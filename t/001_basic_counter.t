@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Test::More no_plan => 1;
+
+BEGIN {
+    use_ok('MooseX::AttributeHelpers');   
+}
+
+{
+    package MyHomePage;
+    use Moose;
+
+    has 'counter' => (
+        metaclass => 'Counter',
+        is        => 'ro',
+        isa       => 'Int',
+        default   => sub { 0 },
+        provides  => {
+            inc => 'inc_counter',
+            dec => 'dec_counter',
+        }
+    );
+}
+
+my $page = MyHomePage->new();
+isa_ok($page, 'MyHomePage');
+
+is($page->counter, 0, '... got the default value');
+
+$page->inc_counter; 
+is($page->counter, 1, '... got the incremented value');
+
+$page->inc_counter; 
+is($page->counter, 2, '... got the incremented value (again)');
+
+$page->dec_counter; 
+is($page->counter, 1, '... got the decremented value');
+
+
+
