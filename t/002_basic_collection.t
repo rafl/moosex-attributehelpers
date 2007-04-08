@@ -14,7 +14,7 @@ BEGIN {
     use Moose;
 
     has 'options' => (
-        metaclass => 'Collection',
+        metaclass => 'Collection::Array',
         is        => 'ro',
         isa       => 'ArrayRef',
         default   => sub { [] },

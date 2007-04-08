@@ -1,8 +1,50 @@
 
 package MooseX::AttributeHelpers::Collection::Hash;
+use Moose;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
+
+extends 'MooseX::AttributeHelpers::Base';
+
+has '+method_constructors' => (
+    default => sub {
+        return +{
+            'get' => sub {
+                my $attr = shift;
+                return sub { $attr->get_value($_[0])->{$_[1]} };
+            },    
+            'set' => sub {
+                my $attr = shift;
+                return sub { $attr->get_value($_[0])->{$_[1]} = $_[2] };
+            },    
+            'count' => sub {
+                my $attr = shift;
+                return sub { scalar keys %{$attr->get_value($_[0])} };        
+            },
+            'empty' => sub {
+                my $attr = shift;
+                return sub { scalar keys %{$attr->get_value($_[0])} ? 1 : 0 };        
+            }
+        }
+    }
+);
+
+sub _process_options_for_provides {
+    my ($self, $options) = @_;    
+    (exists $options->{isa})
+        || confess "You must define a type with the Hash metaclass";  
+         
+    (find_type_constraint($options->{isa})->is_subtype_of('HashRef'))
+        || confess "The type constraint for a Hash must be a subtype of HashRef";
+}
+
+no Moose;
+
+# register the alias ...
+package Moose::Meta::Attribute::Custom::Collection::Hash;
+sub register_implementation { 'MooseX::AttributeHelpers::Collection::Hash' }
+
 
 1;
 

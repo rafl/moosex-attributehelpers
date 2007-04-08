@@ -1,63 +1,37 @@
 
 package MooseX::AttributeHelpers::Counter;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-extends 'Moose::Meta::Attribute';
+extends 'MooseX::AttributeHelpers::Base';
 
-my %METHOD_CONSTRUCTORS = (
-    inc => sub {
-        my $attr = shift;
-        return sub { $attr->set_value($_[0], $attr->get_value($_[0]) + 1) };
-    },
-    dec => sub {
-        my $attr = shift;
-        return sub { $attr->set_value($_[0], $attr->get_value($_[0]) - 1) };        
-    },
+has '+method_constructors' => (
+    default => sub {
+        return +{
+            inc => sub {
+                my $attr = shift;
+                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) + 1) };
+            },
+            dec => sub {
+                my $attr = shift;
+                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) - 1) };        
+            },
+        }
+    }
 );
 
-has 'provides' => (
-    is       => 'ro',
-    isa      => subtype('HashRef' => where { 
-        (exists $METHOD_CONSTRUCTORS{$_} || return) for keys %{$_}; 1;
-    }),
-    required => 1,
-);
-
-has '+$!default'       => (required => 1);
-has '+type_constraint' => (required => 1);
-
-before '_process_options' => sub {
-    my ($self, %options) = @_;
+sub _process_options_for_provides {
+    my ($self, $options) = @_;
+    (exists $options->{isa})
+        || confess "You must define a type with the Counter metaclass";  
+     
+    (find_type_constraint($options->{isa})->is_subtype_of('Num'))
+        || confess "The type constraint for a Counter must be a subtype of Num";
+}
     
-    if (exists $options{provides}) {
-        (exists $options{isa})
-            || confess "You must define a type with the Counter metaclass";  
-             
-        (find_type_constraint($options{isa})->is_subtype_of('Num'))
-            || confess "The type constraint for a Counter must be a subtype of Num";
-    }
-};
-
-after 'install_accessors' => sub {
-    my $attr  = shift;
-    my $class = $attr->associated_class;
-    
-    foreach my $key (keys %{$attr->provides}) {
-        (exists $METHOD_CONSTRUCTORS{$key})
-            || confess "Unsupported method type ($key)";
-        $class->add_method(
-            $attr->provides->{$key}, 
-            $METHOD_CONSTRUCTORS{$key}->($attr)
-        );
-    }
-};
-
 no Moose;
-no Moose::Util::TypeConstraints;
 
 # register the alias ...
 package Moose::Meta::Attribute::Custom::Counter;
