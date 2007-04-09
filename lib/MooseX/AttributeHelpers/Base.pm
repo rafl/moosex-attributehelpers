@@ -19,9 +19,13 @@ has 'provides' => (
     required => 1,
 );
 
+# extend the parents stuff to make sure 
+# certain bits are now required ...
 has '+$!default'       => (required => 1);
 has '+type_constraint' => (required => 1);
 
+# this confirms that provides has 
+# all valid possibilities in it
 sub _check_provides {
     my ($self, $provides) = @_;
     my $method_constructors = $self->method_constructors;
@@ -31,6 +35,10 @@ sub _check_provides {
     }
 }
 
+# this provides an opportunity to 
+# manipulate the %options to handle
+# some of the provides features 
+# correctly.
 sub _process_options_for_provides {
     my ($self, $options) = @_;
     # ...
@@ -38,7 +46,6 @@ sub _process_options_for_provides {
 
 before '_process_options' => sub {
     my ($self, %options) = @_;
-    
     if (exists $options{provides}) {
         $self->_check_provides($options{provides});
         $self->_process_options_for_provides(\%options);
@@ -60,8 +67,6 @@ after 'install_accessors' => sub {
 };
 
 no Moose;
-no Moose::Util::TypeConstraints;
-
 
 1;
 
