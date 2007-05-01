@@ -27,9 +27,9 @@ has '+type_constraint' => (required => 1);
 # this confirms that provides has 
 # all valid possibilities in it
 sub _check_provides {
-    my ($self, $provides) = @_;
+    my $self = shift;
     my $method_constructors = $self->method_constructors;
-    foreach my $key (keys %$provides) {
+    foreach my $key (keys %{$self->provides}) {
         (exists $method_constructors->{$key})
             || confess "$key is an unsupported method type";
     }
@@ -45,16 +45,19 @@ sub _process_options_for_provides {
 }
 
 before '_process_options' => sub {
-    my ($self, %options) = @_;
-    if (exists $options{provides}) {
-        $self->_check_provides($options{provides});
-        $self->_process_options_for_provides(\%options);
+    my ($self, $name, $options) = @_;
+    if (exists $options->{provides}) {
+        $self->_process_options_for_provides($options);
     }
 };
 
 after 'install_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
+
+    # before we install them, lets
+    # make sure they are valid
+    $attr->_check_provides;    
 
     my $method_constructors = $attr->method_constructors;
     
