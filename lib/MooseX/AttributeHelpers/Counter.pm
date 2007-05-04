@@ -28,7 +28,13 @@ sub _process_options_for_provides {
     (exists $options->{isa})
         || confess "You must define a type with the Counter metaclass";  
      
-    (find_type_constraint($options->{isa})->is_a_type_of('Num'))
+    my $isa = $options->{isa}; 
+    
+    unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
+        $isa = find_type_constraint($isa);        
+    }
+    
+    ($isa->is_a_type_of('Num'))
         || confess "The type constraint for a Counter ($options->{isa}) must be a subtype of Num";
 }
     

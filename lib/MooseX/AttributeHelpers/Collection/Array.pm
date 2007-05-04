@@ -57,9 +57,14 @@ sub _process_options_for_provides {
     my ($self, $options) = @_;
     (exists $options->{isa})
         || confess "You must define a type with the Array metaclass";  
-         
-    my $c = find_type_constraint($options->{isa}) || $options->{isa};
-    ( $c && blessed($c) && $c->is_a_type_of('ArrayRef'))
+
+    my $isa = $options->{isa}; 
+
+    unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
+        $isa = find_type_constraint($isa);        
+    }
+
+    ($isa->is_a_type_of('ArrayRef'))
         || confess "The type constraint for a Array ($options->{isa}) must be a subtype of ArrayRef";
 }
 
