@@ -58,7 +58,8 @@ sub _process_options_for_provides {
     (exists $options->{isa})
         || confess "You must define a type with the Array metaclass";  
          
-    (find_type_constraint($options->{isa})->is_a_type_of('ArrayRef'))
+    my $c = find_type_constraint($options->{isa}) || $options->{isa};
+    ( $c && blessed($c) && $c->is_a_type_of('ArrayRef'))
         || confess "The type constraint for a Array ($options->{isa}) must be a subtype of ArrayRef";
 }
 
