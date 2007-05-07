@@ -8,6 +8,8 @@ our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
 
+sub helper_type { 'Num' }
+
 has '+method_constructors' => (
     default => sub {
         return +{
@@ -22,21 +24,6 @@ has '+method_constructors' => (
         }
     }
 );
-
-sub _process_options_for_provides {
-    my ($self, $options) = @_;
-    (exists $options->{isa})
-        || confess "You must define a type with the Counter metaclass";  
-     
-    my $isa = $options->{isa}; 
-    
-    unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
-        $isa = find_type_constraint($isa);        
-    }
-    
-    ($isa->is_a_type_of('Num'))
-        || confess "The type constraint for a Counter ($options->{isa}) must be a subtype of Num";
-}
     
 no Moose;
 no Moose::Util::TypeConstraints;

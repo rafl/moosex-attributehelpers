@@ -1,12 +1,13 @@
 
 package MooseX::AttributeHelpers::Collection::Array;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
+
+sub helper_type { 'ArrayRef' }
 
 has '+method_constructors' => (
     default => sub {
@@ -53,23 +54,7 @@ has '+method_constructors' => (
     }
 );
 
-sub _process_options_for_provides {
-    my ($self, $options) = @_;
-    (exists $options->{isa})
-        || confess "You must define a type with the Array metaclass";  
-
-    my $isa = $options->{isa}; 
-
-    unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
-        $isa = find_type_constraint($isa);        
-    }
-
-    ($isa->is_a_type_of('ArrayRef'))
-        || confess "The type constraint for a Array ($options->{isa}) must be a subtype of ArrayRef";
-}
-
 no Moose;
-no Moose::Util::TypeConstraints;;
 
 # register the alias ...
 package Moose::Meta::Attribute::Custom::Collection::Array;

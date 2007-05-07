@@ -1,12 +1,13 @@
 
 package MooseX::AttributeHelpers::Collection::Hash;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
+
+sub helper_type { 'HashRef' }
 
 has '+method_constructors' => (
     default => sub {
@@ -31,23 +32,7 @@ has '+method_constructors' => (
     }
 );
 
-sub _process_options_for_provides {
-    my ($self, $options) = @_;    
-    (exists $options->{isa})
-        || confess "You must define a type with the Hash metaclass";  
-
-    my $isa = $options->{isa}; 
-
-    unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
-        $isa = find_type_constraint($isa);        
-    }
-
-    ($isa->is_a_type_of('HashRef'))
-        || confess "The type constraint for a Hash ($options->{isa}) must be a subtype of HashRef";
-}
-
 no Moose;
-no Moose::Util::TypeConstraints;
 
 # register the alias ...
 package Moose::Meta::Attribute::Custom::Collection::Hash;

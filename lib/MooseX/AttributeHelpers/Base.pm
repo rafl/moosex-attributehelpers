@@ -1,6 +1,7 @@
 
 package MooseX::AttributeHelpers::Base;
 use Moose;
+use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -24,9 +25,42 @@ has 'provides' => (
 has '+$!default'       => (required => 1);
 has '+type_constraint' => (required => 1);
 
+## Methods called prior to instantiation
+
+sub helper_type { () }
+
+sub process_options_for_provides {
+    my ($self, $options) = @_;
+    if (my $type = $self->helper_type) {
+        (exists $options->{isa})
+            || confess "You must define a type with the $type metaclass";  
+
+        my $isa = $options->{isa}; 
+
+        unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
+            $isa = find_type_constraint($isa);        
+        }
+
+        ($isa->is_a_type_of($type))
+            || confess "The type constraint for a $type ($options->{isa}) must be a subtype of $type";
+    }
+    
+    # this can be augmented by subclasses ..
+    inner();
+}
+
+before '_process_options' => sub {
+    my ($self, $name, $options) = @_;
+    if (exists $options->{provides}) {
+        $self->process_options_for_provides($options);
+    }
+};
+
+## methods called after instantiation
+
 # this confirms that provides has 
 # all valid possibilities in it
-sub _check_provides {
+sub check_provides_values {
     my $self = shift;
     my $method_constructors = $self->method_constructors;
     foreach my $key (keys %{$self->provides}) {
@@ -35,29 +69,13 @@ sub _check_provides {
     }
 }
 
-# this provides an opportunity to 
-# manipulate the %options to handle
-# some of the provides features 
-# correctly.
-sub _process_options_for_provides {
-    my ($self, $options) = @_;
-    # ...
-}
-
-before '_process_options' => sub {
-    my ($self, $name, $options) = @_;
-    if (exists $options->{provides}) {
-        $self->_process_options_for_provides($options);
-    }
-};
-
 after 'install_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
 
     # before we install them, lets
     # make sure they are valid
-    $attr->_check_provides;    
+    $attr->check_provides_values;    
 
     my $method_constructors = $attr->method_constructors;
     
@@ -70,6 +88,7 @@ after 'install_accessors' => sub {
 };
 
 no Moose;
+no Moose::Util::TypeConstraints;
 
 1;
 
