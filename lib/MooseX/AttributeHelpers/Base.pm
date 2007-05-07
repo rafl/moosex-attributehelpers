@@ -31,6 +31,7 @@ sub helper_type { () }
 
 sub process_options_for_provides {
     my ($self, $options) = @_;
+    
     if (my $type = $self->helper_type) {
         (exists $options->{isa})
             || confess "You must define a type with the $type metaclass";  

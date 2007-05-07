@@ -54,11 +54,13 @@ MooseX::AttributeHelpers::Counter
       default   => sub { 0 },
       provides  => {
           inc => 'inc_counter',
+          dec => 'dec_counter',          
       }
   );
 
   my $page = MyHomePage->new();
   $page->inc_counter; # same as $page->counter($page->counter + 1);
+  $page->dec_counter; # same as $page->counter($page->counter - 1);  
   
 =head1 DESCRIPTION
 
