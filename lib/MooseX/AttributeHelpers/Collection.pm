@@ -26,8 +26,12 @@ has 'container_type_constraint' => (
         my $container_type = $self->container_type;
         my $constraint     = find_type_constraint($container_type);
         
-	    $constraint = subtype('Object', where { $_->isa($container_type) })
-	        unless $constraint;            
+	    $constraint = subtype(
+	        'Object', 
+	        sub { 
+	            $_->isa($container_type) || ($_->can('does') && $_->does($container_type))
+	        }
+	    ) unless $constraint;            
         
         return $constraint;
     }
@@ -48,6 +52,7 @@ before 'process_options_for_provides' => sub {
 };
 
 no Moose;
+no Moose::Util::TypeConstraints;
 
 1;
 

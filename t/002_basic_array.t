@@ -104,4 +104,4 @@ is_deeply($options->provides, {
     'empty'   => 'has_options',    
 }, '... got the right provies mapping');
 
-
+is($options->container_type, 'Int', '... got the right container type');

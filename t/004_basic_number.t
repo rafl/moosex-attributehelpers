@@ -31,6 +31,11 @@ BEGIN {
 }
 
 my $real = Real->new;
+isa_ok($real, 'Real');
+
+can_ok($real, $_) for qw[
+    set add sub mul div mod abs
+];
 
 is $real->integer, 5, 'Default to five';
 

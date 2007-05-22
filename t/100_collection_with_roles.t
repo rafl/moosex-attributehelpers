@@ -17,7 +17,7 @@ use MooseX::AttributeHelpers;
 has observers => (
     metaclass  => 'Collection::Array',
     is         => 'ro',
-    isa        => 'ArrayRef',
+    isa        => 'ArrayRef[Observer]',
     auto_deref => 1,
     default    => sub { [] },
     provides   => { 'push' => 'add_observer', count => 'count_observers' }
@@ -36,9 +36,7 @@ package Observer;
 
 use Moose::Role;
 
-sub update {
-    die 'Forgot to implement' . "\n";
-}
+requires 'update';
 
 ###############################################################################
 
