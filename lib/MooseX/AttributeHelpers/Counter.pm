@@ -1,7 +1,6 @@
 
 package MooseX::AttributeHelpers::Counter;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -26,7 +25,6 @@ has '+method_constructors' => (
 );
     
 no Moose;
-no Moose::Util::TypeConstraints;
 
 # register the alias ...
 package Moose::Meta::Attribute::Custom::Counter;

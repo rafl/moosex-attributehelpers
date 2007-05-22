@@ -1,6 +1,5 @@
 package MooseX::AttributeHelpers::Number;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -45,7 +44,6 @@ has '+method_constructors' => (
 );
     
 no Moose;
-no Moose::Util::TypeConstraints;
 
 # register the alias ...
 package Moose::Meta::Attribute::Custom::Number;
@@ -96,7 +94,7 @@ to cpan-RT.
 
 =head1 AUTHOR
 
-Stevan Little E<lt>stevan@iinteractive.comE<gt>
+Robert Boone
 
 =head1 COPYRIGHT AND LICENSE
 

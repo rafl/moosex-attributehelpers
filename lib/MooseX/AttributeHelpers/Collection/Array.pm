@@ -1,11 +1,12 @@
 
 package MooseX::AttributeHelpers::Collection::Array;
 use Moose;
+use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-extends 'MooseX::AttributeHelpers::Base';
+extends 'MooseX::AttributeHelpers::Collection';
 
 sub helper_type { 'ArrayRef' }
 
@@ -14,10 +15,22 @@ has '+method_constructors' => (
         return +{
             'push' => sub {
                 my $attr = shift;
-                return sub { 
-                    my $instance = shift;
-                    push @{$attr->get_value($instance)} => @_; 
-                };
+                if ($attr->has_container_type) {
+                    my $container_type_constraint = $attr->container_type_constraint;
+                    return sub { 
+                        my $instance = shift;
+                        $container_type_constraint->check($_) 
+                            || confess "Value $_ did not pass container type constraint"
+                                foreach @_;
+                        push @{$attr->get_value($instance)} => @_; 
+                    };                    
+                }
+                else {
+                    return sub { 
+                        my $instance = shift;
+                        push @{$attr->get_value($instance)} => @_; 
+                    };
+                }
             },
             'pop' => sub {
                 my $attr = shift;
@@ -25,10 +38,22 @@ has '+method_constructors' => (
             },    
             'unshift' => sub {
                 my $attr = shift;
-                return sub { 
-                    my $instance = shift;
-                    unshift @{$attr->get_value($instance)} => @_; 
-                };
+                if ($attr->has_container_type) {
+                    my $container_type_constraint = $attr->container_type_constraint;
+                    return sub { 
+                        my $instance = shift;
+                        $container_type_constraint->check($_) 
+                            || confess "Value $_ did not pass container type constraint"
+                                foreach @_;
+                        unshift @{$attr->get_value($instance)} => @_; 
+                    };                    
+                }
+                else {                
+                    return sub { 
+                        my $instance = shift;
+                        unshift @{$attr->get_value($instance)} => @_; 
+                    };
+                }
             },    
             'shift' => sub {
                 my $attr = shift;
@@ -40,7 +65,17 @@ has '+method_constructors' => (
             },    
             'set' => sub {
                 my $attr = shift;
-                return sub { $attr->get_value($_[0])->[$_[1]] = $_[2] };
+                if ($attr->has_container_type) {
+                    my $container_type_constraint = $attr->container_type_constraint;
+                    return sub { 
+                        ($container_type_constraint->check($_[2])) 
+                            || confess "Value $_[2] did not pass container type constraint";
+                        $attr->get_value($_[0])->[$_[1]] = $_[2]
+                    };                    
+                }
+                else {                
+                    return sub { $attr->get_value($_[0])->[$_[1]] = $_[2] };
+                }
             },    
             'count' => sub {
                 my $attr = shift;
@@ -77,7 +112,7 @@ __END__
   has 'options' => (
       metaclass => 'Collection',
       is        => 'ro',
-      isa       => 'ArrayRef',
+      isa       => 'ArrayRef[Int]',
       default   => sub { [] },
       provides  => {
           'push' => 'add_options',

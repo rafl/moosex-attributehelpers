@@ -5,7 +5,7 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-extends 'MooseX::AttributeHelpers::Base';
+extends 'MooseX::AttributeHelpers::Collection';
 
 sub helper_type { 'HashRef' }
 
@@ -18,8 +18,26 @@ has '+method_constructors' => (
             },    
             'set' => sub {
                 my $attr = shift;
-                return sub { $attr->get_value($_[0])->{$_[1]} = $_[2] };
+                if ($attr->has_container_type) {
+                    my $container_type_constraint = $attr->container_type_constraint;
+                    return sub { 
+                        ($container_type_constraint->check($_[2])) 
+                            || confess "Value $_[2] did not pass container type constraint";                        
+                        $attr->get_value($_[0])->{$_[1]} = $_[2] 
+                    };
+                }
+                else {
+                    return sub { $attr->get_value($_[0])->{$_[1]} = $_[2] };
+                }
             },    
+            'keys' => sub {
+                my $attr = shift;
+                return sub { keys %{$attr->get_value($_[0])} };        
+            },            
+            'values' => sub {
+                my $attr = shift;
+                return sub { values %{$attr->get_value($_[0])} };        
+            },            
             'count' => sub {
                 my $attr = shift;
                 return sub { scalar keys %{$attr->get_value($_[0])} };        

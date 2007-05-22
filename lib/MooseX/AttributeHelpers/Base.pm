@@ -36,7 +36,7 @@ sub process_options_for_provides {
         (exists $options->{isa})
             || confess "You must define a type with the $type metaclass";  
 
-        my $isa = $options->{isa}; 
+        my $isa = $options->{isa};       
 
         unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
             $isa = find_type_constraint($isa);        
@@ -45,9 +45,6 @@ sub process_options_for_provides {
         ($isa->is_a_type_of($type))
             || confess "The type constraint for a $type ($options->{isa}) must be a subtype of $type";
     }
-    
-    # this can be augmented by subclasses ..
-    inner();
 }
 
 before '_process_options' => sub {
