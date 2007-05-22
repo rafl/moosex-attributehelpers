@@ -33,7 +33,7 @@ has '+method_constructors' => (
             },
             mod => sub {
                 my $attr = shift;
-                return sub { $attr->set_value($_[0], abs($attr->get_value($_[0]) % $_[1])) };
+                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) % $_[1]) };
             },
             abs => sub {
                 my $attr = shift;
