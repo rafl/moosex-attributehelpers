@@ -20,7 +20,7 @@ has '+method_constructors' => (
                     return sub { 
                         my $instance = shift;
                         $container_type_constraint->check($_) 
-                            || confess "Value $_ did not pass container type constraint"
+                            || confess "Value " . ($_||'undef') . " did not pass container type constraint"
                                 foreach @_;
                         push @{$attr->get_value($instance)} => @_; 
                     };                    
@@ -43,7 +43,7 @@ has '+method_constructors' => (
                     return sub { 
                         my $instance = shift;
                         $container_type_constraint->check($_) 
-                            || confess "Value $_ did not pass container type constraint"
+                            || confess "Value " . ($_||'undef') . " did not pass container type constraint"
                                 foreach @_;
                         unshift @{$attr->get_value($instance)} => @_; 
                     };                    
@@ -69,7 +69,7 @@ has '+method_constructors' => (
                     my $container_type_constraint = $attr->container_type_constraint;
                     return sub { 
                         ($container_type_constraint->check($_[2])) 
-                            || confess "Value $_[2] did not pass container type constraint";
+                            || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
                         $attr->get_value($_[0])->[$_[1]] = $_[2]
                     };                    
                 }

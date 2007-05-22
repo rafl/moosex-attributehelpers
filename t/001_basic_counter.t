@@ -28,8 +28,10 @@ BEGIN {
 my $page = MyHomePage->new();
 isa_ok($page, 'MyHomePage');
 
-can_ok($page, 'inc_counter');
-can_ok($page, 'dec_counter');
+can_ok($page, $_) for qw[
+    dec_counter 
+    inc_counter
+];
 
 is($page->counter, 0, '... got the default value');
 

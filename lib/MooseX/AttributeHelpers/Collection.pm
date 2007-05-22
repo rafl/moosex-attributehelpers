@@ -25,13 +25,15 @@ has 'container_type_constraint' => (
 
         my $container_type = $self->container_type;
         my $constraint     = find_type_constraint($container_type);
-        
-	    $constraint = subtype(
-	        'Object', 
-	        sub { 
-	            $_->isa($container_type) || ($_->can('does') && $_->does($container_type))
-	        }
-	    ) unless $constraint;            
+
+        # NOTE:
+        # I am not sure DWIM-ery is a good thing
+        # here, so i am going to err on the side 
+        # of caution, and blow up if you have
+        # not made a type constraint for this yet.
+        # - SL
+        (defined $constraint)
+            || confess "You must predefine the '$container_type' constraint before you can use it as a container type";
         
         return $constraint;
     }

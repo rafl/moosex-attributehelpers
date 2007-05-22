@@ -22,7 +22,7 @@ has '+method_constructors' => (
                     my $container_type_constraint = $attr->container_type_constraint;
                     return sub { 
                         ($container_type_constraint->check($_[2])) 
-                            || confess "Value $_[2] did not pass container type constraint";                        
+                            || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";                        
                         $attr->get_value($_[0])->{$_[1]} = $_[2] 
                     };
                 }
