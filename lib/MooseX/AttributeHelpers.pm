@@ -5,6 +5,7 @@ our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Counter;
+use MooseX::AttributeHelpers::Number;
 use MooseX::AttributeHelpers::Collection::Array;
 use MooseX::AttributeHelpers::Collection::Hash;
 

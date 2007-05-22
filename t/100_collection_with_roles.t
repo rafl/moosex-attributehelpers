@@ -9,9 +9,6 @@ BEGIN {
     use_ok('MooseX::AttributeHelpers');
 }
 
-## convert this to a test ... 
-## code by Robert Boone
-
 package Subject;
 
 use Moose::Role;
