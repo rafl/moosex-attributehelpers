@@ -9,8 +9,6 @@ BEGIN {
     use_ok('MooseX::AttributeHelpers');
 }
 
-=pod
-
 ## convert this to a test ... 
 ## code by Robert Boone
 
@@ -25,7 +23,7 @@ has observers => (
     isa        => 'ArrayRef',
     auto_deref => 1,
     default    => sub { [] },
-    provides   => { 'push' => 'add_observer', }
+    provides   => { 'push' => 'add_observer', count => 'count_observers' }
 );
 
 sub notify {
@@ -74,13 +72,15 @@ after 'inc_counter','dec_counter' => sub {
 
 package Display;
 
+use Test::More;
+
 use Moose;
 
 with 'Observer';
 
 sub update {
     my ( $self, $subject ) = @_;
-    print $subject->count() . "\n";
+    like $subject->count, qr{^-?\d+$}, 'Observed number ' . $subject->count;
 }
 
 ###############################################################################
@@ -88,12 +88,41 @@ sub update {
 package main;
 
 my $count = Counter->new();
+
+ok($count->can('add_observer'), 'add_observer method added');
+
+ok($count->can('count_observers'), 'count_observers method added');
+
+ok($count->can('inc_counter'), 'inc_counter method added');
+
+ok($count->can('dec_counter'), 'dec_counter method added');
+
 $count->add_observer( Display->new() );
 
-for ( 1 .. 5 ) {
-    $count->inc_counter();
-}
+is($count->count_observers, 1, 'Only one observer');
 
-for ( 1 .. 5 ) {
-    $count->dec_counter();
-}
+is($count->count, 0, 'Default to zero');
+
+$count->inc_counter;
+
+is($count->count, 1, 'Increment to one ');
+
+$count->inc_counter for (1 .. 6);
+
+is($count->count, 7, 'Increment up to seven');
+
+$count->dec_counter;
+
+is($count->count, 6, 'Decrement to 6');
+
+$count->dec_counter for (1 .. 5);
+
+is($count->count, 1, 'Decrement to 1');
+
+$count->dec_counter for (1 .. 2);
+    
+is($count->count, -1, 'Negative numbers');
+
+$count->inc_counter;
+
+is($count->count, 0, 'Back to zero');
