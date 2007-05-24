@@ -60,10 +60,18 @@ is_deeply($stuff->options, { foo => 'bar', bar => 'baz' }, '... got more options
 
 is($stuff->get_option('foo'), 'bar', '... got the right option');
 
+lives_ok {
+    Stuff->new(options => { foo => 'BAR' });
+} '... good constructor params';
+
 ## check some errors
 
 dies_ok {
     $stuff->set_option(bar => {});
 } '... could not add a hash ref where an string is expected';
+
+dies_ok {
+    Stuff->new(options => { foo => [] });
+} '... bad constructor params';
 
 

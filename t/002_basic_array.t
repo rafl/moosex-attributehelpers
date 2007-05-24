@@ -32,7 +32,7 @@ BEGIN {
     );
 }
 
-my $stuff = Stuff->new();
+my $stuff = Stuff->new(options => [ 10, 12 ]);
 isa_ok($stuff, 'Stuff');
 
 can_ok($stuff, $_) for qw[
@@ -46,7 +46,15 @@ can_ok($stuff, $_) for qw[
     has_options
 ];
 
-is_deeply($stuff->options, [], '... no options yet');
+is_deeply($stuff->options, [10, 12], '... got options');
+
+ok($stuff->has_options, '... we have options');
+is($stuff->num_options, 2, '... got 2 options');
+
+is($stuff->remove_last_option, 12, '... removed the last option');
+is($stuff->remove_first_option, 10, '... removed the last option');
+
+is_deeply($stuff->options, [], '... no options anymore');
 
 ok(!$stuff->has_options, '... no options');
 is($stuff->num_options, 0, '... got no options');
@@ -112,6 +120,10 @@ dies_ok {
 dies_ok {
     $stuff->set_option(5, {});
 } '... could not add a hash ref where an int is expected';
+
+dies_ok {
+    Stuff->new(options => [ 'Foo', 10, 'Bar', 20 ]);
+} '... bad constructor params';
 
 ## test the meta
 
