@@ -4,6 +4,8 @@ package MooseX::AttributeHelpers;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use MooseX::AttributeHelpers::Meta::Method::Provided;
+
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
 use MooseX::AttributeHelpers::Collection::Array;

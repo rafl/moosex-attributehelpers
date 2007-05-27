@@ -78,9 +78,18 @@ after 'install_accessors' => sub {
     my $method_constructors = $attr->method_constructors;
     
     foreach my $key (keys %{$attr->provides}) {
-        $class->add_method(
-            $attr->provides->{$key}, 
-            $method_constructors->{$key}->($attr)
+        
+        my $method_name = $attr->provides->{$key};
+        my $method_body = $method_constructors->{$key}->($attr);
+        
+        if ($class->has_method($method_name)) {
+            confess "The method ($method_name) already exists in class (" . $class->name . ")";
+        }
+        
+        $class->add_method($method_name => 
+            MooseX::AttributeHelpers::Meta::Method::Provided->wrap(
+                $method_body,
+            )
         );
     }
 };
