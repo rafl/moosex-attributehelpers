@@ -12,6 +12,10 @@ sub helper_type { 'HashRef' }
 has '+method_constructors' => (
     default => sub {
         return +{
+            'exists' => sub {
+                my $attr = shift;
+                return sub { exists $attr->get_value($_[0])->{$_[1]} ? 1 : 0 };
+            },            
             'get' => sub {
                 my $attr = shift;
                 return sub { $attr->get_value($_[0])->{$_[1]} };

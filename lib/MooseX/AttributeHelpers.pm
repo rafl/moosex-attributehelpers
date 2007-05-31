@@ -19,11 +19,11 @@ __END__
 
 =head1 NAME
 
+MooseX::AttributeHelpers 
+
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
-
-=head1 METHODS
 
 =head1 BUGS
 
