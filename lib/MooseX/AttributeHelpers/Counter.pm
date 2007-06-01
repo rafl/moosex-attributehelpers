@@ -5,24 +5,15 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use MooseX::AttributeHelpers::MethodProvider::Counter;
+
 extends 'MooseX::AttributeHelpers::Base';
 
-sub helper_type { 'Num' }
-
-has '+method_constructors' => (
-    default => sub {
-        return +{
-            inc => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) + 1) };
-            },
-            dec => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) - 1) };        
-            },
-        }
-    }
+has '+method_provider' => (
+    default => 'MooseX::AttributeHelpers::MethodProvider::Counter'
 );
+
+sub helper_type { 'Num' }
     
 no Moose;
 

@@ -8,16 +8,43 @@ our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
 
-has 'method_constructors' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub { {} }
-);
-
+# this is the method map you define ...
 has 'provides' => (
     is       => 'ro',
     isa      => 'HashRef',
     required => 1,
+);
+
+
+# these next two are the possible methods 
+# you can use in the 'provides' map.
+
+# provide a Class or Role which we can 
+# collect the method providers from 
+has 'method_provider' => (
+    is        => 'ro',
+    isa       => 'ClassName',
+    predicate => 'has_method_provider',
+);
+
+# or you can provide a HASH ref of anon subs
+# yourself. This will also collect and store
+# the methods from a method_provider as well 
+has 'method_constructors' => (
+    is      => 'ro',
+    isa     => 'HashRef',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        return +{} unless $self->has_method_provider;
+        # or grab them from the role/class
+        my $method_provider = $self->method_provider->meta;
+        return +{
+            map { 
+                $_ => $method_provider->get_method($_)
+            } $method_provider->get_method_list
+        };            
+    }
 );
 
 # extend the parents stuff to make sure 
@@ -60,7 +87,9 @@ before '_process_options' => sub {
 # all valid possibilities in it
 sub check_provides_values {
     my $self = shift;
+    
     my $method_constructors = $self->method_constructors;
+    
     foreach my $key (keys %{$self->provides}) {
         (exists $method_constructors->{$key})
             || confess "$key is an unsupported method type";
