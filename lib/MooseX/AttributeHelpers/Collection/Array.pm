@@ -6,88 +6,15 @@ use Moose::Util::TypeConstraints;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use MooseX::AttributeHelpers::MethodProvider::Array;
+
 extends 'MooseX::AttributeHelpers::Collection';
 
-sub helper_type { 'ArrayRef' }
-
-has '+method_constructors' => (
-    default => sub {
-        return +{
-            'push' => sub {
-                my $attr = shift;
-                if ($attr->has_container_type) {
-                    my $container_type_constraint = $attr->container_type_constraint;
-                    return sub { 
-                        my $instance = shift;
-                        $container_type_constraint->check($_) 
-                            || confess "Value " . ($_||'undef') . " did not pass container type constraint"
-                                foreach @_;
-                        push @{$attr->get_value($instance)} => @_; 
-                    };                    
-                }
-                else {
-                    return sub { 
-                        my $instance = shift;
-                        push @{$attr->get_value($instance)} => @_; 
-                    };
-                }
-            },
-            'pop' => sub {
-                my $attr = shift;
-                return sub { pop @{$attr->get_value($_[0])} };
-            },    
-            'unshift' => sub {
-                my $attr = shift;
-                if ($attr->has_container_type) {
-                    my $container_type_constraint = $attr->container_type_constraint;
-                    return sub { 
-                        my $instance = shift;
-                        $container_type_constraint->check($_) 
-                            || confess "Value " . ($_||'undef') . " did not pass container type constraint"
-                                foreach @_;
-                        unshift @{$attr->get_value($instance)} => @_; 
-                    };                    
-                }
-                else {                
-                    return sub { 
-                        my $instance = shift;
-                        unshift @{$attr->get_value($instance)} => @_; 
-                    };
-                }
-            },    
-            'shift' => sub {
-                my $attr = shift;
-                return sub { shift @{$attr->get_value($_[0])} };
-            },    
-            'get' => sub {
-                my $attr = shift;
-                return sub { $attr->get_value($_[0])->[$_[1]] };
-            },    
-            'set' => sub {
-                my $attr = shift;
-                if ($attr->has_container_type) {
-                    my $container_type_constraint = $attr->container_type_constraint;
-                    return sub { 
-                        ($container_type_constraint->check($_[2])) 
-                            || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
-                        $attr->get_value($_[0])->[$_[1]] = $_[2]
-                    };                    
-                }
-                else {                
-                    return sub { $attr->get_value($_[0])->[$_[1]] = $_[2] };
-                }
-            },    
-            'count' => sub {
-                my $attr = shift;
-                return sub { scalar @{$attr->get_value($_[0])} };        
-            },
-            'empty' => sub {
-                my $attr = shift;
-                return sub { scalar @{$attr->get_value($_[0])} ? 1 : 0 };        
-            }
-        }
-    }
+has '+method_provider' => (
+    default => 'MooseX::AttributeHelpers::MethodProvider::Array'
 );
+
+sub helper_type { 'ArrayRef' }
 
 no Moose;
 
