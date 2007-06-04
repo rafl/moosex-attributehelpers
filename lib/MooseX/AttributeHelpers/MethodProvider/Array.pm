@@ -104,6 +104,22 @@ sub find : method {
     };
 }
 
+sub map : method {
+    my ($attr) = @_;
+    return sub {
+        my ($instance, $f) = @_;
+        CORE::map { $f->($_) } @{$attr->get_value($instance)}
+    };
+}
+
+sub grep : method {
+    my ($attr) = @_;
+    return sub {
+        my ($instance, $predicate) = @_;
+        CORE::grep { $predicate->($_) } @{$attr->get_value($instance)}
+    };
+}
+
 1;
 
 __END__
