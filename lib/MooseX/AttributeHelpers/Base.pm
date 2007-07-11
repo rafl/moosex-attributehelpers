@@ -10,9 +10,9 @@ extends 'Moose::Meta::Attribute';
 
 # this is the method map you define ...
 has 'provides' => (
-    is       => 'ro',
-    isa      => 'HashRef',
-    required => 1,
+    is      => 'ro',
+    isa     => 'HashRef',
+    default => sub {{}}
 );
 
 
@@ -76,7 +76,8 @@ sub process_options_for_provides {
 
 before '_process_options' => sub {
     my ($self, $name, $options) = @_;
-    if (exists $options->{provides}) {
+    if (exists $options->{provides} || 
+        exists $options->{isa}      && $options->{isa} =~ /^.*?\[.*?\]$/) {
         $self->process_options_for_provides($options);
     }
 };

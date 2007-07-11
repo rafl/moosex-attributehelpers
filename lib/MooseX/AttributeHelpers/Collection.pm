@@ -15,13 +15,12 @@ has 'container_type' => (
 );
 
 has 'container_type_constraint' => (
-    is       => 'rw',
-    isa      => 'Moose::Meta::TypeConstraint',
-    required => 1,
+    is  => 'rw',
+    isa => 'Moose::Meta::TypeConstraint',
 );
 
 before 'process_options_for_provides' => sub {
-    my ($self, $options) = @_;
+    my ($self, $options) = @_; 
     
     if (exists $options->{isa}) {
         my $type = $options->{isa};
