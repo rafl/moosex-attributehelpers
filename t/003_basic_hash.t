@@ -20,10 +20,11 @@ BEGIN {
         isa       => 'HashRef[Str]',
         default   => sub { {} },
         provides  => {
-            'set'   => 'set_option',
-            'get'   => 'get_option',            
-            'empty' => 'has_options',
-            'count' => 'num_options',
+            'set'    => 'set_option',
+            'get'    => 'get_option',            
+            'empty'  => 'has_options',
+            'count'  => 'num_options',
+            'delete' => 'delete_option',
         }
     );
 }
@@ -36,6 +37,7 @@ can_ok($stuff, $_) for qw[
     get_option
     has_options
     num_options
+    delete_option
 ];
 
 ok(!$stuff->has_options, '... we have no options');
@@ -59,6 +61,13 @@ is($stuff->num_options, 2, '... we have 2 option(s)');
 is_deeply($stuff->options, { foo => 'bar', bar => 'baz' }, '... got more options now');
 
 is($stuff->get_option('foo'), 'bar', '... got the right option');
+
+lives_ok {
+    $stuff->delete_option('bar');
+} '... deleted the option okay';
+
+is($stuff->num_options, 1, '... we have 1 option(s)');
+is_deeply($stuff->options, { foo => 'bar' }, '... got more options now');
 
 lives_ok {
     Stuff->new(options => { foo => 'BAR' });

@@ -49,7 +49,7 @@ has '+method_constructors' => (
             'empty' => sub {
                 my $attr = shift;
                 return sub { scalar keys %{$attr->get_value($_[0])} ? 1 : 0 };        
-            }
+            },
             'delete' => sub {
                 my $attr = shift;
                 return sub { delete $attr->get_value($_[0])->{$_[1]} };
