@@ -5,58 +5,15 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use MooseX::AttributeHelpers::MethodProvider::Hash;
+
 extends 'MooseX::AttributeHelpers::Collection';
 
-sub helper_type { 'HashRef' }
-
-has '+method_constructors' => (
-    default => sub {
-        return +{
-            'exists' => sub {
-                my $attr = shift;
-                return sub { exists $attr->get_value($_[0])->{$_[1]} ? 1 : 0 };
-            },            
-            'get' => sub {
-                my $attr = shift;
-                return sub { $attr->get_value($_[0])->{$_[1]} };
-            },    
-            'set' => sub {
-                my $attr = shift;
-                if ($attr->has_container_type) {
-                    my $container_type_constraint = $attr->container_type_constraint;
-                    return sub { 
-                        ($container_type_constraint->check($_[2])) 
-                            || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";                        
-                        $attr->get_value($_[0])->{$_[1]} = $_[2] 
-                    };
-                }
-                else {
-                    return sub { $attr->get_value($_[0])->{$_[1]} = $_[2] };
-                }
-            },    
-            'keys' => sub {
-                my $attr = shift;
-                return sub { keys %{$attr->get_value($_[0])} };        
-            },            
-            'values' => sub {
-                my $attr = shift;
-                return sub { values %{$attr->get_value($_[0])} };        
-            },            
-            'count' => sub {
-                my $attr = shift;
-                return sub { scalar keys %{$attr->get_value($_[0])} };        
-            },
-            'empty' => sub {
-                my $attr = shift;
-                return sub { scalar keys %{$attr->get_value($_[0])} ? 1 : 0 };        
-            },
-            'delete' => sub {
-                my $attr = shift;
-                return sub { delete $attr->get_value($_[0])->{$_[1]} };
-            }
-        }
-    }
+has '+method_provider' => (
+    default => 'MooseX::AttributeHelpers::MethodProvider::Hash'
 );
+
+sub helper_type { 'HashRef' }
 
 no Moose;
 
