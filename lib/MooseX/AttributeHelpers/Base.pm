@@ -44,7 +44,7 @@ has 'method_constructors' => (
                 $_ => $method_provider->get_method($_)
             } $method_provider->get_method_list
         };            
-    }
+    },
 );
 
 # extend the parents stuff to make sure 
@@ -141,7 +141,29 @@ MooseX::AttributeHelpers::Base
   
 =head1 DESCRIPTION
 
+Base class for attribute helpers.
+
+=head1 ATTRIBUTES
+
+=head2 provides
+
+=head2 method_provider
+
+=head2 method_constructors
+
+=head1 EXTENDED ATTRIBUTES
+
+=head2 $!default
+
+C<$!default> is now required.
+
+=head2 type_constraint
+
+C<type_constraint> is now required.
+
 =head1 METHODS
+
+=head2 helper_type
 
 =head1 BUGS
 
