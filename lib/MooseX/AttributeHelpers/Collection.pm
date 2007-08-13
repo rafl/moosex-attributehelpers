@@ -77,11 +77,25 @@ __END__
 
 =head1 NAME
 
-=head1 SYNOPSIS
+MooseX::AttributeHelpers::Collection - Base class for all collection type helpers
 
 =head1 DESCRIPTION
 
+Documentation to come.
+
 =head1 METHODS
+
+=over 4
+
+=item B<container_type>
+
+=item B<container_type_constraint>
+
+=item B<has_container_type>
+
+=item B<process_options_for_provides>
+
+=back
 
 =head1 BUGS
 

@@ -16,7 +16,7 @@ MooseX::AttributeHelpers::Meta::Method::Provided
   
 =head1 DESCRIPTION
 
-=head1 METHODS
+This is an extension of Moose::Meta::Method to mark I<provided> methods.
 
 =head1 BUGS
 

@@ -30,11 +30,47 @@ __END__
 
 =head1 NAME
 
+MooseX::AttributeHelpers::Collection::Hash
+
 =head1 SYNOPSIS
 
+  package Stuff;
+  use Moose;
+  use MooseX::AttributeHelpers;
+  
+  has 'options' => (
+      metaclass => 'Collection::Hash',
+      is        => 'ro',
+      isa       => 'HashRef[Str]',
+      default   => sub { {} },
+      provides  => {
+          'set'    => 'set_option',
+          'get'    => 'get_option',            
+          'empty'  => 'has_options',
+          'count'  => 'num_options',
+          'delete' => 'delete_option',
+      }
+  );
+  
 =head1 DESCRIPTION
 
+This module provides an Array attribute which provides a number of 
+array operations. See L<MooseX::AttributeHelpers::MethodProvider::Hash>
+for more details.
+
 =head1 METHODS
+
+=over 4
+
+=item B<meta>
+
+=item B<method_provider>
+
+=item B<has_method_provider>
+
+=item B<helper_type>
+
+=back
 
 =head1 BUGS
 

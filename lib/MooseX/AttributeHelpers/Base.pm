@@ -135,35 +135,57 @@ __END__
 
 =head1 NAME
 
-MooseX::AttributeHelpers::Base
-
-=head1 SYNOPSIS
+MooseX::AttributeHelpers::Base - Base class for attribute helpers
   
 =head1 DESCRIPTION
 
-Base class for attribute helpers.
+Documentation to come.
 
 =head1 ATTRIBUTES
 
-=head2 provides
+=over 4
 
-=head2 method_provider
+=item B<provides>
 
-=head2 method_constructors
+=item B<method_provider>
+
+=item B<method_constructors>
+
+=back
 
 =head1 EXTENDED ATTRIBUTES
 
-=head2 $!default
+=over 4
+
+=item B<$!default>
 
 C<$!default> is now required.
 
-=head2 type_constraint
+=item B<type_constraint>
 
 C<type_constraint> is now required.
 
+=back
+
 =head1 METHODS
 
-=head2 helper_type
+=over 4
+
+=item B<helper_type>
+
+=item B<check_provides_values>
+
+=item B<has_default>
+
+=item B<has_method_provider>
+
+=item B<has_type_constraint>
+
+=item B<install_accessors>
+
+=item B<process_options_for_provides>
+
+=back
 
 =head1 BUGS
 

@@ -126,4 +126,68 @@ __END__
 
 =pod
 
+=head1 NAME
+
+MooseX::AttributeHelpers::MethodProvider::Array
+  
+=head1 DESCRIPTION
+
+This is a role which provides the method generators for 
+L<MooseX::AttributeHelpers::Collection::Array>.
+
+=head1 METHODS
+
+=over 4
+
+=item B<meta>
+
+=back
+
+=head1 PROVIDED METHODS
+
+=over 4
+
+=item B<count>
+
+=item B<empty>
+
+=item B<find>
+
+=item B<get>
+
+=item B<grep>
+
+=item B<map>
+
+=item B<pop>
+
+=item B<push>
+
+=item B<set>
+
+=item B<shift>
+
+=item B<unshift>
+
+=back
+
+=head1 BUGS
+
+All complex software has bugs lurking in it, and this module is no 
+exception. If you find a bug please either email me, or add the bug
+to cpan-RT.
+
+=head1 AUTHOR
+
+Stevan Little E<lt>stevan@iinteractive.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2007 by Infinity Interactive, Inc.
+
+L<http://www.iinteractive.com>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
 =cut

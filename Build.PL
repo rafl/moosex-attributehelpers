@@ -6,7 +6,7 @@ my $build = Module::Build->new(
     module_name => 'MooseX::AttributeHelpers',
     license => 'perl',
     requires => {   
-        'Moose'        => '0.21',
+        'Moose' => '0.24',
     },
     optional => {
     },

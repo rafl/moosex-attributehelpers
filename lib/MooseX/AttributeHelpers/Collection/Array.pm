@@ -1,7 +1,6 @@
 
 package MooseX::AttributeHelpers::Collection::Array;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -31,10 +30,13 @@ __END__
 
 =head1 NAME
 
+MooseX::AttributeHelpers::Collection::Array
+
 =head1 SYNOPSIS
 
   package Stuff;
   use Moose;
+  use MooseX::AttributeHelpers;
   
   has 'options' => (
       metaclass => 'Collection',
@@ -49,7 +51,21 @@ __END__
 
 =head1 DESCRIPTION
 
+This module provides an Array attribute which provides a number of 
+array operations. See L<MooseX::AttributeHelpers::MethodProvider::Array>
+for more details.
+
 =head1 METHODS
+
+=over 4
+
+=item B<method_provider>
+
+=item B<has_method_provider>
+
+=item B<helper_type>
+
+=back
 
 =head1 BUGS
 

@@ -60,23 +60,24 @@ MooseX::AttributeHelpers::Number
 =head1 SYNOPSIS
   
   package Real;
-   use Moose;
-
-   has 'integer' => (
-       metaclass => 'Number',
-       is        => 'ro',
-       isa       => 'Int',
-       default   => sub { 5 },
-       provides  => {
-           set => 'set',
-           add => 'add',
-           sub => 'sub',
-           mul => 'mul',
-           div => 'div',
-           mod => 'mod',
-           abs => 'abs',
-       }
-   );
+  use Moose;
+  use MooseX::AttributeHelpers;
+  
+  has 'integer' => (
+      metaclass => 'Number',
+      is        => 'ro',
+      isa       => 'Int',
+      default   => sub { 5 },
+      provides  => {
+          set => 'set',
+          add => 'add',
+          sub => 'sub',
+          mul => 'mul',
+          div => 'div',
+          mod => 'mod',
+          abs => 'abs',
+      }
+  );
 
   my $real = Real->new();
   $real->add(5); # same as $real->integer($real->integer + 5);
@@ -84,7 +85,18 @@ MooseX::AttributeHelpers::Number
   
 =head1 DESCRIPTION
 
+This provides a simple numeric attribute, which supports most of the
+basic math operations.
+
 =head1 METHODS
+
+=over 4
+
+=item B<helper_type>
+
+=item B<method_constructors>
+
+=back
 
 =head1 BUGS
 

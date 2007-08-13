@@ -35,6 +35,7 @@ MooseX::AttributeHelpers::Counter
 
   package MyHomePage;
   use Moose;
+  use MooseX::AttributeHelpers;
   
   has 'counter' => (
       metaclass => 'Counter',
@@ -53,7 +54,20 @@ MooseX::AttributeHelpers::Counter
   
 =head1 DESCRIPTION
 
+This module provides a simple counter attribute, which can be 
+incremented and decremeneted. 
+
 =head1 METHODS
+
+=over 4
+
+=item B<method_provider>
+
+=item B<has_method_provider>
+
+=item B<helper_type>
+
+=back
 
 =head1 BUGS
 

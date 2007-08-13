@@ -13,6 +13,7 @@ BEGIN {
 {
     package Stuff;
     use Moose;
+    use MooseX::AttributeHelpers;
 
     has 'options' => (
         metaclass => 'Collection::Hash',
