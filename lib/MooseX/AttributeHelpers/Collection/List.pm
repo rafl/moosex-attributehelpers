@@ -1,16 +1,16 @@
 
-package MooseX::AttributeHelpers::Collection::Array;
+package MooseX::AttributeHelpers::Collection::List;
 use Moose;
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::Array;
+use MooseX::AttributeHelpers::MethodProvider::List;
 
 extends 'MooseX::AttributeHelpers::Collection';
 
 has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::Array'
+    default => 'MooseX::AttributeHelpers::MethodProvider::List'
 );
 
 sub helper_type { 'ArrayRef' }
@@ -18,8 +18,8 @@ sub helper_type { 'ArrayRef' }
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Collection::Array;
-sub register_implementation { 'MooseX::AttributeHelpers::Collection::Array' }
+package Moose::Meta::Attribute::Custom::Collection::List;
+sub register_implementation { 'MooseX::AttributeHelpers::Collection::List' }
 
 
 1;
@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-MooseX::AttributeHelpers::Collection::Array
+MooseX::AttributeHelpers::Collection::List
 
 =head1 SYNOPSIS
 
@@ -39,20 +39,20 @@ MooseX::AttributeHelpers::Collection::Array
   use MooseX::AttributeHelpers;
   
   has 'options' => (
-      metaclass => 'Collection::Array',
+      metaclass => 'Collection::List',
       is        => 'ro',
       isa       => 'ArrayRef[Int]',
       default   => sub { [] },
       provides  => {
-          'push' => 'add_options',
-          'pop'  => 'remove_last_option',
+          map  => 'map_options',
+          grep => 'fitler_options',
       }
   );
 
 =head1 DESCRIPTION
 
-This module provides an Array attribute which provides a number of 
-array operations. See L<MooseX::AttributeHelpers::MethodProvider::Array>
+This module provides an List attribute which provides a number of 
+list operations. See L<MooseX::AttributeHelpers::MethodProvider::List>
 for more details.
 
 =head1 METHODS

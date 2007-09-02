@@ -3,7 +3,7 @@ package MooseX::AttributeHelpers::Base;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
@@ -100,6 +100,24 @@ sub check_provides_values {
 after 'install_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
+    
+    # grab the reader and writer methods
+    # as well, this will be useful for 
+    # our method provider constructors
+    my ($attr_reader, $attr_writer);
+    if (my $reader = $attr->get_read_method) {    
+        $attr_reader = $class->get_method($reader);
+    }
+    else {
+        $attr_reader = sub { $attr->get_value(@_) };
+    }
+    
+    if (my $writer = $attr->get_write_method) {    
+        $attr_writer = $class->get_method($writer);
+    }
+    else {
+        $attr_writer = sub { $attr->set_value(@_) };
+    }        
 
     # before we install them, lets
     # make sure they are valid
@@ -109,8 +127,12 @@ after 'install_accessors' => sub {
     
     foreach my $key (keys %{$attr->provides}) {
         
-        my $method_name = $attr->provides->{$key};
-        my $method_body = $method_constructors->{$key}->($attr);
+        my $method_name = $attr->provides->{$key};       
+        my $method_body = $method_constructors->{$key}->(
+            $attr,
+            $attr_reader,
+            $attr_writer,            
+        );
         
         if ($class->has_method($method_name)) {
             confess "The method ($method_name) already exists in class (" . $class->name . ")";

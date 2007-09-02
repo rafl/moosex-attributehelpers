@@ -1,54 +1,57 @@
 package MooseX::AttributeHelpers::MethodProvider::Hash;
 use Moose::Role;
 
+our $VERSION   = '0.01';
+our $AUTHORITY = 'cpan:STEVAN';
+
 sub exists : method {
-    my ($attr) = @_;    
-    return sub { exists $attr->get_value($_[0])->{$_[1]} ? 1 : 0 };
+    my ($attr, $reader, $writer) = @_;    
+    return sub { exists $reader->($_[0])->{$_[1]} ? 1 : 0 };
 }   
 
 sub get : method {
-    my ($attr) = @_;    
-    return sub { $attr->get_value($_[0])->{$_[1]} };
+    my ($attr, $reader, $writer) = @_;    
+    return sub { $reader->($_[0])->{$_[1]} };
 }  
 
 sub set : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     if ($attr->has_container_type) {
         my $container_type_constraint = $attr->container_type_constraint;
         return sub { 
             ($container_type_constraint->check($_[2])) 
                 || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";                        
-            $attr->get_value($_[0])->{$_[1]} = $_[2] 
+            $reader->($_[0])->{$_[1]} = $_[2] 
         };
     }
     else {
-        return sub { $attr->get_value($_[0])->{$_[1]} = $_[2] };
+        return sub { $reader->($_[0])->{$_[1]} = $_[2] };
     }
 }
 
 sub keys : method {
-    my ($attr) = @_;
-    return sub { keys %{$attr->get_value($_[0])} };        
+    my ($attr, $reader, $writer) = @_;
+    return sub { keys %{$reader->($_[0])} };        
 }
      
 sub values : method {
-    my ($attr) = @_;
-    return sub { values %{$attr->get_value($_[0])} };        
+    my ($attr, $reader, $writer) = @_;
+    return sub { values %{$reader->($_[0])} };        
 }   
    
 sub count : method {
-    my ($attr) = @_;
-    return sub { scalar keys %{$attr->get_value($_[0])} };        
+    my ($attr, $reader, $writer) = @_;
+    return sub { scalar keys %{$reader->($_[0])} };        
 }
 
 sub empty : method {
-    my ($attr) = @_;
-    return sub { scalar keys %{$attr->get_value($_[0])} ? 1 : 0 };        
+    my ($attr, $reader, $writer) = @_;
+    return sub { scalar keys %{$reader->($_[0])} ? 1 : 0 };        
 }
 
 sub delete : method {
-    my ($attr) = @_;
-    return sub { delete $attr->get_value($_[0])->{$_[1]} };
+    my ($attr, $reader, $writer) = @_;
+    return sub { delete $reader->($_[0])->{$_[1]} };
 }
 
 1;

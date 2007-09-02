@@ -1,13 +1,14 @@
 
 package MooseX::AttributeHelpers;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Meta::Method::Provided;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
+use MooseX::AttributeHelpers::Collection::List;
 use MooseX::AttributeHelpers::Collection::Array;
 use MooseX::AttributeHelpers::Collection::Hash;
 
@@ -79,6 +80,10 @@ Common methods for hash references.
 =item L<Collection::Array|MooseX::AttributeHelpers::Collection::Array>
 
 Common methods for array references.
+
+=item L<Collection::Array|MooseX::AttributeHelpers::Collection::List>
+
+Common list methods for array references. 
 
 =back
 

@@ -1,8 +1,14 @@
 package MooseX::AttributeHelpers::MethodProvider::Array;
 use Moose::Role;
 
+our $VERSION   = '0.03';
+our $AUTHORITY = 'cpan:STEVAN';
+
+with 'MooseX::AttributeHelpers::MethodProvider::List';
+
 sub push : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
+    
     if ($attr->has_container_type) {
         my $container_type_constraint = $attr->container_type_constraint;
         return sub { 
@@ -10,26 +16,26 @@ sub push : method {
             $container_type_constraint->check($_) 
                 || confess "Value " . ($_||'undef') . " did not pass container type constraint"
                     foreach @_;
-            CORE::push @{$attr->get_value($instance)} => @_; 
+            CORE::push @{$reader->($instance)} => @_; 
         };                    
     }
     else {
         return sub { 
             my $instance = CORE::shift;
-            CORE::push @{$attr->get_value($instance)} => @_; 
+            CORE::push @{$reader->($instance)} => @_; 
         };
     }
 }
 
 sub pop : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     return sub { 
-        CORE::pop @{$attr->get_value($_[0])} 
+        CORE::pop @{$reader->($_[0])} 
     };
 }
 
 sub unshift : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     if ($attr->has_container_type) {
         my $container_type_constraint = $attr->container_type_constraint;
         return sub { 
@@ -37,89 +43,48 @@ sub unshift : method {
             $container_type_constraint->check($_) 
                 || confess "Value " . ($_||'undef') . " did not pass container type constraint"
                     foreach @_;
-            CORE::unshift @{$attr->get_value($instance)} => @_; 
+            CORE::unshift @{$reader->($instance)} => @_; 
         };                    
     }
     else {                
         return sub { 
             my $instance = CORE::shift;
-            CORE::unshift @{$attr->get_value($instance)} => @_; 
+            CORE::unshift @{$reader->($instance)} => @_; 
         };
     }
 }
 
 sub shift : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     return sub { 
-        CORE::shift @{$attr->get_value($_[0])} 
+        CORE::shift @{$reader->($_[0])} 
     };
 }
    
 sub get : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     return sub { 
-        $attr->get_value($_[0])->[$_[1]] 
+        $reader->($_[0])->[$_[1]] 
     };
 }
 
 sub set : method {
-    my ($attr) = @_;
+    my ($attr, $reader, $writer) = @_;
     if ($attr->has_container_type) {
         my $container_type_constraint = $attr->container_type_constraint;
         return sub { 
             ($container_type_constraint->check($_[2])) 
                 || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
-            $attr->get_value($_[0])->[$_[1]] = $_[2]
+            $reader->($_[0])->[$_[1]] = $_[2]
         };                    
     }
     else {                
         return sub { 
-            $attr->get_value($_[0])->[$_[1]] = $_[2] 
+            $reader->($_[0])->[$_[1]] = $_[2] 
         };
     }
 }
  
-sub count : method {
-    my ($attr) = @_;
-    return sub { 
-        scalar @{$attr->get_value($_[0])} 
-    };        
-}
-
-sub empty : method {
-    my ($attr) = @_;
-    return sub { 
-        scalar @{$attr->get_value($_[0])} ? 1 : 0 
-    };        
-}
-
-sub find : method {
-    my ($attr) = @_;
-    return sub {
-        my ($instance, $predicate) = @_;
-        foreach my $val (@{$attr->get_value($instance)}) {
-            return $val if $predicate->($val);
-        }
-        return;
-    };
-}
-
-sub map : method {
-    my ($attr) = @_;
-    return sub {
-        my ($instance, $f) = @_;
-        CORE::map { $f->($_) } @{$attr->get_value($instance)}
-    };
-}
-
-sub grep : method {
-    my ($attr) = @_;
-    return sub {
-        my ($instance, $predicate) = @_;
-        CORE::grep { $predicate->($_) } @{$attr->get_value($instance)}
-    };
-}
-
 1;
 
 __END__
@@ -145,19 +110,12 @@ L<MooseX::AttributeHelpers::Collection::Array>.
 
 =head1 PROVIDED METHODS
 
+This module also consumes the B<List> method providers, to 
+see those provied methods, refer to that documentation.
+
 =over 4
 
-=item B<count>
-
-=item B<empty>
-
-=item B<find>
-
 =item B<get>
-
-=item B<grep>
-
-=item B<map>
 
 =item B<pop>
 

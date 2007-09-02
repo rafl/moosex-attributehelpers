@@ -8,36 +8,42 @@ extends 'MooseX::AttributeHelpers::Base';
 
 sub helper_type { 'Num' }
 
+# NOTE:
+# we don't use the method provider for this 
+# module since many of the names of the provied
+# methods would conflict with keywords
+# - SL
+
 has '+method_constructors' => (
     default => sub {
         return +{
             set => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $_[1]) };
             },
             add => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) + $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $reader->($_[0]) + $_[1]) };
             },
             sub => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) - $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $reader->($_[0]) - $_[1]) };
             },
             mul => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) * $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $reader->($_[0]) * $_[1]) };
             },
             div => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) / $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $reader->($_[0]) / $_[1]) };
             },
             mod => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], $attr->get_value($_[0]) % $_[1]) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], $reader->($_[0]) % $_[1]) };
             },
             abs => sub {
-                my $attr = shift;
-                return sub { $attr->set_value($_[0], abs($attr->get_value($_[0])) ) };
+                my ($attr, $reader, $writer) = @_;
+                return sub { $writer->($_[0], abs($reader->($_[0])) ) };
             },
         }
     }

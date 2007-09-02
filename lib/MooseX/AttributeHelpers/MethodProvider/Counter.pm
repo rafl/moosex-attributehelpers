@@ -2,14 +2,22 @@
 package MooseX::AttributeHelpers::MethodProvider::Counter;
 use Moose::Role;
 
+our $VERSION   = '0.03';
+our $AUTHORITY = 'cpan:STEVAN';
+
+sub reset : method { 
+    my ($attr, $reader, $writer) = @_;
+    return sub { $writer->($_[0], $attr->default($_[0])) };
+}
+
 sub inc {
-    my $attr = shift;
-    return sub { $attr->set_value($_[0], $attr->get_value($_[0]) + 1) };
+    my ($attr, $reader, $writer) = @_;
+    return sub { $writer->($_[0], $reader->($_[0]) + 1) };
 }
 
 sub dec {
-    my $attr = shift;
-    return sub { $attr->set_value($_[0], $attr->get_value($_[0]) - 1) };        
+    my ($attr, $reader, $writer) = @_;
+    return sub { $writer->($_[0], $reader->($_[0]) - 1) };        
 }
 
 1;
@@ -42,6 +50,8 @@ L<MooseX::AttributeHelpers::Counter>.
 =item B<inc>
 
 =item B<dec>
+
+=item B<reset>
 
 =back
 

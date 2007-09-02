@@ -1,4 +1,22 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.02
+    * MooseX::AttributeHelpers::Base
+      - now providing subrefs for the reader and writer 
+        methods to all the method provider constructors
+        (this should speed things up quite a bit).
+        - all method providers now use this internally
+
+    * MooseX::AttributeHelpers::Counter
+      - added the 'reset' method 
+    
+    * MooseX::AttributeHelpers::Collection::Array
+      - Extracted the List method provider role from 
+        Array and made Array consume List.
+
+    + MooseX::AttributeHelpers::Collection::List
+      - created the Collection::List metaclass
+        derived from parts of the old Collection::Array 
+
 0.01 Mon. Aug. 13, 2007
     - module released to CPAN
