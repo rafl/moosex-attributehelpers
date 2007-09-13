@@ -1,6 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.02
+0.02 Thurs. Sept. 13, 2007
+    ~~ some misc. doc updates ~~
+
     * MooseX::AttributeHelpers::Base
       - now providing subrefs for the reader and writer 
         methods to all the method provider constructors

@@ -91,7 +91,7 @@ Common list methods for array references.
 
 This is an early release of this module. Right now it is in great need 
 of documentation and tests in the test suite. However, we have used this 
-module to great success at $work where it has been tested very thoroughly
+module to great success at C<$work> where it has been tested very thoroughly
 and deployed into a major production site.
 
 I plan on getting better docs and tests in the next few releases, but until 

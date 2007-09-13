@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::Number;
 use Moose;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
@@ -101,6 +101,43 @@ basic math operations.
 =item B<helper_type>
 
 =item B<method_constructors>
+
+=back
+
+=head1 PROVIDED METHODS
+
+It is important to note that all those methods do in place
+modification of the value stored in the attribute.
+
+=over 4
+
+=item I<set ($value)>
+
+Alternate way to set the value.
+
+=item I<add ($value)>
+
+Adds the current value of the attribute to C<$value>.
+
+=item I<sub ($value)>
+
+Subtracts the current value of the attribute to C<$value>.
+
+=item I<mul ($value)>
+
+Multiplies the current value of the attribute to C<$value>.
+
+=item I<div ($value)>
+
+Divides the current value of the attribute to C<$value>.
+
+=item I<mod ($value)>
+
+Modulus the current value of the attribute to C<$value>.
+
+=item I<abs>
+
+Sets the current value of the attribute to its absolute value.
 
 =back
 

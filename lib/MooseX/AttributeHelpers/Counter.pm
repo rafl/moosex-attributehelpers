@@ -69,6 +69,27 @@ incremented and decremeneted.
 
 =back
 
+=head1 PROVIDED METHODS
+
+It is important to note that all those methods do in place
+modification of the value stored in the attribute.
+
+=over 4
+
+=item I<inc>
+
+Increments the value stored in this slot by 1.
+
+=item I<dec>
+
+Decrements the value stored in this slot by 1.
+
+=item I<reset>
+
+Resets the value stored in this slot to it's default value.
+
+=back
+
 =head1 BUGS
 
 All complex software has bugs lurking in it, and this module is no 
