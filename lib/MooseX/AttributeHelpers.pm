@@ -1,7 +1,7 @@
 
 package MooseX::AttributeHelpers;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Meta::Method::Provided;
@@ -81,7 +81,7 @@ Common methods for hash references.
 
 Common methods for array references.
 
-=item L<Collection::Array|MooseX::AttributeHelpers::Collection::List>
+=item L<Collection::List|MooseX::AttributeHelpers::Collection::List>
 
 Common list methods for array references. 
 
