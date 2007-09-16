@@ -60,6 +60,13 @@ sub shift : method {
         CORE::shift @{$reader->($_[0])} 
     };
 }
+
+sub clear : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub { 
+        @{$reader->($_[0])} = ()
+    };
+}
    
 sub get : method {
     my ($attr, $reader, $writer) = @_;
@@ -126,6 +133,8 @@ see those provied methods, refer to that documentation.
 =item B<shift>
 
 =item B<unshift>
+
+=item B<clear>
 
 =back
 

@@ -49,6 +49,11 @@ sub empty : method {
     return sub { scalar keys %{$reader->($_[0])} ? 1 : 0 };        
 }
 
+sub clear : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub { %{$reader->($_[0])} = () };
+}
+
 sub delete : method {
     my ($attr, $reader, $writer) = @_;
     return sub { delete $reader->($_[0])->{$_[1]} };
@@ -86,6 +91,8 @@ L<MooseX::AttributeHelpers::Collection::Hash>.
 =item B<delete>
 
 =item B<empty>
+
+=item B<clear>
 
 =item B<exists>
 

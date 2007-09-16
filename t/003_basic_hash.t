@@ -25,6 +25,7 @@ BEGIN {
             'get'    => 'get_option',            
             'empty'  => 'has_options',
             'count'  => 'num_options',
+            'clear'  => 'clear_options',
             'delete' => 'delete_option',
         }
     );
@@ -39,6 +40,7 @@ can_ok($stuff, $_) for qw[
     has_options
     num_options
     delete_option
+    clear_options
 ];
 
 ok(!$stuff->has_options, '... we have no options');
@@ -69,6 +71,10 @@ lives_ok {
 
 is($stuff->num_options, 1, '... we have 1 option(s)');
 is_deeply($stuff->options, { foo => 'bar' }, '... got more options now');
+
+$stuff->clear_options;
+
+is_deeply($stuff->options, { }, "... cleared options" );
 
 lives_ok {
     Stuff->new(options => { foo => 'BAR' });

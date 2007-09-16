@@ -28,6 +28,7 @@ BEGIN {
             'set'     => 'set_option_at',
             'count'   => 'num_options',
             'empty'   => 'has_options',        
+            'clear'   => 'clear_options',        
         }
     );
 }
@@ -43,6 +44,7 @@ can_ok($stuff, $_) for qw[
     get_option_at
     set_option_at
     num_options
+    clear_options
     has_options
 ];
 
@@ -107,6 +109,9 @@ is($stuff->remove_first_option, 10, '... getting the first option');
 is($stuff->num_options, 5, '... got 5 options');
 is($stuff->get_option_at(0), 20, '... get option at index 0');
 
+$stuff->clear_options;
+is_deeply( $stuff->options, [], "... clear options" );
+
 ## check some errors
 
 dies_ok {
@@ -139,6 +144,7 @@ is_deeply($options->provides, {
     'set'     => 'set_option_at',
     'count'   => 'num_options',
     'empty'   => 'has_options',    
+    'clear'   => 'clear_options',    
 }, '... got the right provies mapping');
 
 is($options->container_type, 'Int', '... got the right container type');
