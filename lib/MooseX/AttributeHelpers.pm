@@ -120,6 +120,8 @@ Chris (perigrin) Prather
 
 Robert (phaylon) Sedlacek
 
+Tom (dec) Lanyon
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2007 by Infinity Interactive, Inc.

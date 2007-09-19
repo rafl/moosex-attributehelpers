@@ -76,10 +76,7 @@ sub process_options_for_provides {
 
 before '_process_options' => sub {
     my ($self, $name, $options) = @_;
-    if (exists $options->{provides} || 
-        exists $options->{isa}      && $options->{isa} =~ /^.*?\[.*?\]$/) {
-        $self->process_options_for_provides($options);
-    }
+    $self->process_options_for_provides($options, $name);
 };
 
 ## methods called after instantiation

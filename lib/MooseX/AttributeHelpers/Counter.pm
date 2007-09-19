@@ -14,7 +14,25 @@ has '+method_provider' => (
 );
 
 sub helper_type { 'Num' }
+
+before 'process_options_for_provides' => sub {
+    my ($self, $options, $name) = @_;
+
+    # Set some default attribute options here unless already defined
+    if (my $type = $self->helper_type and not exists $options->{isa}){
+        $options->{isa} = $self->helper_type;
+    }
+    $options->{is} = 'ro' unless exists $options->{is};
+    $options->{default} = 0 unless exists $options->{default};
     
+    # If no provides are specified we'll default to all of them
+    unless ( exists $options->{provides} and
+             grep { exists $options->{provides}{$_} } qw( inc dec reset )
+    ){
+        @{$options->{provides}}{qw(inc dec reset)} = ("inc_$name", "dec_$name", "reset_$name");
+    }
+};
+
 no Moose;
 
 # register the alias ...
@@ -39,12 +57,13 @@ MooseX::AttributeHelpers::Counter
   
   has 'counter' => (
       metaclass => 'Counter',
-      is        => 'rw',
-      isa       => 'Int',
+      is        => 'ro',
+      isa       => 'Num',
       default   => sub { 0 },
       provides  => {
           inc => 'inc_counter',
           dec => 'dec_counter',          
+          reset => 'reset_counter',
       }
   );
 
@@ -57,6 +76,14 @@ MooseX::AttributeHelpers::Counter
 This module provides a simple counter attribute, which can be 
 incremented and decremeneted. 
 
+If your attribute definition does not include any of I<is>, I<isa>,
+I<default> or I<provides> but does use the C<Counter> metaclass,
+then this module applies defaults as in the L</SYNOPSIS>
+above. This allows for a very basic counter definition:
+
+  has 'foo' => (metaclass => 'Counter');
+  $obj->inc_foo;
+
 =head1 METHODS
 
 =over 4
@@ -66,6 +93,10 @@ incremented and decremeneted.
 =item B<has_method_provider>
 
 =item B<helper_type>
+
+=item B<process_options_for_provides>
+
+Run before its superclass method.
 
 =back
 

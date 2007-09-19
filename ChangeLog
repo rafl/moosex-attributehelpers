@@ -1,5 +1,20 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.04
+    ~~ changed 'make' references in README to 'Build' ~~
+
+    * MooseX::AttributeHelpers::Counter
+      - now provides default attribute options for 'is',
+      'isa', 'provides', and 'default' if not specified.
+    
+    * MooseX::AttributeHelpers::Base
+      - added attribute $name to the params passed to
+        process_options_or_provides(), which gives us more
+	flexibility when writing additional helpers
+      - removed check for 'provides' and 'isa' attr
+        options before _process_options. It should be
+        called always.
+
 0.03
     ~~ more misc. doc updates ~~
 
