@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Counter;
 use Moose;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::Counter;
@@ -19,17 +19,25 @@ before 'process_options_for_provides' => sub {
     my ($self, $options, $name) = @_;
 
     # Set some default attribute options here unless already defined
-    if (my $type = $self->helper_type and not exists $options->{isa}){
+    if (my $type = $self->helper_type && !exists $options->{isa}){
         $options->{isa} = $self->helper_type;
     }
-    $options->{is} = 'ro' unless exists $options->{is};
-    $options->{default} = 0 unless exists $options->{default};
     
-    # If no provides are specified we'll default to all of them
-    unless ( exists $options->{provides} and
-             grep { exists $options->{provides}{$_} } qw( inc dec reset )
-    ){
-        @{$options->{provides}}{qw(inc dec reset)} = ("inc_$name", "dec_$name", "reset_$name");
+    $options->{is}      = 'ro' unless exists $options->{is};
+    $options->{default} = 0    unless exists $options->{default};
+};
+
+after 'check_provides_values' => sub {
+    my $self     = shift;
+    my $provides = $self->provides;
+
+    unless (scalar keys %$provides) {
+        my $method_constructors = $self->method_constructors;
+        my $attr_name           = $self->name;
+        
+        foreach my $method (keys %$method_constructors) {
+            $provides->{$method} = ($method . '_' . $attr_name);
+        }
     }
 };
 
@@ -97,6 +105,10 @@ above. This allows for a very basic counter definition:
 =item B<process_options_for_provides>
 
 Run before its superclass method.
+
+=item B<check_provides_values>
+
+Run after its superclass method.
 
 =back
 
