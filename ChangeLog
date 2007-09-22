@@ -10,7 +10,7 @@ Revision history for Perl extension MooseX-AttributeHelpers
     * MooseX::AttributeHelpers::Base
       - added attribute $name to the params passed to
         process_options_or_provides(), which gives us more
-	flexibility when writing additional helpers
+	    flexibility when writing additional helpers
       - removed check for 'provides' and 'isa' attr
         options before _process_options. It should be
         called always.    
