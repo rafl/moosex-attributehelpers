@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::MethodProvider::Array;
 use Moose::Role;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::MethodProvider::List';
@@ -60,13 +60,6 @@ sub shift : method {
         CORE::shift @{$reader->($_[0])} 
     };
 }
-
-sub clear : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { 
-        @{$reader->($_[0])} = ()
-    };
-}
    
 sub get : method {
     my ($attr, $reader, $writer) = @_;
@@ -90,6 +83,37 @@ sub set : method {
             $reader->($_[0])->[$_[1]] = $_[2] 
         };
     }
+}
+
+sub clear : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub { 
+        @{$reader->($_[0])} = ()
+    };
+}
+
+sub delete : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        CORE::splice @{$reader->($_[0])}, $_[1], 1;
+    }
+}
+
+sub insert : method {
+    my ($attr, $reader, $writer) = @_;
+    if ($attr->has_container_type) {
+        my $container_type_constraint = $attr->container_type_constraint;
+        return sub { 
+            ($container_type_constraint->check($_[2])) 
+                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
+            splice @{$reader->($_[0])}, $_[1], 0, $_[2];
+        };                    
+    }
+    else {                
+        return sub { 
+            splice @{$reader->($_[0])}, $_[1], 0, $_[2];
+        };
+    }    
 }
  
 1;
@@ -135,6 +159,10 @@ see those provied methods, refer to that documentation.
 =item B<unshift>
 
 =item B<clear>
+
+=item B<delete>
+
+=item B<insert>
 
 =back
 

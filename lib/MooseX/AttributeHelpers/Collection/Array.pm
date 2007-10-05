@@ -59,6 +59,8 @@ for more details.
 
 =over 4
 
+=item B<meta>
+
 =item B<method_provider>
 
 =item B<has_method_provider>

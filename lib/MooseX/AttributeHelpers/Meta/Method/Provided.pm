@@ -18,6 +18,14 @@ MooseX::AttributeHelpers::Meta::Method::Provided
 
 This is an extension of Moose::Meta::Method to mark I<provided> methods.
 
+=head1 METHODS
+
+=over 4
+
+=item B<meta>
+
+=back
+
 =head1 BUGS
 
 All complex software has bugs lurking in it, and this module is no 

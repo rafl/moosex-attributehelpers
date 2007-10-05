@@ -87,6 +87,8 @@ Documentation to come.
 
 =over 4
 
+=item B<meta>
+
 =item B<container_type>
 
 =item B<container_type_constraint>

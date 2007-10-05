@@ -96,6 +96,8 @@ above. This allows for a very basic counter definition:
 
 =over 4
 
+=item B<meta>
+
 =item B<method_provider>
 
 =item B<has_method_provider>

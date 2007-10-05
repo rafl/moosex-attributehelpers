@@ -190,6 +190,8 @@ C<type_constraint> is now required.
 
 =over 4
 
+=item B<meta>
+
 =item B<helper_type>
 
 =item B<check_provides_values>

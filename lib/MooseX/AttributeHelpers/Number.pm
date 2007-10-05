@@ -98,6 +98,8 @@ basic math operations.
 
 =over 4
 
+=item B<meta>
+
 =item B<helper_type>
 
 =item B<method_constructors>
