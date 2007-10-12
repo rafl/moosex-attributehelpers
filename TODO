@@ -1,0 +1,20 @@
+
+Add a &reverse_method_lookup to MooseX::AttributeHelpers::Base which 
+given a name of a providable method will return the method name chosen
+by the consumer of the module. Something like this.
+
+has +method => (default => sub {
+    return +{
+        'foo' => sub {
+            my ($attr, $reader, $writer) = @_;
+            my $bar_method_name = $attr->reverse_method_lookup('bar');
+            return sub {
+                $_[0]->$bar_method_name()
+            }
+        },
+        'bar' => sub {
+           ...
+        }
+    }
+})
+
