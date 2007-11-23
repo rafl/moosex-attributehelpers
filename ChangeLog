@@ -1,6 +1,6 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.04
+0.04 Fri. Nov. 23, 2007
     * MooseX::AttributeHelpers::Base
       - changing this to use the new Class::MOP::Attribute
         reader and write method ref stuff.
