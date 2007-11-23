@@ -1,6 +1,30 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.03
+0.04
+    * MooseX::AttributeHelpers::Base
+      - changing this to use the new Class::MOP::Attribute
+        reader and write method ref stuff.
+      - fixed this to use find_or_create_type_constraint 
+        instead of trying to parse stuff on our own.
+    
+    * MooseX::AttributeHelpers::Collection
+      - this is pretty much empty subclass now cause of 
+        the find_or_create_type_constraint fix above
+        
+    + MooseX::AttributeHelpers::Collection::ImmutableHash
+    + MooseX::AttributeHelpers::Collection::Bag
+      - added these two new collection types
+        - added method provider roles for them
+        - added tests for them
+        
+    * MooseX::AttributeHelpers::MethodProvider::Hash
+      - this is now composed from the ImmutableHash
+        method provider
+        
+    * t/
+      - fixed the plans on all the tests
+
+0.03 Mon. Sept. 17, 2007
     ~~ more misc. doc updates ~~
     
     * MooseX::AttributeHelpers::Counter

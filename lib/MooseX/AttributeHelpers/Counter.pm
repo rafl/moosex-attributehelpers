@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Counter;
 use Moose;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::Counter;
@@ -19,8 +19,8 @@ before 'process_options_for_provides' => sub {
     my ($self, $options, $name) = @_;
 
     # Set some default attribute options here unless already defined
-    if (my $type = $self->helper_type && !exists $options->{isa}){
-        $options->{isa} = $self->helper_type;
+    if ((my $type = $self->helper_type) && !exists $options->{isa}){
+        $options->{isa} = $type;
     }
     
     $options->{is}      = 'ro' unless exists $options->{is};

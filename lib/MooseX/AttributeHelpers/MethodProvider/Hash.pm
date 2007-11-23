@@ -1,23 +1,15 @@
 package MooseX::AttributeHelpers::MethodProvider::Hash;
 use Moose::Role;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
-sub exists : method {
-    my ($attr, $reader, $writer) = @_;    
-    return sub { exists $reader->($_[0])->{$_[1]} ? 1 : 0 };
-}   
-
-sub get : method {
-    my ($attr, $reader, $writer) = @_;    
-    return sub { $reader->($_[0])->{$_[1]} };
-}  
+with 'MooseX::AttributeHelpers::MethodProvider::ImmutableHash';
 
 sub set : method {
     my ($attr, $reader, $writer) = @_;
-    if ($attr->has_container_type) {
-        my $container_type_constraint = $attr->container_type_constraint;
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
             ($container_type_constraint->check($_[2])) 
                 || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";                        
@@ -29,26 +21,6 @@ sub set : method {
     }
 }
 
-sub keys : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { keys %{$reader->($_[0])} };        
-}
-     
-sub values : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { values %{$reader->($_[0])} };        
-}   
-   
-sub count : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { scalar keys %{$reader->($_[0])} };        
-}
-
-sub empty : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { scalar keys %{$reader->($_[0])} ? 1 : 0 };        
-}
-
 sub clear : method {
     my ($attr, $reader, $writer) = @_;
     return sub { %{$reader->($_[0])} = () };
@@ -56,7 +28,7 @@ sub clear : method {
 
 sub delete : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { delete $reader->($_[0])->{$_[1]} };
+    return sub { CORE::delete $reader->($_[0])->{$_[1]} };
 }
 
 1;
@@ -73,6 +45,9 @@ MooseX::AttributeHelpers::MethodProvider::Hash
 
 This is a role which provides the method generators for 
 L<MooseX::AttributeHelpers::Collection::Hash>.
+
+This role is composed from the 
+L<MooseX::AttributeHelpers::Collection::ImmutableHash> role.
 
 =head1 METHODS
 
@@ -103,6 +78,8 @@ L<MooseX::AttributeHelpers::Collection::Hash>.
 =item B<set>
 
 =item B<values>
+
+=item B<kv>
 
 =back
 

@@ -1,7 +1,7 @@
 
 package MooseX::AttributeHelpers;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.04';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Meta::Method::Provided;
@@ -11,6 +11,8 @@ use MooseX::AttributeHelpers::Number;
 use MooseX::AttributeHelpers::Collection::List;
 use MooseX::AttributeHelpers::Collection::Array;
 use MooseX::AttributeHelpers::Collection::Hash;
+use MooseX::AttributeHelpers::Collection::ImmutableHash;
+use MooseX::AttributeHelpers::Collection::Bag;
 
 1;
 

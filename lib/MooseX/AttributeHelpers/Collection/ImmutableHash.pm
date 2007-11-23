@@ -1,16 +1,16 @@
 
-package MooseX::AttributeHelpers::Collection::Hash;
+package MooseX::AttributeHelpers::Collection::ImmutableHash;
 use Moose;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::Hash;
+use MooseX::AttributeHelpers::MethodProvider::ImmutableHash;
 
 extends 'MooseX::AttributeHelpers::Collection';
 
 has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::Hash'
+    default => 'MooseX::AttributeHelpers::MethodProvider::ImmutableHash'
 );
 
 sub helper_type { 'HashRef' }
@@ -18,8 +18,8 @@ sub helper_type { 'HashRef' }
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Collection::Hash;
-sub register_implementation { 'MooseX::AttributeHelpers::Collection::Hash' }
+package Moose::Meta::Attribute::Custom::Collection::ImmutableHash;
+sub register_implementation { 'MooseX::AttributeHelpers::Collection::ImmutableHash' }
 
 
 1;
@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-MooseX::AttributeHelpers::Collection::Hash
+MooseX::AttributeHelpers::Collection::ImmutableHash
 
 =head1 SYNOPSIS
 
@@ -39,23 +39,21 @@ MooseX::AttributeHelpers::Collection::Hash
   use MooseX::AttributeHelpers;
   
   has 'options' => (
-      metaclass => 'Collection::Hash',
+      metaclass => 'Collection::ImmutableHash',
       is        => 'ro',
       isa       => 'HashRef[Str]',
       default   => sub { {} },
       provides  => {
-          'set'    => 'set_option',
           'get'    => 'get_option',            
           'empty'  => 'has_options',
-          'count'  => 'num_options',
-          'delete' => 'delete_option',
+          'keys'   => 'get_option_list',
       }
   );
   
 =head1 DESCRIPTION
 
-This module provides an Hash attribute which provides a number of 
-hash-like operations. See L<MooseX::AttributeHelpers::MethodProvider::Hash>
+This module provides a immutable HashRef attribute which provides a number of 
+hash-line operations. See L<MooseX::AttributeHelpers::MethodProvider::ImmutableHash>
 for more details.
 
 =head1 METHODS

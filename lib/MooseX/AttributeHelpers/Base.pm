@@ -3,7 +3,7 @@ package MooseX::AttributeHelpers::Base;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
@@ -66,7 +66,7 @@ sub process_options_for_provides {
         my $isa = $options->{isa};       
 
         unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
-            $isa = find_type_constraint($isa);        
+            $isa = Moose::Util::TypeConstraints::find_or_create_type_constraint($isa);        
         }
 
         ($isa->is_a_type_of($type))
@@ -101,20 +101,9 @@ after 'install_accessors' => sub {
     # grab the reader and writer methods
     # as well, this will be useful for 
     # our method provider constructors
-    my ($attr_reader, $attr_writer);
-    if (my $reader = $attr->get_read_method) {    
-        $attr_reader = $class->get_method($reader);
-    }
-    else {
-        $attr_reader = sub { $attr->get_value(@_) };
-    }
-    
-    if (my $writer = $attr->get_write_method) {    
-        $attr_writer = $class->get_method($writer);
-    }
-    else {
-        $attr_writer = sub { $attr->set_value(@_) };
-    }        
+    my $attr_reader = $attr->get_read_method_ref;
+    my $attr_writer = $attr->get_write_method_ref;
+        
 
     # before we install them, lets
     # make sure they are valid
@@ -125,15 +114,16 @@ after 'install_accessors' => sub {
     foreach my $key (keys %{$attr->provides}) {
         
         my $method_name = $attr->provides->{$key};       
+        
+        if ($class->has_method($method_name)) {
+            confess "The method ($method_name) already exists in class (" . $class->name . ")";
+        }        
+        
         my $method_body = $method_constructors->{$key}->(
             $attr,
             $attr_reader,
             $attr_writer,            
         );
-        
-        if ($class->has_method($method_name)) {
-            confess "The method ($method_name) already exists in class (" . $class->name . ")";
-        }
         
         $class->add_method($method_name => 
             MooseX::AttributeHelpers::Meta::Method::Provided->wrap(

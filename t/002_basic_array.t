@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More no_plan => 1;
+use Test::More tests => 51;
 use Test::Exception;
 
 BEGIN {
@@ -147,4 +147,4 @@ is_deeply($options->provides, {
     'clear'   => 'clear_options',    
 }, '... got the right provies mapping');
 
-is($options->container_type, 'Int', '... got the right container type');
+is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
