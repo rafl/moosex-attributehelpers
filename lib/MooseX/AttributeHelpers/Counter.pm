@@ -44,7 +44,8 @@ after 'check_provides_values' => sub {
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Counter;
+package # hide me from search.cpan.org
+    Moose::Meta::Attribute::Custom::Counter;
 sub register_implementation { 'MooseX::AttributeHelpers::Counter' }
 
 1;

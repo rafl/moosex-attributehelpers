@@ -18,7 +18,8 @@ sub helper_type { 'ArrayRef' }
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Collection::Array;
+package # hide me from search.cpan.org
+    Moose::Meta::Attribute::Custom::Collection::Array;
 sub register_implementation { 'MooseX::AttributeHelpers::Collection::Array' }
 
 

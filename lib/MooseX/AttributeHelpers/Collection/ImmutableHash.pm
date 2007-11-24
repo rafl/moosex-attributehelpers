@@ -18,7 +18,8 @@ sub helper_type { 'HashRef' }
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Collection::ImmutableHash;
+package # hide me from search.cpan.org
+    Moose::Meta::Attribute::Custom::Collection::ImmutableHash;
 sub register_implementation { 'MooseX::AttributeHelpers::Collection::ImmutableHash' }
 
 

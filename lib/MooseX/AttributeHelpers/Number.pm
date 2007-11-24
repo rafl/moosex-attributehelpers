@@ -52,7 +52,8 @@ has '+method_constructors' => (
 no Moose;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Number;
+package # hide me from search.cpan.org
+    Moose::Meta::Attribute::Custom::Number;
 sub register_implementation { 'MooseX::AttributeHelpers::Number' }
 
 1;

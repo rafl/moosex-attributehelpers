@@ -33,7 +33,8 @@ no Moose;
 no Moose::Util::TypeConstraints;
 
 # register the alias ...
-package Moose::Meta::Attribute::Custom::Collection::Bag;
+package # hide me from search.cpan.org
+    Moose::Meta::Attribute::Custom::Collection::Bag;
 sub register_implementation { 'MooseX::AttributeHelpers::Collection::Bag' }
 
 1;
