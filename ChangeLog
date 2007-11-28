@@ -1,6 +1,6 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.05 Sat. Nov. 23, 2007
+0.05 Sat. Nov. 24, 2007
     - update Class::MOP dependency
     - hide the Moose::Meta::Attribute::Custom::* package 
       declarations from search.cpan.org (when did they change
