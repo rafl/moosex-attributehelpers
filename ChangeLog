@@ -1,6 +1,6 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.06
+0.06 Tues. Dec. 7, 2007
     * MooseX::AttributeHelpers::Base
       - added the &remove_accessors method to comply with the
         Class::MOP::Attribute interface
