@@ -3,7 +3,7 @@ package MooseX::AttributeHelpers::Base;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.04';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
@@ -16,11 +16,11 @@ has 'provides' => (
 );
 
 
-# these next two are the possible methods 
+# these next two are the possible methods
 # you can use in the 'provides' map.
 
-# provide a Class or Role which we can 
-# collect the method providers from 
+# provide a Class or Role which we can
+# collect the method providers from
 has 'method_provider' => (
     is        => 'ro',
     isa       => 'ClassName',
@@ -29,7 +29,7 @@ has 'method_provider' => (
 
 # or you can provide a HASH ref of anon subs
 # yourself. This will also collect and store
-# the methods from a method_provider as well 
+# the methods from a method_provider as well
 has 'method_constructors' => (
     is      => 'ro',
     isa     => 'HashRef',
@@ -40,14 +40,14 @@ has 'method_constructors' => (
         # or grab them from the role/class
         my $method_provider = $self->method_provider->meta;
         return +{
-            map { 
+            map {
                 $_ => $method_provider->get_method($_)
             } $method_provider->get_method_list
-        };            
+        };
     },
 );
 
-# extend the parents stuff to make sure 
+# extend the parents stuff to make sure
 # certain bits are now required ...
 has '+$!default'       => (required => 1);
 has '+type_constraint' => (required => 1);
@@ -58,15 +58,15 @@ sub helper_type { () }
 
 sub process_options_for_provides {
     my ($self, $options) = @_;
-    
+
     if (my $type = $self->helper_type) {
         (exists $options->{isa})
-            || confess "You must define a type with the $type metaclass";  
+            || confess "You must define a type with the $type metaclass";
 
-        my $isa = $options->{isa};       
+        my $isa = $options->{isa};
 
         unless (blessed($isa) && $isa->isa('Moose::Meta::TypeConstraint')) {
-            $isa = Moose::Util::TypeConstraints::find_or_create_type_constraint($isa);        
+            $isa = Moose::Util::TypeConstraints::find_or_create_type_constraint($isa);
         }
 
         ($isa->is_a_type_of($type))
@@ -81,13 +81,13 @@ before '_process_options' => sub {
 
 ## methods called after instantiation
 
-# this confirms that provides has 
+# this confirms that provides has
 # all valid possibilities in it
 sub check_provides_values {
     my $self = shift;
-    
+
     my $method_constructors = $self->method_constructors;
-    
+
     foreach my $key (keys %{$self->provides}) {
         (exists $method_constructors->{$key})
             || confess "$key is an unsupported method type";
@@ -97,39 +97,50 @@ sub check_provides_values {
 after 'install_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
-    
+
     # grab the reader and writer methods
-    # as well, this will be useful for 
+    # as well, this will be useful for
     # our method provider constructors
     my $attr_reader = $attr->get_read_method_ref;
     my $attr_writer = $attr->get_write_method_ref;
-        
+
 
     # before we install them, lets
     # make sure they are valid
-    $attr->check_provides_values;    
+    $attr->check_provides_values;
 
     my $method_constructors = $attr->method_constructors;
-    
+
     foreach my $key (keys %{$attr->provides}) {
-        
-        my $method_name = $attr->provides->{$key};       
-        
+
+        my $method_name = $attr->provides->{$key};
+
         if ($class->has_method($method_name)) {
             confess "The method ($method_name) already exists in class (" . $class->name . ")";
-        }        
-        
-        my $method_body = $method_constructors->{$key}->(
-            $attr,
-            $attr_reader,
-            $attr_writer,            
-        );
-        
-        $class->add_method($method_name => 
-            MooseX::AttributeHelpers::Meta::Method::Provided->wrap(
-                $method_body,
+        }
+
+        my $method = MooseX::AttributeHelpers::Meta::Method::Provided->wrap(
+            $method_constructors->{$key}->(
+                $attr,
+                $attr_reader,
+                $attr_writer,
             )
         );
+        
+        $attr->associate_method($method);
+        $class->add_method($method_name => $method);
+    }
+};
+
+after 'remove_accessors' => sub {
+    my $attr  = shift;
+    my $class = $attr->associated_class;
+    foreach my $key (keys %{$attr->provides}) {
+        my $method_name = $attr->provides->{$key};
+        my $method = $class->get_method($method_name);
+        $class->remove_method($method_name)
+            if blessed($method) &&
+               $method->isa('MooseX::AttributeHelpers::Meta::Method::Provided');
     }
 };
 
@@ -145,7 +156,7 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::Base - Base class for attribute helpers
-  
+
 =head1 DESCRIPTION
 
 Documentation to come.
@@ -194,13 +205,15 @@ C<type_constraint> is now required.
 
 =item B<install_accessors>
 
+=item B<remove_accessors>
+
 =item B<process_options_for_provides>
 
 =back
 
 =head1 BUGS
 
-All complex software has bugs lurking in it, and this module is no 
+All complex software has bugs lurking in it, and this module is no
 exception. If you find a bug please either email me, or add the bug
 to cpan-RT.
 

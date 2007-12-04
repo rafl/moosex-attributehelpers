@@ -1,8 +1,17 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.06
+    * MooseX::AttributeHelpers::Base
+      - added the &remove_accessors method to comply with the
+        Class::MOP::Attribute interface
+        - added test for this
+      - the &install_accessors method now also properly assocaites
+        the methods with the attribute, so they are accessible via
+        introspection now.
+
 0.05 Sat. Nov. 24, 2007
     - update Class::MOP dependency
-    - hide the Moose::Meta::Attribute::Custom::* package 
+    - hide the Moose::Meta::Attribute::Custom::* package
       declarations from search.cpan.org (when did they change
       things to start seeing these?? *sigh*)
 
@@ -10,63 +19,63 @@ Revision history for Perl extension MooseX-AttributeHelpers
     * MooseX::AttributeHelpers::Base
       - changing this to use the new Class::MOP::Attribute
         reader and write method ref stuff.
-      - fixed this to use find_or_create_type_constraint 
+      - fixed this to use find_or_create_type_constraint
         instead of trying to parse stuff on our own.
-    
+
     * MooseX::AttributeHelpers::Collection
-      - this is pretty much empty subclass now cause of 
+      - this is pretty much empty subclass now cause of
         the find_or_create_type_constraint fix above
-        
+
     + MooseX::AttributeHelpers::Collection::ImmutableHash
     + MooseX::AttributeHelpers::Collection::Bag
       - added these two new collection types
         - added method provider roles for them
         - added tests for them
-        
+
     * MooseX::AttributeHelpers::MethodProvider::Hash
       - this is now composed from the ImmutableHash
         method provider
-        
+
     * t/
       - fixed the plans on all the tests
 
 0.03 Mon. Sept. 17, 2007
     ~~ more misc. doc updates ~~
-    
+
     * MooseX::AttributeHelpers::Counter
       - now provides default attribute options for 'is',
       'isa', 'provides', and 'default' if not specified.
-    
+
     * MooseX::AttributeHelpers::Base
       - added attribute $name to the params passed to
         process_options_or_provides(), which gives us more
 	    flexibility when writing additional helpers
       - removed check for 'provides' and 'isa' attr
         options before _process_options. It should be
-        called always.   
-        
+        called always.
+
     * MooseX::AttributeHelpers::MethodProvider::Array
-      - added `delete` and `insert` methods 
+      - added `delete` and `insert` methods
 
 0.02 Thurs. Sept. 13, 2007
     ~~ some misc. doc updates ~~
 
     * MooseX::AttributeHelpers::Base
-      - now providing subrefs for the reader and writer 
+      - now providing subrefs for the reader and writer
         methods to all the method provider constructors
         (this should speed things up quite a bit).
         - all method providers now use this internally
 
     * MooseX::AttributeHelpers::Counter
-      - added the 'reset' method 
-    
+      - added the 'reset' method
+
     * MooseX::AttributeHelpers::Collection::Array
-      - Extracted the List method provider role from 
+      - Extracted the List method provider role from
         Array and made Array consume List.
 
     + MooseX::AttributeHelpers::Collection::List
       - created the Collection::List metaclass
-        derived from parts of the old Collection::Array 
+        derived from parts of the old Collection::Array
 
 0.01 Mon. Aug. 13, 2007
     - module released to CPAN

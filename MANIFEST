@@ -30,6 +30,7 @@ t/005_basic_list.t
 t/006_basic_bag.t
 t/010_array_from_role.t
 t/011_counter_with_defaults.t
+t/020_remove_attribute.t
 t/100_collection_with_roles.t
 t/pod.t
 t/pod_coverage.t
