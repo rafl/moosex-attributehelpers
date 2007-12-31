@@ -8,6 +8,7 @@ use MooseX::AttributeHelpers::Meta::Method::Provided;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
+use MooseX::AttributeHelpers::String;
 use MooseX::AttributeHelpers::Collection::List;
 use MooseX::AttributeHelpers::Collection::Array;
 use MooseX::AttributeHelpers::Collection::Hash;
