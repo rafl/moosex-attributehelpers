@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 26;
+use Test::More tests => 32;
 use Test::Exception;
 
 BEGIN {
@@ -65,8 +65,25 @@ is_deeply($stuff->options, { foo => 'bar', bar => 'baz' }, '... got more options
 
 is($stuff->get_option('foo'), 'bar', '... got the right option');
 
+is_deeply([ $stuff->get_option(qw(foo bar)) ], [qw(bar baz)], "get multiple options at once");
+
+lives_ok {
+    $stuff->set_option(oink => "blah", xxy => "flop");
+} '... set the option okay';
+
+is($stuff->num_options, 4, "4 options");
+is_deeply([ $stuff->get_option(qw(foo bar oink xxy)) ], [qw(bar baz blah flop)], "get multiple options at once");
+
 lives_ok {
     $stuff->delete_option('bar');
+} '... deleted the option okay';
+
+lives_ok {
+    $stuff->delete_option('oink');
+} '... deleted the option okay';
+
+lives_ok {
+    $stuff->delete_option('xxy');
 } '... deleted the option okay';
 
 is($stuff->num_options, 1, '... we have 1 option(s)');

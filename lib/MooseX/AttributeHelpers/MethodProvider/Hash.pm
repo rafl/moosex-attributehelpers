@@ -11,13 +11,41 @@ sub set : method {
     if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
         my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
-            ($container_type_constraint->check($_[2])) 
-                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";                        
-            $reader->($_[0])->{$_[1]} = $_[2] 
+            my ( $self, @kvp ) = @_;
+           
+            my ( @keys, @values );
+
+            while ( @kvp ) {
+                my ( $key, $value ) = ( shift(@kvp), shift(@kvp) );
+                ($container_type_constraint->check($value)) 
+                    || confess "Value " . ($value||'undef') . " did not pass container type constraint";
+                push @keys, $key;
+                push @values, $value;
+            }
+
+            if ( @values > 1 ) {
+                @{ $reader->($self) }{@keys} = @values;
+            } else {
+                $reader->($self)->{$keys[0]} = $values[0];
+            }
         };
     }
     else {
-        return sub { $reader->($_[0])->{$_[1]} = $_[2] };
+        return sub {
+            if ( @_ == 3 ) {
+                $reader->($_[0])->{$_[1]} = $_[2]
+            } else {
+                my ( $self, @kvp ) = @_;
+                my ( @keys, @values );
+
+                while ( @kvp ) {
+                    push @keys, shift @kvp;
+                    push @values, shift @kvp;
+                }
+
+                @{ $reader->($_[0]) }{@keys} = {@values};
+            }
+        };
     }
 }
 

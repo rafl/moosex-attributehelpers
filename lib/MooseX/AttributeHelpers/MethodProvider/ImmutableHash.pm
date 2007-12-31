@@ -11,7 +11,14 @@ sub exists : method {
 
 sub get : method {
     my ($attr, $reader, $writer) = @_;    
-    return sub { $reader->($_[0])->{$_[1]} };
+    return sub {
+        if ( @_ == 2 ) {
+            $reader->($_[0])->{$_[1]}
+        } else {
+            my ( $self, @keys ) = @_;
+            @{ $reader->($self) }{@keys}
+        }
+    };
 }
 
 sub keys : method {
