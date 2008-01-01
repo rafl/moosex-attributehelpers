@@ -1,5 +1,11 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.07 Tues. Jan. 1, 2008
+    * MooseX::AttributeHelpers::String
+      - Initial version
+    * MooseX::AttributeHelpers::Hash
+      - get and set now support aggregate operations
+
 0.06 Tues. Dec. 7, 2007
     * MooseX::AttributeHelpers::Base
       - added the &remove_accessors method to comply with the
