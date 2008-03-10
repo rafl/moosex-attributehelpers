@@ -1,6 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
 0.08
+    ~~ updates copyright year on all modules ~~
+
     * MooseX::AttributeHelpers::MethodProvider::Hash
       - fixed bug in non-type constraint version of set
         method (thanks to frodwith)
