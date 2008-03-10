@@ -43,7 +43,7 @@ sub set : method {
                     push @values, shift @kvp;
                 }
 
-                @{ $reader->($_[0]) }{@keys} = {@values};
+                @{ $reader->($_[0]) }{@keys} = @values;
             }
         };
     }
