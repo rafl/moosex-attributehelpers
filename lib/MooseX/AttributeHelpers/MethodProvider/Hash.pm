@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::MethodProvider::Hash;
 use Moose::Role;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.04';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::MethodProvider::ImmutableHash';
