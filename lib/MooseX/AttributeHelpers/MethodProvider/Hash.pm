@@ -56,7 +56,10 @@ sub clear : method {
 
 sub delete : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { CORE::delete $reader->($_[0])->{$_[1]} };
+    return sub { 
+        my $hashref = $reader->(shift);
+        CORE::delete @{$hashref}{@_};
+    };
 }
 
 1;
