@@ -14,7 +14,7 @@ sub count : method {
 sub empty : method {
     my ($attr, $reader, $writer) = @_;
     return sub { 
-        scalar @{$reader->($_[0])} ? 0 : 1
+        scalar @{$reader->($_[0])} ? 1 : 0
     };        
 }
 
