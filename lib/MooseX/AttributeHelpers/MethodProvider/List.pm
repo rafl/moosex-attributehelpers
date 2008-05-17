@@ -45,6 +45,14 @@ sub grep : method {
     };
 }
 
+sub elements : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my ($instance, $f) = @_;
+        @{$reader->($instance)}
+    };
+}
+
 1;
 
 __END__
@@ -81,6 +89,8 @@ L<MooseX::AttributeHelpers::Collection::List>.
 =item B<grep>
 
 =item B<map>
+
+=item B<elements>
 
 =back
 

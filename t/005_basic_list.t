@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 19;
 use Test::Exception;
 
 BEGIN {
@@ -14,17 +14,19 @@ BEGIN {
     package Stuff;
     use Moose;
 
-    has 'options' => (
+    has '_options' => (
         metaclass => 'Collection::List',
         is        => 'ro',
         isa       => 'ArrayRef[Int]',
+        init_arg  => 'options',
         default   => sub { [] },
         provides  => {
-            'count'   => 'num_options',
-            'empty'   => 'has_options',        
-            'map'     => 'map_options',
-            'grep'    => 'filter_options',
-            'find'    => 'find_option',
+            'count'    => 'num_options',
+            'empty'    => 'has_options',        
+            'map'      => 'map_options',
+            'grep'     => 'filter_options',
+            'find'     => 'find_option',
+            'elements' => 'options',
         }
     );
 }
@@ -33,14 +35,16 @@ my $stuff = Stuff->new(options => [ 1 .. 10 ]);
 isa_ok($stuff, 'Stuff');
 
 can_ok($stuff, $_) for qw[
+    _options
     num_options
     has_options
     map_options
     filter_options
     find_option
+    options
 ];
 
-is_deeply($stuff->options, [1 .. 10], '... got options');
+is_deeply($stuff->_options, [1 .. 10], '... got options');
 
 ok($stuff->has_options, '... we have options');
 is($stuff->num_options, 10, '... got 2 options');
@@ -59,17 +63,20 @@ is_deeply(
 
 is($stuff->find_option(sub { $_[0] % 2 == 0 }), 2, '.. found the right option');
 
+is_deeply([ $stuff->options ], [1 .. 10], '... got the list of options');
+
 ## test the meta
 
-my $options = $stuff->meta->get_attribute('options');
+my $options = $stuff->meta->get_attribute('_options');
 isa_ok($options, 'MooseX::AttributeHelpers::Collection::List');
 
 is_deeply($options->provides, {
-    'map'     => 'map_options',
-    'grep'    => 'filter_options',
-    'find'    => 'find_option',
-    'count'   => 'num_options',
-    'empty'   => 'has_options',    
+    'map'      => 'map_options',
+    'grep'     => 'filter_options',
+    'find'     => 'find_option',
+    'count'    => 'num_options',
+    'empty'    => 'has_options',
+    'elements' => 'options',
 }, '... got the right provies mapping');
 
 is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
