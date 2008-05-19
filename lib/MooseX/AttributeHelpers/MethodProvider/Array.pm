@@ -115,7 +115,26 @@ sub insert : method {
         };
     }    
 }
- 
+
+sub splice : method {
+    my ($attr, $reader, $writer) = @_;
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
+        return sub { 
+            my ( $self, $i, $j, @elems ) = @_;
+            ($container_type_constraint->check($_)) 
+                || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint" for @elems;
+            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+        };                    
+    }
+    else {                
+        return sub {
+            my ( $self, $i, $j, @elems ) = @_;
+            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+        };
+    }    
+}
+
 1;
 
 __END__
@@ -163,6 +182,8 @@ see those provied methods, refer to that documentation.
 =item B<delete>
 
 =item B<insert>
+
+=item B<splice>
 
 =back
 
