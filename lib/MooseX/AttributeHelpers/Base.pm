@@ -111,6 +111,8 @@ after 'install_accessors' => sub {
 
     my $method_constructors = $attr->method_constructors;
 
+    my $class_name = $class->name;
+
     foreach my $key (keys %{$attr->provides}) {
 
         my $method_name = $attr->provides->{$key};
@@ -124,7 +126,9 @@ after 'install_accessors' => sub {
                 $attr,
                 $attr_reader,
                 $attr_writer,
-            )
+            ),
+            package_name => $class_name,
+            name => $method_name,
         );
         
         $attr->associate_method($method);
