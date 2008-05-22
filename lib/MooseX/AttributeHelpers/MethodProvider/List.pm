@@ -48,7 +48,7 @@ sub grep : method {
 sub elements : method {
     my ($attr, $reader, $writer) = @_;
     return sub {
-        my ($instance, $f) = @_;
+        my ($instance) = @_;
         @{$reader->($instance)}
     };
 }
