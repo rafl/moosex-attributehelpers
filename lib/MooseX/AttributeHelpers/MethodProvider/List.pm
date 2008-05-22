@@ -53,6 +53,14 @@ sub elements : method {
     };
 }
 
+sub join : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my ($instance, $separator) = @_;
+        join $separator, @{$reader->($instance)}
+    };
+}
+
 1;
 
 __END__
@@ -91,6 +99,8 @@ L<MooseX::AttributeHelpers::Collection::List>.
 =item B<map>
 
 =item B<elements>
+
+=item B<join>
 
 =back
 

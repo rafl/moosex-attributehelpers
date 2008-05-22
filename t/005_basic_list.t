@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 use Test::Exception;
 
 BEGIN {
@@ -27,6 +27,7 @@ BEGIN {
             'grep'     => 'filter_options',
             'find'     => 'find_option',
             'elements' => 'options',
+            'join'     => 'join_options',
         }
     );
 }
@@ -42,6 +43,7 @@ can_ok($stuff, $_) for qw[
     filter_options
     find_option
     options
+    join_options
 ];
 
 is_deeply($stuff->_options, [1 .. 10], '... got options');
@@ -65,6 +67,8 @@ is($stuff->find_option(sub { $_[0] % 2 == 0 }), 2, '.. found the right option');
 
 is_deeply([ $stuff->options ], [1 .. 10], '... got the list of options');
 
+is($stuff->join_options(':'), '1:2:3:4:5:6:7:8:9:10', '... joined the list of options by :');
+
 ## test the meta
 
 my $options = $stuff->meta->get_attribute('_options');
@@ -77,6 +81,7 @@ is_deeply($options->provides, {
     'count'    => 'num_options',
     'empty'    => 'has_options',
     'elements' => 'options',
+    'join'     => 'join_options',
 }, '... got the right provies mapping');
 
 is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
