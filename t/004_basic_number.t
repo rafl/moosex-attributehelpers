@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -73,4 +73,20 @@ $real->set(-1);
 
 $real->abs;
 
-is $real->integer, 1, 'abs 1'
+is $real->integer, 1, 'abs 1';
+
+## test the meta
+
+my $attr = $real->meta->get_attribute('integer');
+isa_ok($attr, 'MooseX::AttributeHelpers::Number');
+
+is_deeply($attr->provides, {
+    set => 'set',
+    add => 'add',
+    sub => 'sub',
+    mul => 'mul',
+    div => 'div',
+    mod => 'mod',
+    abs => 'abs',
+}, '... got the right provides mapping');
+
