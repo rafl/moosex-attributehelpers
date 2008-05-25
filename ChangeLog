@@ -1,17 +1,23 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.08
+0.09 Sat. May, 24, 2008
+	- remove Module::Build in favor of Module::Install
+	
+    * MooseX::AttributeHelpers::MethodProvider::Hash
+	  - delete with multiple keys will now work (thanks to frodwith)
+
+    * MooseX::AttributeHelpers::MethodProvider::List
+      - add "join" and "elements" provided methods (thanks to Sartak)
+    
+    * MooseX::AttributeHelpers::MethodProvider::Array
+      - add "splice" provided method
+
+0.08 Sat. April 12, 2008
     ~~ updates copyright year on all modules ~~
-	- remove Module::Build support in favor of ExtUtils::MakeMaker
 
     * MooseX::AttributeHelpers::MethodProvider::Hash
       - fixed bug in non-type constraint version of set
         method (thanks to frodwith)
-	  - delete with multiple keys will now work (thanks to frodwith)
-	* MooseX::AttributeHelpers::MethodProvider::List
-	  - add "join" and "elements" provided methods (thanks to Sartak)
-	* MooseX::AttributeHelpers::MethodProvider::Array
-	  - add "splice" provided method
 
 0.07 Tues. Jan. 1, 2008
     * MooseX::AttributeHelpers::String

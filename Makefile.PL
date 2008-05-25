@@ -1,19 +1,14 @@
-#!/usr/bin/perl
+use inc::Module::Install;
 
-use strict;
-use warnings;
+name 'MooseX-AttributeHelpers';
+license 'perl';
 
-use ExtUtils::MakeMaker;
-WriteMakefile(
-    'NAME'         => 'MooseX::AttributeHelpers',
-    'VERSION_FROM' => 'lib/MooseX/AttributeHelpers.pm',
-    'PREREQ_PM'    => {
-        'Class::MOP'      => '0.47',
-        'Moose'           => '0.30',
-        'Test::Exception' => '0.21',
-        'Test::More'      => '0.62'
-    },
-    'INSTALLDIRS' => 'site',
-    'EXE_FILES'   => [],
-    'PL_FILES'    => {}
-);
+all_from 'lib/MooseX/AttributeHelpers.pm';
+
+requires 'Moose' => '0.45';
+
+build_requires 'Test::More'       => '0.62';
+build_requires 'Test::Exception'  => '0.21';
+
+auto_provides;
+WriteAll();

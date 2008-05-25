@@ -1,7 +1,7 @@
 
 package MooseX::AttributeHelpers;
 
-our $VERSION   = '0.08';
+our $VERSION   = '0.09';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Meta::Method::Provided;
@@ -118,6 +118,10 @@ Stevan Little E<lt>stevan@iinteractive.comE<gt>
 B<with contributions from:>
 
 Robert (rlb3) Boone
+
+Paul (frodwith) Driver
+
+Shawn (Sartak) Moore
 
 Chris (perigrin) Prather
 
