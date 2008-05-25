@@ -21,11 +21,8 @@ has 'provides' => (
 
 # provide a Class or Role which we can
 # collect the method providers from
-has 'method_provider' => (
-    is        => 'ro',
-    isa       => 'ClassName',
-    predicate => 'has_method_provider',
-);
+
+# requires_attr 'method_provider'
 
 # or you can provide a HASH ref of anon subs
 # yourself. This will also collect and store
