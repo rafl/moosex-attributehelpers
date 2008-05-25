@@ -4,51 +4,9 @@ use Moose;
 our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
-extends 'MooseX::AttributeHelpers::Base';
+extends 'Moose::Meta::Attribute';
+with 'MooseX::AttributeHelpers::Trait::Number';
 
-sub helper_type { 'Num' }
-
-# NOTE:
-# we don't use the method provider for this 
-# module since many of the names of the provied
-# methods would conflict with keywords
-# - SL
-
-has '+method_constructors' => (
-    default => sub {
-        return +{
-            set => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $_[1]) };
-            },
-            add => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $reader->($_[0]) + $_[1]) };
-            },
-            sub => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $reader->($_[0]) - $_[1]) };
-            },
-            mul => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $reader->($_[0]) * $_[1]) };
-            },
-            div => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $reader->($_[0]) / $_[1]) };
-            },
-            mod => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], $reader->($_[0]) % $_[1]) };
-            },
-            abs => sub {
-                my ($attr, $reader, $writer) = @_;
-                return sub { $writer->($_[0], abs($reader->($_[0])) ) };
-            },
-        }
-    }
-);
-    
 no Moose;
 
 # register the alias ...
