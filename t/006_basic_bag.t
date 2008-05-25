@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 use Test::Exception;
 
 BEGIN {
@@ -61,5 +61,16 @@ is($stuff->get_count_for('foo'), 1, '... got words now');
 is($stuff->get_count_for('bar'), 5, '... got words now');
 is($stuff->get_count_for('baz'), 11, '... got words now');
 
+## test the meta
 
+my $words = $stuff->meta->get_attribute('word_histogram');
+isa_ok($words, 'MooseX::AttributeHelpers::Collection::Bag');
+
+is_deeply($words->provides, {
+    'add'    => 'add_word',
+    'get'    => 'get_count_for',            
+    'empty'  => 'has_any_words',
+    'count'  => 'num_words',
+    'delete' => 'delete_word',
+}, '... got the right provides mapping');
 
