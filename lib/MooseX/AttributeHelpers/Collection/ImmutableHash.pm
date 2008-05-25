@@ -5,15 +5,8 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::ImmutableHash;
-
-extends 'MooseX::AttributeHelpers::Collection';
-
-has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::ImmutableHash'
-);
-
-sub helper_type { 'HashRef' }
+extends 'Moose::Meta::Attribute';
+with 'MooseX::AttributeHelpers::Trait::Collection::ImmutableHash';
 
 no Moose;
 

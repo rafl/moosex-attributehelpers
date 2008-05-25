@@ -5,41 +5,8 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::String;
-
-extends 'MooseX::AttributeHelpers::Base';
-
-has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::String'
-);
-
-sub helper_type { 'Str' }
-
-before 'process_options_for_provides' => sub {
-    my ($self, $options, $name) = @_;
-
-    # Set some default attribute options here unless already defined
-    if ((my $type = $self->helper_type) && !exists $options->{isa}){
-        $options->{isa} = $type;
-    }
-    
-    $options->{is}      = 'rw' unless exists $options->{is};
-    $options->{default} = ''   unless exists $options->{default};
-};
-
-after 'check_provides_values' => sub {
-    my $self     = shift;
-    my $provides = $self->provides;
-
-    unless (scalar keys %$provides) {
-        my $method_constructors = $self->method_constructors;
-        my $attr_name           = $self->name;
-        
-        foreach my $method (keys %$method_constructors) {
-            $provides->{$method} = ($method . '_' . $attr_name);
-        }
-    }
-};
+extends 'Moose::Meta::Attribute';
+with 'MooseX::AttributeHelpers::Trait::String';
 
 no Moose;
 

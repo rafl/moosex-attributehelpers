@@ -5,15 +5,8 @@ use Moose;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::List;
-
-extends 'MooseX::AttributeHelpers::Collection';
-
-has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::List'
-);
-
-sub helper_type { 'ArrayRef' }
+extends 'Moose::Meta::Attribute';
+with 'MooseX::AttributeHelpers::Trait::Collection::List';
 
 no Moose;
 

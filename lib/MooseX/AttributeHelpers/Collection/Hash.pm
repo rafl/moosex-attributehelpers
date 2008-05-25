@@ -5,15 +5,8 @@ use Moose;
 our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use MooseX::AttributeHelpers::MethodProvider::Hash;
-
-extends 'MooseX::AttributeHelpers::Collection';
-
-has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::Hash'
-);
-
-sub helper_type { 'HashRef' }
+extends 'Moose::Meta::Attribute';
+with 'MooseX::AttributeHelpers::Trait::Collection::Hash';
 
 no Moose;
 
