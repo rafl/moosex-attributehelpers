@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 32;
+use Test::More tests => 35;
 use Test::Exception;
 
 BEGIN {
@@ -107,4 +107,18 @@ dies_ok {
     Stuff->new(options => { foo => [] });
 } '... bad constructor params';
 
+## test the meta
 
+my $options = $stuff->meta->get_attribute('options');
+isa_ok($options, 'MooseX::AttributeHelpers::Collection::Hash');
+
+is_deeply($options->provides, {
+    'set'    => 'set_option',
+    'get'    => 'get_option',            
+    'empty'  => 'has_options',
+    'count'  => 'num_options',
+    'clear'  => 'clear_options',
+    'delete' => 'delete_option',
+}, '... got the right provies mapping');
+
+is($options->type_constraint->type_parameter, 'Str', '... got the right container type');
