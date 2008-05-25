@@ -11,6 +11,7 @@ use MooseX::AttributeHelpers::Trait::Number;
 use MooseX::AttributeHelpers::Trait::String;
 use MooseX::AttributeHelpers::Trait::Collection::List;
 use MooseX::AttributeHelpers::Trait::Collection::Array;
+use MooseX::AttributeHelpers::Trait::Collection::Hash;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
