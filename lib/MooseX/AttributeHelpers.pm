@@ -9,6 +9,7 @@ use MooseX::AttributeHelpers::Meta::Method::Provided;
 use MooseX::AttributeHelpers::Trait::Counter;
 use MooseX::AttributeHelpers::Trait::Number;
 use MooseX::AttributeHelpers::Trait::String;
+use MooseX::AttributeHelpers::Trait::Collection::List;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;

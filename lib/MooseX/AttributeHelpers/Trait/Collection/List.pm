@@ -9,18 +9,23 @@ use MooseX::AttributeHelpers::MethodProvider::List;
 
 with 'MooseX::AttributeHelpers::Trait::Collection';
 
-has '+method_provider' => (
-    default => 'MooseX::AttributeHelpers::MethodProvider::List'
+has 'method_provider' => (
+    is        => 'ro',
+    isa       => 'ClassName',
+    predicate => 'has_method_provider',
+    default   => 'MooseX::AttributeHelpers::MethodProvider::List'
 );
 
 sub helper_type { 'ArrayRef' }
 
-no Moose;
+no Moose::Role;
 
 # register the alias ...
 package # hide me from search.cpan.org
-    Moose::Meta::Attribute::Custom::Collection::List;
-sub register_implementation { 'MooseX::AttributeHelpers::Collection::List' }
+    Moose::Meta::Attribute::Custom::Trait::Collection::List;
+sub register_implementation {
+    'MooseX::AttributeHelpers::Trait::Collection::List'
+}
 
 
 1;
