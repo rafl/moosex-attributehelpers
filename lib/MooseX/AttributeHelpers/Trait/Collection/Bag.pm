@@ -17,8 +17,7 @@ has 'method_provider' => (
     default   => 'MooseX::AttributeHelpers::MethodProvider::Bag'
 );
 
-subtype 'Bag' => as 'HashRef[Int]'
-    unless find_type_constraint('Bag');
+subtype 'Bag' => as 'HashRef[Int]';
 
 sub helper_type { 'Bag' }
 
