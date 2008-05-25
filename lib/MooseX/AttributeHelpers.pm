@@ -13,6 +13,7 @@ use MooseX::AttributeHelpers::Trait::Collection::List;
 use MooseX::AttributeHelpers::Trait::Collection::Array;
 use MooseX::AttributeHelpers::Trait::Collection::Hash;
 use MooseX::AttributeHelpers::Trait::Collection::ImmutableHash;
+use MooseX::AttributeHelpers::Trait::Collection::Bag;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
