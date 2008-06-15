@@ -46,7 +46,7 @@ MooseX::AttributeHelpers::Collection::List
       default   => sub { [] },
       provides  => {
           map  => 'map_options',
-          grep => 'fitler_options',
+          grep => 'filter_options',
       }
   );
 
