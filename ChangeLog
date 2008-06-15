@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.10
+	- add Bool as an attribute helper (thanks to jasonmay)
+
 0.09 Sat. May, 24, 2008
 	- remove Module::Build in favor of Module::Install
 	
