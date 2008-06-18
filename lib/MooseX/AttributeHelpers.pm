@@ -77,6 +77,10 @@ Common numerical operations.
 
 Methods for incrementing and decrementing a counter attribute.
 
+=item L<Counter|MooseX::AttributeHelpers::Bool>
+
+Common methods for boolean values.
+
 =item L<Collection::Hash|MooseX::AttributeHelpers::Collection::Hash>
 
 Common methods for hash references.
@@ -131,6 +135,8 @@ Robert (phaylon) Sedlacek
 Tom (dec) Lanyon
 
 Yuval Kogman
+
+Jason May
 
 =head1 COPYRIGHT AND LICENSE
 
