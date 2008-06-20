@@ -5,19 +5,24 @@ use Moose::Role;
 our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
-sub reset : method { 
+sub reset : method {
     my ($attr, $reader, $writer) = @_;
     return sub { $writer->($_[0], $attr->default($_[0])) };
 }
 
+sub set : method {
+    my ($attr, $reader, $writer, $value) = @_;
+    return sub { $writer->($_[0], $_[1]) };
+}
+
 sub inc {
     my ($attr, $reader, $writer) = @_;
-    return sub { $writer->($_[0], $reader->($_[0]) + 1) };
+    return sub { $writer->($_[0], $reader->($_[0]) + (defined($_[1]) ? $_[1] : 1) ) };
 }
 
 sub dec {
     my ($attr, $reader, $writer) = @_;
-    return sub { $writer->($_[0], $reader->($_[0]) - 1) };        
+    return sub { $writer->($_[0], $reader->($_[0]) - (defined($_[1]) ? $_[1] : 1) ) };
 }
 
 1;
@@ -46,6 +51,8 @@ L<MooseX::AttributeHelpers::Counter>.
 =head1 PROVIDED METHODS
 
 =over 4
+
+=item B<set>
 
 =item B<inc>
 
