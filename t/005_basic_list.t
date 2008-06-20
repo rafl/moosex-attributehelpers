@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 24;
 use Test::Exception;
 
 BEGIN {
@@ -28,6 +28,11 @@ BEGIN {
             'find'     => 'find_option',
             'elements' => 'options',
             'join'     => 'join_options',
+        },
+        curries   => {
+            'grep'     => ['less_than_five', sub { $_ < 5 }],
+            'map'      => ['up_by_one', sub { $_ + 1 }],
+            'join'     => ['dashify', '-']
         }
     );
 }
@@ -68,6 +73,13 @@ is($stuff->find_option(sub { $_[0] % 2 == 0 }), 2, '.. found the right option');
 is_deeply([ $stuff->options ], [1 .. 10], '... got the list of options');
 
 is($stuff->join_options(':'), '1:2:3:4:5:6:7:8:9:10', '... joined the list of options by :');
+
+# test the currying
+is_deeply([ $stuff->less_than_five() ], [1 .. 4]);
+
+is_deeply([ $stuff->up_by_one() ], [2 .. 11]);
+
+is($stuff->dashify, '1-2-3-4-5-6-7-8-9-10');
 
 ## test the meta
 

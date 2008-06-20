@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 35;
+use Test::More tests => 37;
 use Test::Exception;
 
 BEGIN {
@@ -27,6 +27,12 @@ BEGIN {
             'count'  => 'num_options',
             'clear'  => 'clear_options',
             'delete' => 'delete_option',
+        },
+        curries   => {
+            'set'    => [
+                'set_with_defaults' =>
+                    size => 'medium', quantity => 1
+            ],
         }
     );
 }
@@ -92,6 +98,12 @@ is_deeply($stuff->options, { foo => 'bar' }, '... got more options now');
 $stuff->clear_options;
 
 is_deeply($stuff->options, { }, "... cleared options" );
+
+lives_ok {
+    $stuff->set_with_defaults(foo => 'bar');
+} '... options added okay with defaults';
+
+is_deeply($stuff->options, {size => 'medium', quantity => 1, foo => 'bar'});
 
 lives_ok {
     Stuff->new(options => { foo => 'BAR' });

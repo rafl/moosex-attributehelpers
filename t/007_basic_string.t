@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 21;
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -27,6 +27,11 @@ BEGIN {
             chop    => 'chop_string',
             chomp   => 'chomp_string',
             clear   => 'clear_string',
+        },
+        curries  => {
+            append  => ['exclaim', '!'],
+            replace => ['capitalize_last', qr/(.)$/, sub { uc $1 }],
+            match   => ['invalid_number', qr/\D/]
         }
     );
 }
@@ -63,6 +68,19 @@ is_deeply( [ $page->match_string(qr/([ao])/) ], [ "a" ], "match" );
 
 $page->replace_string(qr/([ao])/, sub { uc($1) });
 is($page->string, 'bArcfo', "substitution");
+
+$page->exclaim;
+is($page->string, 'bArcfo!', 'exclaim!');
+
+$page->string('Moosex');
+$page->capitalize_last;
+is($page->string, 'MooseX', 'capitalize last');
+
+$page->string('1234');
+ok(!$page->invalid_number, 'string "isn\'t an invalid number');
+
+$page->string('one two three four');
+ok($page->invalid_number, 'string an invalid number');
 
 $page->clear_string;
 is($page->string, '', "clear");

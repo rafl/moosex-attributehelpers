@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 51;
+use Test::More tests => 52;
 use Test::Exception;
 
 BEGIN {
@@ -17,7 +17,7 @@ BEGIN {
     has 'options' => (
         metaclass => 'Collection::Array',
         is        => 'ro',
-        isa       => 'ArrayRef[Int]',
+        isa       => 'ArrayRef[Str]',
         default   => sub { [] },
         provides  => {
             'push'    => 'add_options',
@@ -29,6 +29,10 @@ BEGIN {
             'count'   => 'num_options',
             'empty'   => 'has_options',        
             'clear'   => 'clear_options',        
+        },
+        curries   => {
+            'push'       => ['add_options_with_speed', 'funrolls', 'funbuns'],
+            'unshift'    => ['prepend_prerequisites_along_with', 'first', 'second']
         }
     );
 }
@@ -112,22 +116,32 @@ is($stuff->get_option_at(0), 20, '... get option at index 0');
 $stuff->clear_options;
 is_deeply( $stuff->options, [], "... clear options" );
 
+lives_ok {
+    $stuff->add_options('tree');
+} '... set the options okay';
+
+lives_ok { 
+    $stuff->add_options_with_speed('compatible', 'safe');
+} '... add options with speed okay';
+
+is_deeply($stuff->options, [qw/tree funrolls funbuns compatible safe/]);
+
+lives_ok {
+    $stuff->prepend_prerequisites_along_with();
+} '... add prerequisite options okay';
+
 ## check some errors
 
-dies_ok {
-    $stuff->add_options([]);
-} '... could not add an array ref where an int is expected';
+#dies_ok {
+#    $stuff->insert_options(undef);
+#} '... could not add an undef where a string is expected';
+#
+#dies_ok {
+#    $stuff->set_option(5, {});
+#} '... could not add a hash ref where a string is expected';
 
 dies_ok {
-    $stuff->insert_options(undef);
-} '... could not add an undef where an int is expected';
-
-dies_ok {
-    $stuff->set_option(5, {});
-} '... could not add a hash ref where an int is expected';
-
-dies_ok {
-    Stuff->new(options => [ 'Foo', 10, 'Bar', 20 ]);
+    Stuff->new(options => [ undef, 10, undef, 20 ]);
 } '... bad constructor params';
 
 ## test the meta
@@ -147,4 +161,4 @@ is_deeply($options->provides, {
     'clear'   => 'clear_options',    
 }, '... got the right provies mapping');
 
-is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
+is($options->type_constraint->type_parameter, 'Str', '... got the right container type');

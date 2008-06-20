@@ -15,6 +15,12 @@ has 'provides' => (
     default => sub {{}}
 );
 
+has 'curries' => (
+    is      => 'ro',
+    isa     => 'HashRef',
+    default => sub {{}}
+);
+
 
 # these next two are the possible methods
 # you can use in the 'provides' map.
@@ -94,6 +100,15 @@ sub check_provides_values {
     }
 }
 
+sub _curry {
+    my $self = shift;
+    my $code = shift;
+
+    #warn "_curry: "; use DDS; warn Dump($self);
+    my @args = @_;
+    return sub { my $self = shift; $code->($self, @args, @_) };
+}
+
 after 'install_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
@@ -108,10 +123,35 @@ after 'install_accessors' => sub {
     # before we install them, lets
     # make sure they are valid
     $attr->check_provides_values;
+#    $attr->check_curries_values;
 
     my $method_constructors = $attr->method_constructors;
 
     my $class_name = $class->name;
+
+    foreach my $key (keys %{$attr->curries}) {
+
+        my ($curried_name, @curried_args) = @{ $attr->curries->{$key} };
+
+        if ($class->has_method($curried_name)) {
+            confess "The method ($curried_name) already exists in class (" . $class->name . ")";
+        }
+
+        my $method = MooseX::AttributeHelpers::Meta::Method::Curried->wrap(
+            $attr->_curry($method_constructors->{$key}->(
+                $attr,
+                $attr_reader,
+                $attr_writer,
+            ), @curried_args),
+            package_name => $class_name,
+            name => $curried_name,
+        );
+        
+#use DDS; warn Dump($method);
+
+        $attr->associate_method($method);
+        $class->add_method($curried_name => $method);
+    }
 
     foreach my $key (keys %{$attr->provides}) {
 

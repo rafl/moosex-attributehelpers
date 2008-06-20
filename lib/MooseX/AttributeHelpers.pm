@@ -5,6 +5,7 @@ our $VERSION   = '0.09';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::Meta::Method::Provided;
+use MooseX::AttributeHelpers::Meta::Method::Curried;
 
 use MooseX::AttributeHelpers::Counter;
 use MooseX::AttributeHelpers::Number;
@@ -43,14 +44,18 @@ MooseX::AttributeHelpers - Extend your attribute interfaces
           get       => 'get_mapping',
           set       => 'set_mapping',
       },
+      curries  => {
+          set       => [ set_quantity => 'quantity' ]
+      }
   );
 
   # ...
 
   my $obj = MyClass->new;
-  $obj->set_mapping(4, 'foo');
-  $obj->set_mapping(5, 'bar');
-  $obj->set_mapping(6, 'baz');
+  $obj->set_quantity(10);      # quantity => 10
+  $obj->set_mapping(4, 'foo'); # 4 => 'foo'
+  $obj->set_mapping(5, 'bar'); # 5 => 'bar'
+  $obj->set_mapping(6, 'baz'); # 6 => 'baz'
 
   # prints 'bar'
   print $obj->get_mapping(5) if $obj->exists_in_mapping(5);
@@ -66,6 +71,22 @@ used attribute helper methods for more specific types of data.
 
 As seen in the L</SYNOPSIS>, you specify the extension via the 
 C<metaclass> parameter. Available meta classes are:
+
+=head1 PARAMETERS
+
+=head2 provides
+
+This points to a hashref that uses C<provider> for the keys and
+C<['method', @args]> for the values.  The method will be added to
+the object itself and do what you want.
+
+=head2 curries
+
+This points to a hashref that uses C<provider> for the keys and
+C<['method', @args]> for the values.  The method will be added to
+the object itself (always using C<@args> as the beginning arguments).
+
+=head1 METHOD PROVIDERS
 
 =over
 
