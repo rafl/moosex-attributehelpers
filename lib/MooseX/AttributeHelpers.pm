@@ -49,6 +49,7 @@ MooseX::AttributeHelpers - Extend your attribute interfaces
       }
   );
 
+
   # ...
 
   my $obj = MyClass->new;
@@ -56,6 +57,7 @@ MooseX::AttributeHelpers - Extend your attribute interfaces
   $obj->set_mapping(4, 'foo'); # 4 => 'foo'
   $obj->set_mapping(5, 'bar'); # 5 => 'bar'
   $obj->set_mapping(6, 'baz'); # 6 => 'baz'
+
 
   # prints 'bar'
   print $obj->get_mapping(5) if $obj->exists_in_mapping(5);
@@ -83,8 +85,30 @@ the object itself and do what you want.
 =head2 curries
 
 This points to a hashref that uses C<provider> for the keys and
-C<< {method => [ @args ]} >> for the values.  The method will be added to
-the object itself (always using C<@args> as the beginning arguments).
+has two choices for the value:
+
+You can supply C<< {method => [ @args ]} >> for the values.  The method will be
+added to the object itself (always using C<@args> as the beginning arguments).
+
+Another approach to curry a method provider is to supply a coderef instead of an
+arrayref. The code ref takes C<$self>, C<$body>, and any additional arguments
+passed to the final method.
+
+  # ...
+
+  curries => {
+      grep => {
+          times_with_day => sub {
+              my ($self, $body, $datetime) = @_;
+              $body->($self, sub { $_->ymd eq $datetime->ymd });
+          }
+      }
+  }
+
+  # ...
+
+  $obj->times_with_day(DateTime->now); # takes datetime argument, checks day
+
 
 =head1 METHOD PROVIDERS
 

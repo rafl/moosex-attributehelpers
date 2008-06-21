@@ -3,8 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Exception;
+use DateTime;
+use DateTime::Format::Strptime;
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -34,6 +36,20 @@ BEGIN {
             'map'      => {up_by_one      => [ sub { $_ + 1 } ]},
             'join'     => {dashify        => [ '-' ]}
         }
+    );
+
+    has datetimes => (
+        metaclass => 'Collection::List',
+        is => 'rw',
+        isa => 'ArrayRef[DateTime]',
+        curries => {
+            grep => {
+                times_with_day => sub {
+                    my ($self, $body, $datetime) = @_;
+                    $body->($self, sub { $_->ymd eq $datetime->ymd });
+                },
+            },
+        },
     );
 }
 
@@ -80,6 +96,17 @@ is_deeply([ $stuff->less_than_five() ], [1 .. 4]);
 is_deeply([ $stuff->up_by_one() ], [2 .. 11]);
 
 is($stuff->dashify, '1-2-3-4-5-6-7-8-9-10');
+
+$stuff->datetimes([
+    DateTime->now->subtract(days => 1),
+    DateTime->now->subtract(days => 1),
+    DateTime->now,
+    DateTime->now,
+]);
+
+my $my_time = DateTime->now;
+
+is($stuff->times_with_day($my_time), 2, 'check for currying with a coderef');
 
 ## test the meta
 
