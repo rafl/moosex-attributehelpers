@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+
 use strict;
 use warnings;
 
@@ -19,19 +20,19 @@ BEGIN {
         isa       => 'Int',
         default   => sub { 5 },
         provides  => {
-            set => 'set',
-            add => 'add',
-            sub => 'sub',
-            mul => 'mul',
-            div => 'div',
-            mod => 'mod',
-            abs => 'abs',
+            set       => 'set',
+            add       => 'add',
+            sub       => 'sub',
+            mul       => 'mul',
+            div       => 'div',
+            mod       => 'mod',
+            abs       => 'abs',
         },
         curries   => {
-            'add'         => ['inc', 1],
-            'sub'         => ['dec', 1],
-            'mod'         => ['odd', 2],
-            'div'         => ['cut_in_half', 2]
+            add       => {inc         => [ 1 ]},
+            sub       => {dec         => [ 1 ]},
+            mod       => {odd         => [ 2 ]},
+            div       => {cut_in_half => [ 2 ]}
         }
     );
 }

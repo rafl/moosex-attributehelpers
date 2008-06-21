@@ -29,9 +29,9 @@ BEGIN {
             clear   => 'clear_string',
         },
         curries  => {
-            append  => ['exclaim', '!'],
-            replace => ['capitalize_last', qr/(.)$/, sub { uc $1 }],
-            match   => ['invalid_number', qr/\D/]
+            append  => {exclaim         => [ '!' ]},
+            replace => {capitalize_last => [ qr/(.)$/, sub { uc $1 } ]},
+            match   => {invalid_number  => [ qr/\D/ ]}
         }
     );
 }

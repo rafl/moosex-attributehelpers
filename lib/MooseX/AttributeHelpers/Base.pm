@@ -104,7 +104,6 @@ sub _curry {
     my $self = shift;
     my $code = shift;
 
-    #warn "_curry: "; use DDS; warn Dump($self);
     my @args = @_;
     return sub { my $self = shift; $code->($self, @args, @_) };
 }
@@ -129,28 +128,47 @@ after 'install_accessors' => sub {
 
     my $class_name = $class->name;
 
-    foreach my $key (keys %{$attr->curries}) {
-
-        my ($curried_name, @curried_args) = @{ $attr->curries->{$key} };
-
-        if ($class->has_method($curried_name)) {
-            confess "The method ($curried_name) already exists in class (" . $class->name . ")";
+    while (my ($constructor, $constructed) = each %{$attr->curries}) {
+        my $method_code;
+        if (ref $constructed eq 'HASH') {
+            while (my ($curried_name, $curried_args) = each(%$constructed)) {
+#                warn "CURRIED_NAME: $curried_name";
+                if ($class->has_method($curried_name)) {
+                    confess
+                        "The method ($curried_name) already ".
+                        "exists in class (" . $class->name . ")";
+                }
+                $method_code = $attr->_curry(
+                    $method_constructors->{$constructor}->(
+                        $attr,
+                        $attr_reader,
+                        $attr_writer,
+                    ), @$curried_args,
+                ),
+                my $method = MooseX::AttributeHelpers::Meta::Method::Curried->wrap(
+                    $method_code,
+                    package_name => $class_name,
+                    name => $curried_name,
+                );
+                
+                $attr->associate_method($method);
+                $class->add_method($curried_name => $method);
+            }
         }
-
-        my $method = MooseX::AttributeHelpers::Meta::Method::Curried->wrap(
-            $attr->_curry($method_constructors->{$key}->(
-                $attr,
-                $attr_reader,
-                $attr_writer,
-            ), @curried_args),
-            package_name => $class_name,
-            name => $curried_name,
-        );
-        
-#use DDS; warn Dump($method);
-
-        $attr->associate_method($method);
-        $class->add_method($curried_name => $method);
+        elsif (ref $constructed eq 'CODE') {
+#            my $method = MooseX::AttributeHelpers::Meta::Method::Curried->wrap(
+#                $attr->_curry($method_constructors->{$key}->(
+#                    $attr,
+#                    $attr_reader,
+#                    $attr_writer,
+#                ), @curried_args),
+#                package_name => $class_name,
+#                name => $curried_name,
+#            );
+        }
+        else {
+            confess "curries parameter must be ref type HASH or CODE";
+        }
     }
 
     foreach my $key (keys %{$attr->provides}) {

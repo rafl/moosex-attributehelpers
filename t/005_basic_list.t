@@ -30,9 +30,9 @@ BEGIN {
             'join'     => 'join_options',
         },
         curries   => {
-            'grep'     => ['less_than_five', sub { $_ < 5 }],
-            'map'      => ['up_by_one', sub { $_ + 1 }],
-            'join'     => ['dashify', '-']
+            'grep'     => {less_than_five => [ sub { $_ < 5 } ]},
+            'map'      => {up_by_one      => [ sub { $_ + 1 } ]},
+            'join'     => {dashify        => [ '-' ]}
         }
     );
 }

@@ -45,7 +45,7 @@ MooseX::AttributeHelpers - Extend your attribute interfaces
           set       => 'set_mapping',
       },
       curries  => {
-          set       => [ set_quantity => 'quantity' ]
+          set       => { set_quantity => [ 'quantity' ] }
       }
   );
 
@@ -77,13 +77,13 @@ C<metaclass> parameter. Available meta classes are:
 =head2 provides
 
 This points to a hashref that uses C<provider> for the keys and
-C<['method', @args]> for the values.  The method will be added to
+C<method> for the values.  The method will be added to
 the object itself and do what you want.
 
 =head2 curries
 
 This points to a hashref that uses C<provider> for the keys and
-C<['method', @args]> for the values.  The method will be added to
+C<< {method => [ @args ]} >> for the values.  The method will be added to
 the object itself (always using C<@args> as the beginning arguments).
 
 =head1 METHOD PROVIDERS

@@ -31,8 +31,12 @@ BEGIN {
             'clear'   => 'clear_options',        
         },
         curries   => {
-            'push'       => ['add_options_with_speed', 'funrolls', 'funbuns'],
-            'unshift'    => ['prepend_prerequisites_along_with', 'first', 'second']
+            'push'    => {
+                add_options_with_speed => ['funrolls', 'funbuns']
+            },
+            'unshift'  => {
+                prepend_prerequisites_along_with => ['first', 'second']
+            }
         }
     );
 }

@@ -29,10 +29,9 @@ BEGIN {
             'delete' => 'delete_option',
         },
         curries   => {
-            'set'    => [
-                'set_with_defaults' =>
-                    size => 'medium', quantity => 1
-            ],
+            'set'    => {
+                set_quantity => ['quantity']
+            },
         }
     );
 }
@@ -100,10 +99,10 @@ $stuff->clear_options;
 is_deeply($stuff->options, { }, "... cleared options" );
 
 lives_ok {
-    $stuff->set_with_defaults(foo => 'bar');
+    $stuff->set_quantity(4);
 } '... options added okay with defaults';
 
-is_deeply($stuff->options, {size => 'medium', quantity => 1, foo => 'bar'});
+is_deeply($stuff->options, {quantity => 4});
 
 lives_ok {
     Stuff->new(options => { foo => 'BAR' });
