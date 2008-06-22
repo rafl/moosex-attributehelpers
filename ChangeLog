@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.11
+	- add the ability to curry method providers (thanks to jasonmay)
+
 0.10
         - Counter: add set and allow inc and dec to accept args
 	- add Bool as an attribute helper (thanks to jasonmay)

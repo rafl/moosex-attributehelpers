@@ -87,7 +87,7 @@ before '_process_options' => sub {
 
 ## methods called after instantiation
 
-# this confirms that provides has
+# this confirms that provides (and curries) has
 # all valid possibilities in it
 sub check_provides_values {
     my $self = shift;
@@ -98,6 +98,11 @@ sub check_provides_values {
         (exists $method_constructors->{$key})
             || confess "$key is an unsupported method type";
     }
+
+    foreach my $key (keys %{$self->curries}) {
+        (exists $method_constructors->{$key})
+            || confess "$key is an unsupported method type";
+    }
 }
 
 sub _curry {
@@ -105,7 +110,10 @@ sub _curry {
     my $code = shift;
 
     my @args = @_;
-    return sub { my $self = shift; $code->($self, @args, @_) };
+    return sub {
+        my $self = shift;
+        $code->($self, @args, @_)
+    };
 }
 
 sub _curry_sub {
@@ -113,9 +121,10 @@ sub _curry_sub {
     my $body = shift;
     my $code = shift;
 
-    warn "installing sub!";
-
-    return sub { my $self = shift; $code->($self, $body, @_) };
+    return sub {
+        my $self = shift;
+        $code->($self, $body, @_)
+    };
 }
 
 after 'install_accessors' => sub {
@@ -132,7 +141,6 @@ after 'install_accessors' => sub {
     # before we install them, lets
     # make sure they are valid
     $attr->check_provides_values;
-#    $attr->check_curries_values;
 
     my $method_constructors = $attr->method_constructors;
 
@@ -199,8 +207,19 @@ after 'install_accessors' => sub {
 after 'remove_accessors' => sub {
     my $attr  = shift;
     my $class = $attr->associated_class;
+
+    # provides accessors
     foreach my $key (keys %{$attr->provides}) {
         my $method_name = $attr->provides->{$key};
+        my $method = $class->get_method($method_name);
+        $class->remove_method($method_name)
+            if blessed($method) &&
+               $method->isa('MooseX::AttributeHelpers::Meta::Method::Provided');
+    }
+
+    # curries accessors
+    foreach my $key (keys %{$attr->curries}) {
+        my $method_name = $attr->curries->{$key};
         my $method = $class->get_method($method_name);
         $class->remove_method($method_name)
             if blessed($method) &&
