@@ -52,5 +52,6 @@ is_deeply($counter->provides, {
     inc   => 'inc_counter',
     dec   => 'dec_counter',
     reset => 'reset_counter',        
+    set   => 'set_counter',
 }, '... got the right default provides methods');
 
