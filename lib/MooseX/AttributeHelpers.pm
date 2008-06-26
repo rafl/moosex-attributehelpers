@@ -183,6 +183,8 @@ Yuval Kogman
 
 Jason May
 
+Cory (gphat) Watson
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2007, 2008 by Infinity Interactive, Inc.
