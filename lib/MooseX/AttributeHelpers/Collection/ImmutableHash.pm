@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Collection::ImmutableHash;
 use Moose;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::ImmutableHash;

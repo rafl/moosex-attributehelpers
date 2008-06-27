@@ -2,7 +2,7 @@ package MooseX::AttributeHelpers::Bool;
 use Moose;
 use MooseX::AttributeHelpers::MethodProvider::Bool;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';

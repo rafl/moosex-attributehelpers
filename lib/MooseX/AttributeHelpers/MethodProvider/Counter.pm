@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::MethodProvider::Counter;
 use Moose::Role;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 sub reset : method {

@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Collection;
 use Moose;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';

@@ -3,7 +3,7 @@ package MooseX::AttributeHelpers::Base;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.04';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';

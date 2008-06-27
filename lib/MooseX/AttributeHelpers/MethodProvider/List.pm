@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::MethodProvider::List;
 use Moose::Role;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
  
 sub count : method {
