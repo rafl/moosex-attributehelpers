@@ -1,5 +1,7 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.12
+
 0.11 Thurs. Jun 26, 2008
     - add the ability to curry method providers (thanks to jasonmay)
     - Counter: add set and allow inc and dec to accept args

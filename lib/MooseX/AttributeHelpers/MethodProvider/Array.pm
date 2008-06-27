@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::MethodProvider::Array;
 use Moose::Role;
 
-our $VERSION   = '0.11';
+our $VERSION   = '0.12';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::MethodProvider::List';
