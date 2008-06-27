@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 29;
 use Test::Exception;
 use DateTime;
 use DateTime::Format::Strptime;
@@ -30,6 +30,9 @@ BEGIN {
             'find'     => 'find_option',
             'elements' => 'options',
             'join'     => 'join_options',
+            'get'      => 'get_option_at',
+            'first'    => 'get_first_option',
+            'last'     => 'get_last_option',
         },
         curries   => {
             'grep'     => {less_than_five => [ sub { $_ < 5 } ]},
@@ -65,12 +68,16 @@ can_ok($stuff, $_) for qw[
     find_option
     options
     join_options
+    get_option_at
 ];
 
 is_deeply($stuff->_options, [1 .. 10], '... got options');
 
 ok($stuff->has_options, '... we have options');
 is($stuff->num_options, 10, '... got 2 options');
+cmp_ok($stuff->get_option_at(0), '==', 1, '... get option 0');
+cmp_ok($stuff->get_first_option, '==', 1, '... get first');
+cmp_ok($stuff->get_last_option, '==', 10, '... get first');
 
 is_deeply(
 [ $stuff->filter_options(sub { $_[0] % 2 == 0 }) ],
@@ -121,6 +128,9 @@ is_deeply($options->provides, {
     'empty'    => 'has_options',
     'elements' => 'options',
     'join'     => 'join_options',
+    'get'      => 'get_option_at',
+    'first'    => 'get_first_option',
+    'last'     => 'get_last_option'
 }, '... got the right provies mapping');
 
 is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
