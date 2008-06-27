@@ -1,17 +1,15 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.11
-	- add the ability to curry method providers (thanks to jasonmay)
+0.11 Thurs. Jun 26, 2008
+    - add the ability to curry method providers (thanks to jasonmay)
+    - Counter: add set and allow inc and dec to accept args
+    - add Bool as an attribute helper (thanks to jasonmay)
 
-0.10
-        - Counter: add set and allow inc and dec to accept args
-	- add Bool as an attribute helper (thanks to jasonmay)
-
-0.09 Sat. May, 24, 2008
-	- remove Module::Build in favor of Module::Install
-	
+0.09 Sat. May 24, 2008
+    - remove Module::Build in favor of Module::Install
+    
     * MooseX::AttributeHelpers::MethodProvider::Hash
-	  - delete with multiple keys will now work (thanks to frodwith)
+      - delete with multiple keys will now work (thanks to frodwith)
 
     * MooseX::AttributeHelpers::MethodProvider::List
       - add "join" and "elements" provided methods (thanks to Sartak)
@@ -81,7 +79,7 @@ Revision history for Perl extension MooseX-AttributeHelpers
     * MooseX::AttributeHelpers::Base
       - added attribute $name to the params passed to
         process_options_or_provides(), which gives us more
-	    flexibility when writing additional helpers
+        flexibility when writing additional helpers
       - removed check for 'provides' and 'isa' attr
         options before _process_options. It should be
         called always.
