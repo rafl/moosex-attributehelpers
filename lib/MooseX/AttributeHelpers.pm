@@ -122,7 +122,7 @@ Common numerical operations.
 
 Methods for incrementing and decrementing a counter attribute.
 
-=item L<Counter|MooseX::AttributeHelpers::Bool>
+=item L<Bool|MooseX::AttributeHelpers::Bool>
 
 Common methods for boolean values.
 
