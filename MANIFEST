@@ -9,6 +9,7 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/MooseX/AttributeHelpers.pm
 lib/MooseX/AttributeHelpers/Base.pm
+lib/MooseX/AttributeHelpers/Bool.pm
 lib/MooseX/AttributeHelpers/Collection.pm
 lib/MooseX/AttributeHelpers/Collection/Array.pm
 lib/MooseX/AttributeHelpers/Collection/Bag.pm
@@ -16,9 +17,11 @@ lib/MooseX/AttributeHelpers/Collection/Hash.pm
 lib/MooseX/AttributeHelpers/Collection/ImmutableHash.pm
 lib/MooseX/AttributeHelpers/Collection/List.pm
 lib/MooseX/AttributeHelpers/Counter.pm
+lib/MooseX/AttributeHelpers/Meta/Method/Curried.pm
 lib/MooseX/AttributeHelpers/Meta/Method/Provided.pm
 lib/MooseX/AttributeHelpers/MethodProvider/Array.pm
 lib/MooseX/AttributeHelpers/MethodProvider/Bag.pm
+lib/MooseX/AttributeHelpers/MethodProvider/Bool.pm
 lib/MooseX/AttributeHelpers/MethodProvider/Counter.pm
 lib/MooseX/AttributeHelpers/MethodProvider/Hash.pm
 lib/MooseX/AttributeHelpers/MethodProvider/ImmutableHash.pm
@@ -40,6 +43,7 @@ t/006_basic_bag.t
 t/007_basic_string.t
 t/010_array_from_role.t
 t/011_counter_with_defaults.t
+t/012_basic_bool.t
 t/020_remove_attribute.t
 t/100_collection_with_roles.t
 t/pod.t
