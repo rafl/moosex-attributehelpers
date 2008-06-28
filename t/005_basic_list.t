@@ -3,10 +3,13 @@
 use strict;
 use warnings;
 
-use Test::More tests => 29;
+use Test::More;
 use Test::Exception;
-use DateTime;
-use DateTime::Format::Strptime;
+
+BEGIN {
+    plan skip_all => "DateTime required" unless eval { require DateTime };
+    plan tests => 29;
+}
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
