@@ -1,5 +1,7 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.13
+
 0.12 Sun. Jun 29, 2008
     - Move get from Array to List (gphat)
     - Add first and last to List (gphat)

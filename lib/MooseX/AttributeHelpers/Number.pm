@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::Number;
 use Moose;
 
-our $VERSION   = '0.12';
+our $VERSION   = '0.13';
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
