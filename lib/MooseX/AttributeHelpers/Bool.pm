@@ -74,6 +74,10 @@ basic math operations.
 
 =item B<method_constructors>
 
+=item B<has_method_provider>
+
+=item B<method_provider>
+
 =back
 
 =head1 PROVIDED METHODS

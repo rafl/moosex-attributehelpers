@@ -21,7 +21,6 @@ has 'curries' => (
     default => sub {{}}
 );
 
-
 # these next two are the possible methods
 # you can use in the 'provides' map.
 
@@ -249,6 +248,8 @@ Documentation to come.
 =over 4
 
 =item B<provides>
+
+=item B<curries>
 
 =item B<method_provider>
 
