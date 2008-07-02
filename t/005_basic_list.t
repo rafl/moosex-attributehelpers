@@ -7,7 +7,7 @@ use Test::More;
 use Test::Exception;
 
 BEGIN {
-    plan tests => 28;
+    plan tests => 29;
 }
 
 BEGIN {
@@ -42,6 +42,21 @@ BEGIN {
             'join'     => {dashify        => [ '-' ]}
         }
     );
+
+    has animals => (
+        is       => 'rw',
+        isa      => 'ArrayRef[Str]',
+        metaclass => 'Collection::List',
+        curries => {
+            grep =>  {
+                double_length_of => sub {
+                    my ($self, $body, $arg) = @_;
+
+                    $body->($self, sub { length($_) == length($arg) * 2 });
+                }
+            }
+        }
+    )
 }
 
 my $stuff = Stuff->new(options => [ 1 .. 10 ]);
@@ -91,6 +106,15 @@ is_deeply([ $stuff->less_than_five() ], [1 .. 4]);
 is_deeply([ $stuff->up_by_one() ], [2 .. 11]);
 
 is($stuff->dashify, '1-2-3-4-5-6-7-8-9-10');
+
+$stuff->animals([ qw/cat duck horse cattle gorilla elephant flamingo kangaroo/ ]);
+
+# 4 * 2 = 8
+is_deeply(
+        [ sort $stuff->double_length_of('fish') ],
+        [ sort qw/elephant flamingo kangaroo/ ],
+        'returns all elements with double length of string "fish"'
+);
 
 ## test the meta
 
