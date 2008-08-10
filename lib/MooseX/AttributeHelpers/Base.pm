@@ -54,7 +54,7 @@ has 'method_constructors' => (
 
 # extend the parents stuff to make sure
 # certain bits are now required ...
-has '+$!default'       => (required => 1);
+has '+default'         => (required => 1);
 has '+type_constraint' => (required => 1);
 
 ## Methods called prior to instantiation
@@ -261,9 +261,9 @@ Documentation to come.
 
 =over 4
 
-=item B<$!default>
+=item B<default>
 
-C<$!default> is now required.
+C<default> is now required.
 
 =item B<type_constraint>
 
