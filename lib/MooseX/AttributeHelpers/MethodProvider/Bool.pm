@@ -2,7 +2,8 @@
 package MooseX::AttributeHelpers::MethodProvider::Bool;
 use Moose::Role;
 
-our $VERSION   = '0.13';
+our $VERSION   = '0.12_01';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 sub set : method {

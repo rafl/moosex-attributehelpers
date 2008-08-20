@@ -2,7 +2,8 @@ package MooseX::AttributeHelpers::Bool;
 use Moose;
 use MooseX::AttributeHelpers::MethodProvider::Bool;
 
-our $VERSION   = '0.13';
+our $VERSION   = '0.12_01';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'MooseX::AttributeHelpers::Base';
