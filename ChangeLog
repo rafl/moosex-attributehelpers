@@ -1,6 +1,6 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.12_01
+0.12_01 Wed August 20, 2008
     - fixed some missing Pod::Coverage (stevan)
     - fixes to work with Moose 0.55_01 and Class::MOP 0.64_01
       (nothingmuch)
