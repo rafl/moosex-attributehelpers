@@ -1,7 +1,7 @@
 package MooseX::AttributeHelpers::MethodProvider::Bag;
 use Moose::Role;
 
-our $VERSION   = '0.12_01';
+our $VERSION   = '0.13';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
