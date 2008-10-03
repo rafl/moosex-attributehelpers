@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.14 Thu October 2, 2008
+    - Run pod tests only for authors
+
 0.13 Mon September 1, 2008
     - No code changes, just a stable release for Moose 0.56.
 
