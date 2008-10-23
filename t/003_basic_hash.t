@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 39;
+use Test::More tests => 40;
 use Test::Exception;
 
 BEGIN {
@@ -54,6 +54,7 @@ ok(!$stuff->has_options, '... we have no options');
 is($stuff->num_options, 0, '... we have no options');
 
 is_deeply($stuff->options, {}, '... no options yet');
+ok(!$stuff->has_option('foo'), '... we have no foo option');
 
 lives_ok {
     $stuff->set_option(foo => 'bar');
