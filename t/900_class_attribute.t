@@ -1,16 +1,18 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More;
+use MooseX::AttributeHelpers;
 
 do {
     package TestClass;
     BEGIN {
-        ::plan skip_all => "MooseX::ClassAttribute required for this test"
+        ::plan skip_all => "MooseX::ClassAttribute 0.05 required for this test"
             unless eval {
                 require MooseX::ClassAttribute;
                 MooseX::ClassAttribute->VERSION('0.05');
             };
+        ::plan tests => 2;
         MooseX::ClassAttribute->import;
     }
 
