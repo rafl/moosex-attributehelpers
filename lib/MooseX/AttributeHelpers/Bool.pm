@@ -44,7 +44,7 @@ MooseX::AttributeHelpers::Bool
   has 'is_lit' => (
       metaclass => 'Bool',
       is        => 'rw',
-      isa       => 'Int',
+      isa       => 'Bool',
       default   => sub { 0 },
       provides  => {
           set     => 'illuminate',
