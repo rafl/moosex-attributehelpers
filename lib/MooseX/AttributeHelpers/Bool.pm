@@ -19,7 +19,16 @@ sub helper_type { 'Bool' }
 has '+method_provider' => (
     default => 'MooseX::AttributeHelpers::MethodProvider::Bool'
 );
-    
+
+before 'process_options_for_provides' => sub {
+    my ($self, $options, $name) = @_;
+
+    # Set some default attribute options here unless already defined
+    if ((my $type = $self->helper_type) && !exists $options->{isa}){
+        $options->{isa} = $type;
+    }
+};
+
 no Moose;
 
 # register the alias ...
