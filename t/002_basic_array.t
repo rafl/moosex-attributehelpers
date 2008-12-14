@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 52;
+use Test::More tests => 55;
 use Test::Exception;
 
 BEGIN {
@@ -147,6 +147,21 @@ lives_ok {
 dies_ok {
     Stuff->new(options => [ undef, 10, undef, 20 ]);
 } '... bad constructor params';
+
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->add_options(undef);
+} '... rejects push of an invalid type';
+
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->insert_options(undef);
+} '... rejects unshift of an invalid type';
+
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->set_option_at( 0, undef );
+} '... rejects set of an invalid type';
 
 ## test the meta
 
