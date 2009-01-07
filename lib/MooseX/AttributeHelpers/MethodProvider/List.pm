@@ -92,7 +92,36 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::MethodProvider::List
-  
+
+=SYNOPSIS
+    
+   package Stuff;
+   use Moose;
+   use MooseX::AttributeHelpers;
+
+   has 'options' => (
+      metaclass  => 'Collection::List',
+      is         => 'rw',
+      isa        => 'ArrayRef[Str]',
+      default    => sub { [] },
+      auto_deref => 1,
+      provides   => {
+         map   => 'map_options',
+         grep  => 'filter_options',
+         find  => 'find_option',
+         first => 'first_option',
+         last  => 'last_option',
+         get   => 'get_option',
+         join  => 'join_options',
+         count => 'count_options',
+         empty => 'do_i_have_options',
+
+      }
+   );
+
+   no Moose;
+   1;
+
 =head1 DESCRIPTION
 
 This is a role which provides the method generators for 
@@ -111,24 +140,69 @@ L<MooseX::AttributeHelpers::Collection::List>.
 =over 4
 
 =item B<count>
+Returns the number of elements of the list.
+   
+   $stuff = Stuff->new;
+   $stuff->options(["foo", "bar", "baz", "boo"]);
+   
+   my $count = $stuff->count_options;
+   print "$count\n"; # prints 4
 
-=item B<empty>
+=item B<empty> 
+If the list is populated, returns true. Otherwise, returns false.
+
+   $stuff->do_i_have_options ? print "Good boy.\n" : die "No options!\n" ;
 
 =item B<find>
+Returns the first element that returns true in the anonymous subroutine
+passed as argument.
+
+   my $found = $stuff->find_option( sub { $_[0] =~ /^b/ } );
+   print "$found\n"; # prints "bar"
 
 =item B<grep>
+Returns every elemnt of the list that returns true in the anonymous
+subroutine passed as argument.
+
+   my @found = $stuff->filter_options( sub { $_[0] =~ /^b/ } );
+   print "@found\n"; # prints "bar baz boo"
 
 =item B<map>
+Executes the anonymouse subroutine given as argument sequentially
+for each element of the list.
+
+my @mod_options = $stuff->map_options( sub { $_[0] . "-tag" } );
+print "@mod_options\n"; # prints "foo-tag bar-tag baz-tag boo-tag"
 
 =item B<elements>
+Returns an element of the list by its index.
+
+   my $option = $stuff->get_option(1);
+   print "$option\n"; # prints "bar"
 
 =item B<join>
+Joins every elemnt of the list using the separator given as argument.
+
+   my $joined = $stuff->join_options( ':' );
+   print "$joined\n"; # prints "foo:bar:baz:boo"
 
 =item B<get>
+Returns an element of the list by its index.
+
+   my $option = $stuff->get_option(1);
+   print "$option\n"; # prints "bar"
 
 =item B<first>
+Returns the first element.
+
+   my $first = $stuff->first_option;
+   print "$first\n"; # prints "foo"
 
 =item B<last>
+Returns the last item.
+
+   my $last = $stuff->last_option;
+   print "$last\n"; # prints "boo"
 
 =back
 
