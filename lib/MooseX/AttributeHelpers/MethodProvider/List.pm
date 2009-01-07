@@ -161,14 +161,14 @@ passed as argument.
    print "$found\n"; # prints "bar"
 
 =item B<grep>
-Returns every elemnt of the list that returns true in the anonymous
+Returns every element of the list that returns true in the anonymous
 subroutine passed as argument.
 
    my @found = $stuff->filter_options( sub { $_[0] =~ /^b/ } );
    print "@found\n"; # prints "bar baz boo"
 
 =item B<map>
-Executes the anonymouse subroutine given as argument sequentially
+Executes the anonymous subroutine given as argument sequentially
 for each element of the list.
 
 my @mod_options = $stuff->map_options( sub { $_[0] . "-tag" } );
@@ -181,7 +181,7 @@ Returns an element of the list by its index.
    print "$option\n"; # prints "bar"
 
 =item B<join>
-Joins every elemnt of the list using the separator given as argument.
+Joins every element of the list using the separator given as argument.
 
    my $joined = $stuff->join_options( ':' );
    print "$joined\n"; # prints "foo:bar:baz:boo"
