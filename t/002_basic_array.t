@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 60;
+use Test::More tests => 62;
 use Test::Exception;
 
 BEGIN {
@@ -19,18 +19,18 @@ BEGIN {
         is        => 'ro',
         isa       => 'ArrayRef[Str]',
         default   => sub { [] },
-        provides  => {
-            'push'    => 'add_options',
-            'pop'     => 'remove_last_option',    
-            'shift'   => 'remove_first_option',
-            'unshift' => 'insert_options',
-            'get'     => 'get_option_at',
-            'set'     => 'set_option_at',
-            'count'   => 'num_options',
-            'empty'   => 'has_options',        
-            'clear'   => 'clear_options',        
-            'sort_in_place' => 'sort_in_place_options',
-        },
+        provides => {
+            'push'          => 'add_options',
+            'pop'           => 'remove_last_option',
+            'shift'         => 'remove_first_option',
+            'unshift'       => 'insert_options',
+            'get'           => 'get_option_at',
+            'set'           => 'set_option_at',
+            'count'         => 'num_options',
+            'empty'         => 'has_options',
+            'clear'         => 'clear_options',
+            'sort_in_place' => 'sort_options_in_place',
+            },
         curries   => {
             'push'    => {
                 add_options_with_speed => ['funrolls', 'funbuns']
@@ -38,7 +38,7 @@ BEGIN {
             'unshift'  => {
                 prepend_prerequisites_along_with => ['first', 'second']
             },
-            'sort_in_place' => { ascending_options => [ sub { $_[0] <=> $_[1] } ],
+            'sort_in_place' => { descending_options => [ sub { $_[1] <=> $_[0] } ],
             },
         }
     );
@@ -57,7 +57,7 @@ can_ok($stuff, $_) for qw[
     num_options
     clear_options
     has_options
-    sort_in_place_options
+    sort_options_in_place
 ];
 
 is_deeply($stuff->options, [10, 12], '... got options');
@@ -124,15 +124,23 @@ is($stuff->get_option_at(0), 20, '... get option at index 0');
 $stuff->clear_options;
 is_deeply( $stuff->options, [], "... clear options" );
 
-$stuff->add_options(1..3);
-$stuff->sort_in_place_options( sub { $_[1] <=> $_[0] } );
-is_deeply( $stuff->options, [3, 2, 1], "... sort options in place" );
+$stuff->add_options(5, 1, 2, 3);
+$stuff->sort_options_in_place;
+is_deeply( $stuff->options, [1, 2, 3, 5], "... sort options in place (default sort order)" );
 
-lives_ok { 
-   $stuff->ascending_options();
-} '... add descending options okay';
+$stuff->sort_options_in_place( sub { $_[1] <=> $_[0] } );
+is_deeply( $stuff->options, [5, 3, 2, 1], "... sort options in place (descending order)" );
 
-is_deeply( $stuff->options, [1, 2, 3], "... sort currying" );
+$stuff->clear_options();
+$stuff->add_options(5, 1, 2, 3);
+lives_ok {
+   $stuff->descending_options();
+} '... curried sort in place lives ok';
+
+is_deeply( $stuff->options, [5, 3, 2, 1], "... sort currying" );
+
+throws_ok { $stuff->sort_options_in_place('foo') } qr/Argument must be a code reference/,
+    'error when sort_in_place receives a non-coderef argument';
 
 $stuff->clear_options;
 
@@ -199,7 +207,7 @@ is_deeply($options->provides, {
     'count'   => 'num_options',
     'empty'   => 'has_options',    
     'clear'   => 'clear_options',    
-    'sort_in_place' => 'sort_in_place_options',
-}, '... got the right provies mapping');
+    'sort_in_place' => 'sort_options_in_place',
+}, '... got the right provides mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');

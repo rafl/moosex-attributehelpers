@@ -137,15 +137,23 @@ sub splice : method {
 }
 
 sub sort_in_place : method {
-   my ($attr, $reader, $writer) = @_;
-   return sub {
-      my ($instance, $predicate) = @_;
-      die "Argument must be a code reference" 
-         unless ref $predicate eq "CODE";
-      my @sorted = 
-         CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
-      $writer->($instance, \@sorted); 
-   }
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my ($instance, $predicate) = @_;
+
+        die "Argument must be a code reference"
+            if $predicate && ref $predicate ne 'CODE';
+
+        my @sorted;
+        if ($predicate) {
+            @sorted = CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+        }
+        else {
+            @sorted = CORE::sort @{$reader->($instance)};
+        }
+
+        $writer->($instance, \@sorted);
+    };
 }
 
 1;
@@ -157,7 +165,7 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::MethodProvider::Array
-  
+
 =head1 DESCRIPTION
 
 This is a role which provides the method generators for 
@@ -199,9 +207,12 @@ see those provied methods, refer to that documentation.
 =item B<splice>
 
 =item B<sort_in_place>
-Sorts the array using the comparison subroutine given as argument.
-Instead of returning the sorted list, it modifies the order of the
-items in the ArrayRef attribute.
+
+Sorts the array I<in place>, modifying the value of the attribute.
+
+You can provide an optional subroutine reference to sort with (as you
+can with the core C<sort> function). However, instead of using C<$a>
+and C<$b>, you will need to use C<$_[0]> and C<$_[1]> instead.
 
 =back
 
