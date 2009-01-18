@@ -38,6 +38,16 @@ sub map : method {
     };
 }
 
+sub sort : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my ($instance, $predicate) = @_;
+        die "Argument must be a code reference" 
+            unless ref $predicate eq "CODE";
+        CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+    };
+}
+
 sub grep : method {
     my ($attr, $reader, $writer) = @_;
     return sub {
@@ -93,7 +103,7 @@ __END__
 
 MooseX::AttributeHelpers::MethodProvider::List
 
-=SYNOPSIS
+=head1 SYNOPSIS
     
    package Stuff;
    use Moose;
@@ -115,6 +125,7 @@ MooseX::AttributeHelpers::MethodProvider::List
          join  => 'join_options',
          count => 'count_options',
          empty => 'do_i_have_options',
+         sort  => 'sort_options',
 
       }
    );
@@ -171,8 +182,19 @@ subroutine passed as argument.
 Executes the anonymous subroutine given as argument sequentially
 for each element of the list.
 
-my @mod_options = $stuff->map_options( sub { $_[0] . "-tag" } );
-print "@mod_options\n"; # prints "foo-tag bar-tag baz-tag boo-tag"
+   my @mod_options = $stuff->map_options( sub { $_[0] . "-tag" } );
+   print "@mod_options\n"; # prints "foo-tag bar-tag baz-tag boo-tag"
+
+=item B<sort>
+Returns a sorted list of the elements, using the anonymous subroutine
+given as argument. 
+
+This subroutine should perform a comparison between the two arguments passed
+to it, and return a numeric list with the results of such comparison:
+
+   # Descending alphabetical order
+   my @sorted_options = $stuff->sort_options( sub { $_[1] cmp $_[0] } );
+   print "@sorted_options\n"; # prints "foo boo baz bar"
 
 =item B<elements>
 Returns an element of the list by its index.

@@ -136,6 +136,18 @@ sub splice : method {
     }    
 }
 
+sub sort_in_place : method {
+   my ($attr, $reader, $writer) = @_;
+   return sub {
+      my ($instance, $predicate) = @_;
+      die "Argument must be a code reference" 
+         unless ref $predicate eq "CODE";
+      my @sorted = 
+         CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+      $writer->($instance, \@sorted); 
+   }
+}
+
 1;
 
 __END__
@@ -185,6 +197,11 @@ see those provied methods, refer to that documentation.
 =item B<insert>
 
 =item B<splice>
+
+=item B<sort_in_place>
+Sorts the array using the comparison subroutine given as argument.
+Instead of returning the sorted list, it modifies the order of the
+items in the ArrayRef attribute.
 
 =back
 

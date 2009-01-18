@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 55;
+use Test::More tests => 60;
 use Test::Exception;
 
 BEGIN {
@@ -29,6 +29,7 @@ BEGIN {
             'count'   => 'num_options',
             'empty'   => 'has_options',        
             'clear'   => 'clear_options',        
+            'sort_in_place' => 'sort_in_place_options',
         },
         curries   => {
             'push'    => {
@@ -36,7 +37,9 @@ BEGIN {
             },
             'unshift'  => {
                 prepend_prerequisites_along_with => ['first', 'second']
-            }
+            },
+            'sort_in_place' => { ascending_options => [ sub { $_[0] <=> $_[1] } ],
+            },
         }
     );
 }
@@ -54,6 +57,7 @@ can_ok($stuff, $_) for qw[
     num_options
     clear_options
     has_options
+    sort_in_place_options
 ];
 
 is_deeply($stuff->options, [10, 12], '... got options');
@@ -120,6 +124,18 @@ is($stuff->get_option_at(0), 20, '... get option at index 0');
 $stuff->clear_options;
 is_deeply( $stuff->options, [], "... clear options" );
 
+$stuff->add_options(1..3);
+$stuff->sort_in_place_options( sub { $_[1] <=> $_[0] } );
+is_deeply( $stuff->options, [3, 2, 1], "... sort options in place" );
+
+lives_ok { 
+   $stuff->ascending_options();
+} '... add descending options okay';
+
+is_deeply( $stuff->options, [1, 2, 3], "... sort currying" );
+
+$stuff->clear_options;
+
 lives_ok {
     $stuff->add_options('tree');
 } '... set the options okay';
@@ -163,6 +179,11 @@ dies_ok {
     $stuff->set_option_at( 0, undef );
 } '... rejects set of an invalid type';
 
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->sort_in_place_options( undef );
+} '... sort rejects arg of invalid type';
+
 ## test the meta
 
 my $options = $stuff->meta->get_attribute('options');
@@ -178,6 +199,7 @@ is_deeply($options->provides, {
     'count'   => 'num_options',
     'empty'   => 'has_options',    
     'clear'   => 'clear_options',    
+    'sort_in_place' => 'sort_in_place_options',
 }, '... got the right provies mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');
