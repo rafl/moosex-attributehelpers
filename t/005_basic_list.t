@@ -3,12 +3,8 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 35;
 use Test::Exception;
-
-BEGIN {
-   plan tests => 33;
-}
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -35,13 +31,13 @@ BEGIN {
             'get'      => 'get_option_at',
             'first'    => 'get_first_option',
             'last'     => 'get_last_option',
-            'sort' => 'sort_options',
+            'sort'     => 'sorted_options',
         },
         curries   => {
             'grep'     => {less_than_five => [ sub { $_ < 5 } ]},
             'map'      => {up_by_one      => [ sub { $_ + 1 } ]},
             'join'     => {dashify        => [ '-' ]},
-            'sort'     => {ascending      => [ sub { $_[0] <=> $_[1] } ]},
+            'sort'     => {descending     => [ sub { $_[1] <=> $_[0] } ]},
         }
     );
 
@@ -74,7 +70,7 @@ can_ok($stuff, $_) for qw[
     options
     join_options
     get_option_at
-    sort_options
+    sorted_options
 ];
 
 is_deeply($stuff->_options, [1 .. 10], '... got options');
@@ -103,7 +99,13 @@ is_deeply([ $stuff->options ], [1 .. 10], '... got the list of options');
 
 is($stuff->join_options(':'), '1:2:3:4:5:6:7:8:9:10', '... joined the list of options by :');
 
-is_deeply([ $stuff->sort_options( sub { $_[1] <=> $_[0] } ) ], [sort { $b <=> $a } (1..10)], '... got sorted options');
+is_deeply([ $stuff->sorted_options ], [sort (1..10)],
+          '... got sorted options (default sort order)');
+is_deeply([ $stuff->sorted_options( sub { $_[1] <=> $_[0] } ) ], [sort { $b <=> $a } (1..10)],
+          '... got sorted options (descending sort order) ');
+
+throws_ok { $stuff->sorted_options('foo') } qr/Argument must be a code reference/,
+    'error when sort receives a non-coderef argument';
 
 # test the currying
 is_deeply([ $stuff->less_than_five() ], [1 .. 4]);
@@ -121,7 +123,7 @@ is_deeply(
         'returns all elements with double length of string "fish"'
 );
 
-is_deeply([$stuff->ascending], [1 .. 10]);
+is_deeply([$stuff->descending], [reverse 1 .. 10]);
 
 ## test the meta
 
@@ -139,8 +141,8 @@ is_deeply($options->provides, {
     'get'      => 'get_option_at',
     'first'    => 'get_first_option',
     'last'     => 'get_last_option',
-    'sort' => 'sort_options',
-}, '... got the right provies mapping');
+    'sort'     => 'sorted_options',
+}, '... got the right provides mapping');
 
 is($options->type_constraint->type_parameter, 'Int', '... got the right container type');
 

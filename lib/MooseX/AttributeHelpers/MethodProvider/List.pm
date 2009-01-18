@@ -42,9 +42,15 @@ sub sort : method {
     my ($attr, $reader, $writer) = @_;
     return sub {
         my ($instance, $predicate) = @_;
-        die "Argument must be a code reference" 
-            unless ref $predicate eq "CODE";
-        CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+        die "Argument must be a code reference"
+            if $predicate && ref $predicate ne 'CODE';
+
+        if ($predicate) {
+            CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+        }
+        else {
+            CORE::sort @{$reader->($instance)};
+        }
     };
 }
 
@@ -125,7 +131,7 @@ MooseX::AttributeHelpers::MethodProvider::List
          join  => 'join_options',
          count => 'count_options',
          empty => 'do_i_have_options',
-         sort  => 'sort_options',
+         sort  => 'sorted_options',
 
       }
    );
@@ -186,14 +192,17 @@ for each element of the list.
    print "@mod_options\n"; # prints "foo-tag bar-tag baz-tag boo-tag"
 
 =item B<sort>
-Returns a sorted list of the elements, using the anonymous subroutine
-given as argument. 
 
-This subroutine should perform a comparison between the two arguments passed
-to it, and return a numeric list with the results of such comparison:
+Returns a sorted list of the elements. You can optionally provide a
+subroutine reference to sort with (as you can with the core C<sort>
+function). However, instead of using C<$a> and C<$b>, you will need to
+use C<$_[0]> and C<$_[1]> instead.
+
+   # ascending ASCIIbetical
+   my @sorted = $stuff->sort_options();
 
    # Descending alphabetical order
-   my @sorted_options = $stuff->sort_options( sub { $_[1] cmp $_[0] } );
+   my @sorted_options = $stuff->sort_options( sub { lc $_[1] cmp lc $_[0] } );
    print "@sorted_options\n"; # prints "foo boo baz bar"
 
 =item B<elements>
