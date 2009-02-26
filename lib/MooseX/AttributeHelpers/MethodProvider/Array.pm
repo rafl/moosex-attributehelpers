@@ -125,13 +125,13 @@ sub splice : method {
             my ( $self, $i, $j, @elems ) = @_;
             ($container_type_constraint->check($_)) 
                 || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint" for @elems;
-            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+            CORE::splice @{$reader->($self)}, $i, $j, @elems;
         };                    
     }
     else {                
         return sub {
             my ( $self, $i, $j, @elems ) = @_;
-            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+            CORE::splice @{$reader->($self)}, $i, $j, @elems;
         };
     }    
 }

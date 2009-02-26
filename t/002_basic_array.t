@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 62;
+use Test::More tests => 64;
 use Test::Exception;
 
 BEGIN {
@@ -29,6 +29,7 @@ BEGIN {
             'count'         => 'num_options',
             'empty'         => 'has_options',
             'clear'         => 'clear_options',
+            'splice'        => 'splice_options',
             'sort_in_place' => 'sort_options_in_place',
             },
         curries   => {
@@ -152,11 +153,25 @@ lives_ok {
     $stuff->add_options_with_speed('compatible', 'safe');
 } '... add options with speed okay';
 
-is_deeply($stuff->options, [qw/tree funrolls funbuns compatible safe/]);
+is_deeply($stuff->options, [qw/tree funrolls funbuns compatible safe/],
+          'check options after add_options_with_speed');
 
 lives_ok {
     $stuff->prepend_prerequisites_along_with();
 } '... add prerequisite options okay';
+
+$stuff->clear_options;
+$stuff->add_options( 1, 2 );
+
+lives_ok {
+    $stuff->splice_options( 1, 0, 'foo' );
+} '... splice_options works';
+
+is_deeply(
+    $stuff->options, [ 1, 'foo', 2 ],
+    'splice added expected option'
+);
+
 
 ## check some errors
 
@@ -207,6 +222,7 @@ is_deeply($options->provides, {
     'count'   => 'num_options',
     'empty'   => 'has_options',    
     'clear'   => 'clear_options',    
+    'splice'  => 'splice_options',
     'sort_in_place' => 'sort_options_in_place',
 }, '... got the right provides mapping');
 
