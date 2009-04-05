@@ -138,6 +138,8 @@ L<MooseX::AttributeHelpers::String>.
 
 =item B<clear>
 
+=item B<substr>
+
 =back
 
 =head1 BUGS
