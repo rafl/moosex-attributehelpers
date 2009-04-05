@@ -188,6 +188,8 @@ Jason May
 
 Cory (gphat) Watson
 
+Florian (rafl) Ragwitz
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2007, 2008 by Infinity Interactive, Inc.
