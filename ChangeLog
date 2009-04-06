@@ -1,11 +1,12 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.16 Sun April 5, 2009
     - Add substr to String (Florian Ragwitz).
 
-0.15
+0.15 Thu March 26, 2009
     - The splice helper for arrays was completely broken. Reported by
       Abhijit Mahabal. RT #43343.
-	
+
 0.14 Thu October 2, 2008
     - Run pod tests only for authors
 
