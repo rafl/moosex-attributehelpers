@@ -2,6 +2,10 @@
 package MooseX::AttributeHelpers::Meta::Method::Curried;
 use Moose;
 
+our $VERSION   = '0.16';
+$VERSION = eval $VERSION;
+our $AUTHORITY = 'cpan:STEVAN';
+
 extends 'Moose::Meta::Method';
 
 1;
