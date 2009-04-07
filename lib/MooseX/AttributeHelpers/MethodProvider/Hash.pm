@@ -97,6 +97,8 @@ L<MooseX::AttributeHelpers::Collection::ImmutableHash> role.
 
 =item B<delete>
 
+=item B<defined>
+
 =item B<empty>
 
 =item B<clear>

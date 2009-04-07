@@ -56,7 +56,7 @@ MooseX::AttributeHelpers::Collection::Hash
   
 =head1 DESCRIPTION
 
-This module provides an Hash attribute which provides a number of 
+This module provides a Hash attribute which provides a number of 
 hash-like operations. See L<MooseX::AttributeHelpers::MethodProvider::Hash>
 for more details.
 

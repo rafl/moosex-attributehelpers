@@ -10,6 +10,11 @@ sub exists : method {
     return sub { CORE::exists $reader->($_[0])->{$_[1]} ? 1 : 0 };
 }   
 
+sub defined : method {
+    my ($attr, $reader, $writer) = @_;    
+    return sub { CORE::defined $reader->($_[0])->{$_[1]} ? 1 : 0 };
+}   
+
 sub get : method {
     my ($attr, $reader, $writer) = @_;    
     return sub {
