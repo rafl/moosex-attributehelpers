@@ -7,7 +7,7 @@ use Test::More tests => 42;
 use Test::Exception;
 
 BEGIN {
-    use_ok('MooseX::AttributeHelpers');   
+    use_ok('MooseX::AttributeHelpers');
 }
 
 {
@@ -22,13 +22,13 @@ BEGIN {
         default   => sub { {} },
         provides  => {
             'set'    => 'set_option',
-            'get'    => 'get_option',            
+            'get'    => 'get_option',
             'empty'  => 'has_options',
             'count'  => 'num_options',
             'clear'  => 'clear_options',
             'delete' => 'delete_option',
             'exists' => 'has_option',
-            'defined'=> 'is_defined'
+            'defined'=> 'is_defined',
         },
         curries   => {
             'set'    => {
@@ -132,14 +132,14 @@ my $options = $stuff->meta->get_attribute('options');
 isa_ok($options, 'MooseX::AttributeHelpers::Collection::Hash');
 
 is_deeply($options->provides, {
-    'set'    => 'set_option',
-    'get'    => 'get_option',            
-    'empty'  => 'has_options',
-    'count'  => 'num_options',
-    'clear'  => 'clear_options',
-    'delete' => 'delete_option',
-    'defined'=> 'is_defined',
-    'exists' => 'has_option',
+    'set'     => 'set_option',
+    'get'     => 'get_option',
+    'empty'   => 'has_options',
+    'count'   => 'num_options',
+    'clear'   => 'clear_options',
+    'delete'  => 'delete_option',
+    'defined' => 'is_defined',
+    'exists'  => 'has_option',
 }, '... got the right provies mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');

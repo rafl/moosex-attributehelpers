@@ -6,17 +6,17 @@ $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 sub exists : method {
-    my ($attr, $reader, $writer) = @_;    
+    my ($attr, $reader, $writer) = @_;
     return sub { CORE::exists $reader->($_[0])->{$_[1]} ? 1 : 0 };
-}   
+}
 
 sub defined : method {
-    my ($attr, $reader, $writer) = @_;    
+    my ($attr, $reader, $writer) = @_;
     return sub { CORE::defined $reader->($_[0])->{$_[1]} ? 1 : 0 };
-}   
+}
 
 sub get : method {
-    my ($attr, $reader, $writer) = @_;    
+    my ($attr, $reader, $writer) = @_;
     return sub {
         if ( @_ == 2 ) {
             $reader->($_[0])->{$_[1]}
@@ -29,32 +29,32 @@ sub get : method {
 
 sub keys : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { CORE::keys %{$reader->($_[0])} };        
+    return sub { CORE::keys %{$reader->($_[0])} };
 }
-     
+
 sub values : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { CORE::values %{$reader->($_[0])} };        
-}   
+    return sub { CORE::values %{$reader->($_[0])} };
+}
 
 sub kv : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { 
+    return sub {
         my $h = $reader->($_[0]);
         map {
             [ $_, $h->{$_} ]
-        } CORE::keys %{$h} 
-    };    
+        } CORE::keys %{$h}
+    };
 }
-   
+
 sub count : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { scalar CORE::keys %{$reader->($_[0])} };        
+    return sub { scalar CORE::keys %{$reader->($_[0])} };
 }
 
 sub empty : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { scalar CORE::keys %{$reader->($_[0])} ? 1 : 0 };        
+    return sub { scalar CORE::keys %{$reader->($_[0])} ? 1 : 0 };
 }
 
 1;
@@ -66,10 +66,10 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::MethodProvider::ImmutableHash
-  
+
 =head1 DESCRIPTION
 
-This is a role which provides the method generators for 
+This is a role which provides the method generators for
 L<MooseX::AttributeHelpers::Collection::ImmutableHash>.
 
 =head1 METHODS
@@ -102,7 +102,7 @@ L<MooseX::AttributeHelpers::Collection::ImmutableHash>.
 
 =head1 BUGS
 
-All complex software has bugs lurking in it, and this module is no 
+All complex software has bugs lurking in it, and this module is no
 exception. If you find a bug please either email me, or add the bug
 to cpan-RT.
 
