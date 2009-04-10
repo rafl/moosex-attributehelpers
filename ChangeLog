@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.17 Fri April 19, 2009
+    - Add defined to Hash (Evan Carroll).
+
 0.16 Sun April 5, 2009
     - Add substr to String (Florian Ragwitz).
 
@@ -32,13 +35,13 @@ Revision history for Perl extension MooseX-AttributeHelpers
 
 0.09 Sat. May 24, 2008
     - remove Module::Build in favor of Module::Install
-    
+
     * MooseX::AttributeHelpers::MethodProvider::Hash
       - delete with multiple keys will now work (thanks to frodwith)
 
     * MooseX::AttributeHelpers::MethodProvider::List
       - add "join" and "elements" provided methods (thanks to Sartak)
-    
+
     * MooseX::AttributeHelpers::MethodProvider::Array
       - add "splice" provided method
 
