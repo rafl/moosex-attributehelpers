@@ -90,6 +90,8 @@ L<MooseX::AttributeHelpers::Collection::ImmutableHash>.
 
 =item B<exists>
 
+=item B<defined>
+
 =item B<get>
 
 =item B<keys>
