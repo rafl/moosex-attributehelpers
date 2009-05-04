@@ -86,19 +86,35 @@ L<MooseX::AttributeHelpers::Collection::ImmutableHash>.
 
 =item B<count>
 
+Returns the number of elements in the list.
+
 =item B<empty>
+
+If the list is populated, returns true. Otherwise, returns false.
 
 =item B<exists>
 
+Returns true if the given key is present in the hash
+
 =item B<defined>
+
+Returns true if the value of a given key is defined
 
 =item B<get>
 
+Returns an element of the hash by its key.
+
 =item B<keys>
+
+Returns the list of keys in the hash.
 
 =item B<values>
 
+Returns the list of values in the hash.
+
 =item B<kv>
+
+Returns the  key, value pairs in the hash
 
 =back
 
