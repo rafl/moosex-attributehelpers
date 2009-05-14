@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 45;
+use Test::More tests => 48;
 use Test::Exception;
 
 BEGIN {
@@ -130,6 +130,21 @@ dies_ok {
 dies_ok {
     Stuff->new(options => { foo => [] });
 } '... bad constructor params';
+
+dies_ok {
+    my $stuff = Stuff->new;
+    $stuff->option_accessor();
+} '... accessor dies on 0 args';
+
+dies_ok {
+    my $stuff = Stuff->new;
+    $stuff->option_accessor(1 => 2, 3);
+} '... accessor dies on 3 args';
+
+dies_ok {
+    my $stuff = Stuff->new;
+    $stuff->option_accessor(1 => 2, 3 => 4);
+} '... accessor dies on 4 args';
 
 ## test the meta
 
