@@ -50,6 +50,44 @@ sub set : method {
     }
 }
 
+sub accessor : method {
+    my ($attr, $reader, $writer) = @_;
+
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->{$_[0]};
+            }
+            elsif (@_ == 2) { # writer
+                ($container_type_constraint->check($_[1]))
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint";
+                $reader->($self)->{$_[0]} = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+    else {
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->{$_[0]};
+            }
+            elsif (@_ == 2) { # writer
+                $reader->($self)->{$_[0]} = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+}
+
 sub clear : method {
     my ($attr, $reader, $writer) = @_;
     return sub { %{$reader->($_[0])} = () };
@@ -136,6 +174,11 @@ Returns the list of values in the hash.
 =item B<kv>
 
 Returns the  key, value pairs in the hash
+
+=item B<accessor>
+
+If passed one argument, returns the value of the requested key. If passed two
+arguments, sets the value of the requested key.
 
 =back
 

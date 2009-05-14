@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 42;
+use Test::More tests => 45;
 use Test::Exception;
 
 BEGIN {
@@ -21,18 +21,19 @@ BEGIN {
         isa       => 'HashRef[Str]',
         default   => sub { {} },
         provides  => {
-            'set'    => 'set_option',
-            'get'    => 'get_option',
-            'empty'  => 'has_options',
-            'count'  => 'num_options',
-            'clear'  => 'clear_options',
-            'delete' => 'delete_option',
-            'exists' => 'has_option',
-            'defined'=> 'is_defined',
+            'set'      => 'set_option',
+            'get'      => 'get_option',
+            'empty'    => 'has_options',
+            'count'    => 'num_options',
+            'clear'    => 'clear_options',
+            'delete'   => 'delete_option',
+            'exists'   => 'has_option',
+            'defined'  => 'is_defined',
+            'accessor' => 'option_accessor',
         },
         curries   => {
-            'set'    => {
-                set_quantity => ['quantity']
+            'accessor' => {
+                quantity => ['quantity'],
             },
         }
     );
@@ -50,6 +51,8 @@ can_ok($stuff, $_) for qw[
     clear_options
     is_defined
     has_option
+    quantity
+    option_accessor
 ];
 
 ok(!$stuff->has_options, '... we have no options');
@@ -107,8 +110,10 @@ $stuff->clear_options;
 is_deeply($stuff->options, { }, "... cleared options" );
 
 lives_ok {
-    $stuff->set_quantity(4);
+    $stuff->quantity(4);
 } '... options added okay with defaults';
+
+is($stuff->quantity, 4, 'reader part of curried accessor works');
 
 is_deeply($stuff->options, {quantity => 4}, '... returns what we expect');
 
@@ -132,14 +137,15 @@ my $options = $stuff->meta->get_attribute('options');
 isa_ok($options, 'MooseX::AttributeHelpers::Collection::Hash');
 
 is_deeply($options->provides, {
-    'set'     => 'set_option',
-    'get'     => 'get_option',
-    'empty'   => 'has_options',
-    'count'   => 'num_options',
-    'clear'   => 'clear_options',
-    'delete'  => 'delete_option',
-    'defined' => 'is_defined',
-    'exists'  => 'has_option',
-}, '... got the right provies mapping');
+    'set'      => 'set_option',
+    'get'      => 'get_option',
+    'empty'    => 'has_options',
+    'count'    => 'num_options',
+    'clear'    => 'clear_options',
+    'delete'   => 'delete_option',
+    'defined'  => 'is_defined',
+    'exists'   => 'has_option',
+    'accessor' => 'option_accessor',
+}, '... got the right provides mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');
