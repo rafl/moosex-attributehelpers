@@ -86,6 +86,44 @@ sub set : method {
     }
 }
 
+sub accessor : method {
+    my ($attr, $reader, $writer) = @_;
+
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->[$_[0]];
+            }
+            elsif (@_ == 2) { # writer
+                ($container_type_constraint->check($_[1]))
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint";
+                $reader->($self)->[$_[0]] = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+    else {
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->[$_[0]];
+            }
+            elsif (@_ == 2) { # writer
+                $reader->($self)->[$_[0]] = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+}
+
 sub clear : method {
     my ($attr, $reader, $writer) = @_;
     return sub { 
@@ -213,6 +251,11 @@ Sorts the array I<in place>, modifying the value of the attribute.
 You can provide an optional subroutine reference to sort with (as you
 can with the core C<sort> function). However, instead of using C<$a>
 and C<$b>, you will need to use C<$_[0]> and C<$_[1]> instead.
+
+=item B<accessor>
+
+If passed one argument, returns the value of the requested element.
+If passed two arguments, sets the value of the requested element.
 
 =back
 

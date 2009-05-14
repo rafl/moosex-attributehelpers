@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 64;
+use Test::More tests => 69;
 use Test::Exception;
 
 BEGIN {
@@ -31,6 +31,7 @@ BEGIN {
             'clear'         => 'clear_options',
             'splice'        => 'splice_options',
             'sort_in_place' => 'sort_options_in_place',
+            'accessor'      => 'option_accessor',
             },
         curries   => {
             'push'    => {
@@ -59,6 +60,7 @@ can_ok($stuff, $_) for qw[
     clear_options
     has_options
     sort_options_in_place
+    option_accessor
 ];
 
 is_deeply($stuff->options, [10, 12], '... got options');
@@ -172,6 +174,8 @@ is_deeply(
     'splice added expected option'
 );
 
+is($stuff->option_accessor(1 => 'foo++'), 'foo++');
+is($stuff->option_accessor(1), 'foo++');
 
 ## check some errors
 
@@ -207,6 +211,16 @@ dies_ok {
     $stuff->sort_in_place_options( undef );
 } '... sort rejects arg of invalid type';
 
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->option_accessor();
+} '... accessor rejects 0 args';
+
+dies_ok {
+    my $stuff = Stuff->new();
+    $stuff->option_accessor(1, 2, 3);
+} '... accessor rejects 3 args';
+
 ## test the meta
 
 my $options = $stuff->meta->get_attribute('options');
@@ -224,6 +238,7 @@ is_deeply($options->provides, {
     'clear'   => 'clear_options',    
     'splice'  => 'splice_options',
     'sort_in_place' => 'sort_options_in_place',
+    'accessor' => 'option_accessor',
 }, '... got the right provides mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');
