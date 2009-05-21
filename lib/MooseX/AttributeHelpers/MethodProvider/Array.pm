@@ -15,7 +15,7 @@ sub push : method {
         return sub { 
             my $instance = CORE::shift;
             $container_type_constraint->check($_) 
-                || confess "Value " . ($_||'undef') . " did not pass container type constraint"
+                || confess "Value " . ($_||'undef') . " did not pass container type constraint '$container_type_constraint'"
                     foreach @_;
             CORE::push @{$reader->($instance)} => @_; 
         };                    
@@ -42,7 +42,7 @@ sub unshift : method {
         return sub { 
             my $instance = CORE::shift;
             $container_type_constraint->check($_) 
-                || confess "Value " . ($_||'undef') . " did not pass container type constraint"
+                || confess "Value " . ($_||'undef') . " did not pass container type constraint '$container_type_constraint'"
                     foreach @_;
             CORE::unshift @{$reader->($instance)} => @_; 
         };                    
@@ -75,7 +75,7 @@ sub set : method {
         my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
             ($container_type_constraint->check($_[2])) 
-                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
+                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint '$container_type_constraint'";
             $reader->($_[0])->[$_[1]] = $_[2]
         };                    
     }
@@ -99,7 +99,7 @@ sub accessor : method {
             }
             elsif (@_ == 2) { # writer
                 ($container_type_constraint->check($_[1]))
-                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint";
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint '$container_type_constraint'";
                 $reader->($self)->[$_[0]] = $_[1];
             }
             else {
@@ -144,7 +144,7 @@ sub insert : method {
         my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
             ($container_type_constraint->check($_[2])) 
-                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
+                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint '$container_type_constraint'";
             CORE::splice @{$reader->($_[0])}, $_[1], 0, $_[2];
         };                    
     }
@@ -162,7 +162,7 @@ sub splice : method {
         return sub { 
             my ( $self, $i, $j, @elems ) = @_;
             ($container_type_constraint->check($_)) 
-                || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint" for @elems;
+                || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint '$container_type_constraint'" for @elems;
             CORE::splice @{$reader->($self)}, $i, $j, @elems;
         };                    
     }

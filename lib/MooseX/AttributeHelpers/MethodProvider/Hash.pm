@@ -19,7 +19,7 @@ sub set : method {
             while ( @kvp ) {
                 my ( $key, $value ) = ( shift(@kvp), shift(@kvp) );
                 ($container_type_constraint->check($value)) 
-                    || confess "Value " . ($value||'undef') . " did not pass container type constraint";
+                    || confess "Value " . ($value||'undef') . " did not pass container type constraint '$container_type_constraint'";
                 push @keys, $key;
                 push @values, $value;
             }
@@ -63,7 +63,7 @@ sub accessor : method {
             }
             elsif (@_ == 2) { # writer
                 ($container_type_constraint->check($_[1]))
-                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint";
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint '$container_type_constraint'";
                 $reader->($self)->{$_[0]} = $_[1];
             }
             else {
