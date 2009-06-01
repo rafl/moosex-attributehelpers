@@ -1,7 +1,8 @@
 package MooseX::AttributeHelpers::MethodProvider::Array;
 use Moose::Role;
 
-our $VERSION   = '0.05';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::MethodProvider::List';
@@ -14,7 +15,7 @@ sub push : method {
         return sub { 
             my $instance = CORE::shift;
             $container_type_constraint->check($_) 
-                || confess "Value " . ($_||'undef') . " did not pass container type constraint"
+                || confess "Value " . ($_||'undef') . " did not pass container type constraint '$container_type_constraint'"
                     foreach @_;
             CORE::push @{$reader->($instance)} => @_; 
         };                    
@@ -41,7 +42,7 @@ sub unshift : method {
         return sub { 
             my $instance = CORE::shift;
             $container_type_constraint->check($_) 
-                || confess "Value " . ($_||'undef') . " did not pass container type constraint"
+                || confess "Value " . ($_||'undef') . " did not pass container type constraint '$container_type_constraint'"
                     foreach @_;
             CORE::unshift @{$reader->($instance)} => @_; 
         };                    
@@ -74,13 +75,51 @@ sub set : method {
         my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
             ($container_type_constraint->check($_[2])) 
-                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
+                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint '$container_type_constraint'";
             $reader->($_[0])->[$_[1]] = $_[2]
         };                    
     }
     else {                
         return sub { 
             $reader->($_[0])->[$_[1]] = $_[2] 
+        };
+    }
+}
+
+sub accessor : method {
+    my ($attr, $reader, $writer) = @_;
+
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->[$_[0]];
+            }
+            elsif (@_ == 2) { # writer
+                ($container_type_constraint->check($_[1]))
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint '$container_type_constraint'";
+                $reader->($self)->[$_[0]] = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+    else {
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->[$_[0]];
+            }
+            elsif (@_ == 2) { # writer
+                $reader->($self)->[$_[0]] = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
         };
     }
 }
@@ -105,7 +144,7 @@ sub insert : method {
         my $container_type_constraint = $attr->type_constraint->type_parameter;
         return sub { 
             ($container_type_constraint->check($_[2])) 
-                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint";
+                || confess "Value " . ($_[2]||'undef') . " did not pass container type constraint '$container_type_constraint'";
             CORE::splice @{$reader->($_[0])}, $_[1], 0, $_[2];
         };                    
     }
@@ -123,16 +162,36 @@ sub splice : method {
         return sub { 
             my ( $self, $i, $j, @elems ) = @_;
             ($container_type_constraint->check($_)) 
-                || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint" for @elems;
-            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+                || confess "Value " . (defined($_) ? $_ : 'undef') . " did not pass container type constraint '$container_type_constraint'" for @elems;
+            CORE::splice @{$reader->($self)}, $i, $j, @elems;
         };                    
     }
     else {                
         return sub {
             my ( $self, $i, $j, @elems ) = @_;
-            CORE::splice @{$self->$reader()}, $i, $j, @elems;
+            CORE::splice @{$reader->($self)}, $i, $j, @elems;
         };
     }    
+}
+
+sub sort_in_place : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my ($instance, $predicate) = @_;
+
+        die "Argument must be a code reference"
+            if $predicate && ref $predicate ne 'CODE';
+
+        my @sorted;
+        if ($predicate) {
+            @sorted = CORE::sort { $predicate->($a, $b) } @{$reader->($instance)};
+        }
+        else {
+            @sorted = CORE::sort @{$reader->($instance)};
+        }
+
+        $writer->($instance, \@sorted);
+    };
 }
 
 1;
@@ -144,7 +203,7 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::MethodProvider::Array
-  
+
 =head1 DESCRIPTION
 
 This is a role which provides the method generators for 
@@ -184,6 +243,19 @@ see those provied methods, refer to that documentation.
 =item B<insert>
 
 =item B<splice>
+
+=item B<sort_in_place>
+
+Sorts the array I<in place>, modifying the value of the attribute.
+
+You can provide an optional subroutine reference to sort with (as you
+can with the core C<sort> function). However, instead of using C<$a>
+and C<$b>, you will need to use C<$_[0]> and C<$_[1]> instead.
+
+=item B<accessor>
+
+If passed one argument, returns the value of the requested element.
+If passed two arguments, sets the value of the requested element.
 
 =back
 

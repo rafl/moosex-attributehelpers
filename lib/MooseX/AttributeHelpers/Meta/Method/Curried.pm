@@ -1,5 +1,5 @@
 
-package MooseX::AttributeHelpers::Meta::Method::Provided;
+package MooseX::AttributeHelpers::Meta::Method::Curried;
 use Moose;
 
 our $VERSION   = '0.17';
@@ -16,11 +16,11 @@ __END__
 
 =head1 NAME
 
-MooseX::AttributeHelpers::Meta::Method::Provided
+MooseX::AttributeHelpers::Meta::Method::Curried
   
 =head1 DESCRIPTION
 
-This is an extension of Moose::Meta::Method to mark I<provided> methods.
+This is an extension of Moose::Meta::Method to mark I<curried> methods.
 
 =head1 METHODS
 

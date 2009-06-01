@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 14;
+use Test::More tests => 18;
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -22,6 +22,7 @@ BEGIN {
             inc   => 'inc_counter',
             dec   => 'dec_counter',
             reset => 'reset_counter',
+            set   => 'set_counter'
         }
     );
 }
@@ -33,6 +34,7 @@ can_ok($page, $_) for qw[
     dec_counter 
     inc_counter
     reset_counter
+    set_counter
 ];
 
 is($page->counter, 0, '... got the default value');
@@ -49,6 +51,15 @@ is($page->counter, 1, '... got the decremented value');
 $page->reset_counter;
 is($page->counter, 0, '... got the original value');
 
+$page->set_counter(5);
+is($page->counter, 5, '... set the value');
+
+$page->inc_counter(2);
+is($page->counter, 7, '... increment by arg');
+
+$page->dec_counter(5);
+is($page->counter, 2, '... decrement by arg');
+
 # check the meta ..
 
 my $counter = $page->meta->get_attribute('counter');
@@ -61,6 +72,7 @@ is($counter->type_constraint->name, 'Int', '... got the expected type constraint
 is_deeply($counter->provides, { 
     inc   => 'inc_counter',
     dec   => 'dec_counter',
-    reset => 'reset_counter',        
+    reset => 'reset_counter',
+    set   => 'set_counter'
 }, '... got the right provides methods');
 

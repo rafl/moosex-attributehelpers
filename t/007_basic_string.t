@@ -3,10 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 27;
 
 BEGIN {
-    use_ok('MooseX::AttributeHelpers');   
+    use_ok('MooseX::AttributeHelpers');
 }
 
 {
@@ -27,6 +27,13 @@ BEGIN {
             chop    => 'chop_string',
             chomp   => 'chomp_string',
             clear   => 'clear_string',
+            substr  => 'sub_string',
+        },
+        curries  => {
+            append  => {exclaim         => [ '!' ]},
+            replace => {capitalize_last => [ qr/(.)$/, sub { uc $1 } ]},
+            match   => {invalid_number  => [ qr/\D/ ]},
+            substr  => {shift_chars     => sub { $_[1]->($_[0], 0, $_[2], '') } },
         }
     );
 }
@@ -64,6 +71,27 @@ is_deeply( [ $page->match_string(qr/([ao])/) ], [ "a" ], "match" );
 $page->replace_string(qr/([ao])/, sub { uc($1) });
 is($page->string, 'bArcfo', "substitution");
 
+$page->exclaim;
+is($page->string, 'bArcfo!', 'exclaim!');
+
+is($page->sub_string(2), 'rcfo!', 'substr(offset)');
+is($page->sub_string(2, 2), 'rc', 'substr(offset, length)');
+is($page->sub_string(2, 2, ''), 'rc', 'substr(offset, length, replacement)');
+is($page->string, 'bAfo!', 'replacement got inserted');
+
+is($page->shift_chars(2), 'bA', 'curried substr');
+is($page->string, 'fo!', 'replacement got inserted');
+
+$page->string('Moosex');
+$page->capitalize_last;
+is($page->string, 'MooseX', 'capitalize last');
+
+$page->string('1234');
+ok(!$page->invalid_number, 'string "isn\'t an invalid number');
+
+$page->string('one two three four');
+ok($page->invalid_number, 'string an invalid number');
+
 $page->clear_string;
 is($page->string, '', "clear");
 
@@ -85,5 +113,6 @@ is_deeply($string->provides, {
     chop    => 'chop_string',
     chomp   => 'chomp_string',
     clear   => 'clear_string',
+    substr  => 'sub_string',
 }, '... got the right provides methods');
 

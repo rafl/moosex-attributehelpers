@@ -1,6 +1,54 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.08
+0.18
+    - Add accessor to Hash and Array (Sartak)
+
+0.17 Fri April 19, 2009
+    - Add defined to Hash (Evan Carroll).
+
+0.16 Sun April 5, 2009
+    - Add substr to String (Florian Ragwitz).
+
+0.15 Thu March 26, 2009
+    - The splice helper for arrays was completely broken. Reported by
+      Abhijit Mahabal. RT #43343.
+
+0.14 Thu October 2, 2008
+    - Run pod tests only for authors
+
+0.13 Mon September 1, 2008
+    - No code changes, just a stable release for Moose 0.56.
+
+0.12_01 Wed August 20, 2008
+    - fixed some missing Pod::Coverage (stevan)
+    - fixes to work with Moose 0.55_01 and Class::MOP 0.64_01
+      (nothingmuch)
+
+0.12 Sun. Jun 29, 2008
+    - Move get from Array to List (gphat)
+    - Add first and last to List (gphat)
+    - Doc fixes (gphat)
+    - fix failing tests due to using DateTime (jasonmay)
+
+0.11 Thurs. Jun 26, 2008
+    - add the ability to curry method providers (thanks to jasonmay)
+    - Counter: add set and allow inc and dec to accept args
+    - add Bool as an attribute helper (thanks to jasonmay)
+        - bump all modules to version 0.11 for consistency (Sartak)
+
+0.09 Sat. May 24, 2008
+    - remove Module::Build in favor of Module::Install
+
+    * MooseX::AttributeHelpers::MethodProvider::Hash
+      - delete with multiple keys will now work (thanks to frodwith)
+
+    * MooseX::AttributeHelpers::MethodProvider::List
+      - add "join" and "elements" provided methods (thanks to Sartak)
+
+    * MooseX::AttributeHelpers::MethodProvider::Array
+      - add "splice" provided method
+
+0.08 Sat. April 12, 2008
     ~~ updates copyright year on all modules ~~
 
     * MooseX::AttributeHelpers::MethodProvider::Hash
@@ -62,7 +110,7 @@ Revision history for Perl extension MooseX-AttributeHelpers
     * MooseX::AttributeHelpers::Base
       - added attribute $name to the params passed to
         process_options_or_provides(), which gives us more
-	    flexibility when writing additional helpers
+        flexibility when writing additional helpers
       - removed check for 'provides' and 'isa' attr
         options before _process_options. It should be
         called always.

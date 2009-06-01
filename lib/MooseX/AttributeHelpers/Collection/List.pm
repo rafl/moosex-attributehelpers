@@ -2,7 +2,8 @@
 package MooseX::AttributeHelpers::Collection::List;
 use Moose;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
@@ -39,7 +40,7 @@ MooseX::AttributeHelpers::Collection::List
       default   => sub { [] },
       provides  => {
           map  => 'map_options',
-          grep => 'fitler_options',
+          grep => 'filter_options',
       }
   );
 

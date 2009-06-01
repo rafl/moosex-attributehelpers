@@ -17,3 +17,5 @@ cover_db
 ^#.*#$
 ^\.#
 ^TODO$
+^\.shipit$
+^\.git

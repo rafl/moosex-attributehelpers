@@ -1,4 +1,4 @@
-MooseX::AttributeHelpers version 0.08
+MooseX::AttributeHelpers version 0.17
 ===========================
 
 See the individual module documentation for more information
@@ -11,13 +11,6 @@ To install this module type the following:
    make
    make test 
    make install
-
-or:
-
-   perl Build.PL
-   ./Build
-   ./Build test
-   ./Build install
 
 DEPENDENCIES
 

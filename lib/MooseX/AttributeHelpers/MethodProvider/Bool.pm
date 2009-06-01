@@ -1,29 +1,29 @@
 
-package MooseX::AttributeHelpers::MethodProvider::Counter;
+package MooseX::AttributeHelpers::MethodProvider::Bool;
 use Moose::Role;
 
 our $VERSION   = '0.17';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
-sub reset : method {
-    my ($attr, $reader, $writer) = @_;
-    return sub { $writer->($_[0], $attr->default($_[0])) };
-}
-
 sub set : method {
-    my ($attr, $reader, $writer, $value) = @_;
-    return sub { $writer->($_[0], $_[1]) };
+    my ($attr, $reader, $writer) = @_;
+    return sub { $writer->($_[0], 1) };
 }
 
-sub inc {
+sub unset : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { $writer->($_[0], $reader->($_[0]) + (defined($_[1]) ? $_[1] : 1) ) };
+    return sub { $writer->($_[0], 0) };
 }
 
-sub dec {
+sub toggle : method {
     my ($attr, $reader, $writer) = @_;
-    return sub { $writer->($_[0], $reader->($_[0]) - (defined($_[1]) ? $_[1] : 1) ) };
+    return sub { $writer->($_[0], !$reader->($_[0])) };
+}
+
+sub not : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub { !$reader->($_[0]) };
 }
 
 1;
@@ -34,12 +34,12 @@ __END__
 
 =head1 NAME
 
-MooseX::AttributeHelpers::MethodProvider::Counter
+MooseX::AttributeHelpers::MethodProvider::Bool
   
 =head1 DESCRIPTION
 
 This is a role which provides the method generators for 
-L<MooseX::AttributeHelpers::Counter>.
+L<MooseX::AttributeHelpers::Bool>.
 
 =head1 METHODS
 
@@ -55,11 +55,11 @@ L<MooseX::AttributeHelpers::Counter>.
 
 =item B<set>
 
-=item B<inc>
+=item B<unset>
 
-=item B<dec>
+=item B<toggle>
 
-=item B<reset>
+=item B<not>
 
 =back
 
@@ -71,7 +71,7 @@ to cpan-RT.
 
 =head1 AUTHOR
 
-Stevan Little E<lt>stevan@iinteractive.comE<gt>
+Jason May E<lt>jason.a.may@gmail.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

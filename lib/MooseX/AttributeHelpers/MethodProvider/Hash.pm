@@ -1,7 +1,8 @@
 package MooseX::AttributeHelpers::MethodProvider::Hash;
 use Moose::Role;
 
-our $VERSION   = '0.04';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::MethodProvider::ImmutableHash';
@@ -18,7 +19,7 @@ sub set : method {
             while ( @kvp ) {
                 my ( $key, $value ) = ( shift(@kvp), shift(@kvp) );
                 ($container_type_constraint->check($value)) 
-                    || confess "Value " . ($value||'undef') . " did not pass container type constraint";
+                    || confess "Value " . ($value||'undef') . " did not pass container type constraint '$container_type_constraint'";
                 push @keys, $key;
                 push @values, $value;
             }
@@ -44,6 +45,44 @@ sub set : method {
                 }
 
                 @{ $reader->($_[0]) }{@keys} = @values;
+            }
+        };
+    }
+}
+
+sub accessor : method {
+    my ($attr, $reader, $writer) = @_;
+
+    if ($attr->has_type_constraint && $attr->type_constraint->isa('Moose::Meta::TypeConstraint::Parameterized')) {
+        my $container_type_constraint = $attr->type_constraint->type_parameter;
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->{$_[0]};
+            }
+            elsif (@_ == 2) { # writer
+                ($container_type_constraint->check($_[1]))
+                    || confess "Value " . ($_[1]||'undef') . " did not pass container type constraint '$container_type_constraint'";
+                $reader->($self)->{$_[0]} = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
+            }
+        };
+    }
+    else {
+        return sub {
+            my $self = shift;
+
+            if (@_ == 1) { # reader
+                return $reader->($self)->{$_[0]};
+            }
+            elsif (@_ == 2) { # writer
+                $reader->($self)->{$_[0]} = $_[1];
+            }
+            else {
+                confess "One or two arguments expected, not " . @_;
             }
         };
     }
@@ -94,23 +133,52 @@ L<MooseX::AttributeHelpers::Collection::ImmutableHash> role.
 
 =item B<count>
 
+Returns the number of elements in the hash.
+
 =item B<delete>
+
+Removes the element with the given key
+
+=item B<defined>
+
+Returns true if the value of a given key is defined
 
 =item B<empty>
 
+If the list is populated, returns true. Otherwise, returns false.
+
 =item B<clear>
+
+Unsets the hash entirely.
 
 =item B<exists>
 
+Returns true if the given key is present in the hash
+
 =item B<get>
+
+Returns an element of the hash by its key.
 
 =item B<keys>
 
+Returns the list of keys in the hash.
+
 =item B<set>
+
+Sets the element in the hash at the given key to the given value.
 
 =item B<values>
 
+Returns the list of values in the hash.
+
 =item B<kv>
+
+Returns the  key, value pairs in the hash
+
+=item B<accessor>
+
+If passed one argument, returns the value of the requested key. If passed two
+arguments, sets the value of the requested key.
 
 =back
 

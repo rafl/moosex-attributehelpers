@@ -2,7 +2,8 @@
 package MooseX::AttributeHelpers::Counter;
 use Moose;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 extends 'Moose::Meta::Attribute';
@@ -89,17 +90,23 @@ modification of the value stored in the attribute.
 
 =over 4
 
+=item I<set>
+
+Set the counter to the specified value.
+
 =item I<inc>
 
-Increments the value stored in this slot by 1.
+Increments the value stored in this slot by 1. Providing an argument will
+cause the counter to be increased by specified amount.
 
 =item I<dec>
 
-Decrements the value stored in this slot by 1.
+Decrements the value stored in this slot by 1. Providing an argument will
+cause the counter to be increased by specified amount.
 
 =item I<reset>
 
-Resets the value stored in this slot to it's default value.
+Resets the value stored in this slot to it's default value. 
 
 =back
 

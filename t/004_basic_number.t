@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
+
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 26;
 
 BEGIN {
     use_ok('MooseX::AttributeHelpers');   
@@ -19,13 +20,19 @@ BEGIN {
         isa       => 'Int',
         default   => sub { 5 },
         provides  => {
-            set => 'set',
-            add => 'add',
-            sub => 'sub',
-            mul => 'mul',
-            div => 'div',
-            mod => 'mod',
-            abs => 'abs',
+            set       => 'set',
+            add       => 'add',
+            sub       => 'sub',
+            mul       => 'mul',
+            div       => 'div',
+            mod       => 'mod',
+            abs       => 'abs',
+        },
+        curries   => {
+            add       => {inc         => [ 1 ]},
+            sub       => {dec         => [ 1 ]},
+            mod       => {odd         => [ 2 ]},
+            div       => {cut_in_half => [ 2 ]}
         }
     );
 }
@@ -34,7 +41,7 @@ my $real = Real->new;
 isa_ok($real, 'Real');
 
 can_ok($real, $_) for qw[
-    set add sub mul div mod abs
+    set add sub mul div mod abs inc dec odd cut_in_half
 ];
 
 is $real->integer, 5, 'Default to five';
@@ -74,6 +81,16 @@ $real->set(-1);
 $real->abs;
 
 is $real->integer, 1, 'abs 1';
+
+$real->set(12);
+
+$real->inc;
+
+is $real->integer, 13, 'inc 12';
+
+$real->dec;
+
+is $real->integer, 12, 'dec 13';
 
 ## test the meta
 
