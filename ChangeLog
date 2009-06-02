@@ -1,7 +1,11 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
-0.18
+0.18_01 Mon June 1, 2009
+	- Turn our metaclasses into traits, though metaclasses still exist for
+	  backwards compatibility (Sartak and doy)
     - Add accessor to Hash and Array (Sartak)
+	- Let the user know which constraint they have violated in the confessed
+	message (nperez)
 
 0.17 Fri April 19, 2009
     - Add defined to Hash (Evan Carroll).
