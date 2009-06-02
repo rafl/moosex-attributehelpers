@@ -82,8 +82,6 @@ before '_process_options' => sub {
 
 ## methods called after instantiation
 
-# this confirms that provides (and curries) has
-# all valid possibilities in it
 sub check_provides_values {
     my $self = shift;
 
@@ -227,3 +225,43 @@ no Moose::Util::TypeConstraints;
 
 1;
 
+__END__
+
+=head1 NAME
+
+MooseX::AttributeHelpers::Trait::Base - base role for helpers
+
+=head1 METHODS
+
+=head2 check_provides_values
+
+Confirms that provides (and curries) has all valid possibilities in it.
+
+=head2 process_options_for_provides
+
+Ensures that the type constraint (C<isa>) matches the helper type.
+
+=head1 BUGS
+
+All complex software has bugs lurking in it, and this module is no 
+exception. If you find a bug please either email me, or add the bug
+to cpan-RT.
+
+=head1 AUTHORS
+
+Yuval Kogman
+
+Shawn M Moore
+
+Jesse Luehrs
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2007-2008 by Infinity Interactive, Inc.
+
+L<http://www.iinteractive.com>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
