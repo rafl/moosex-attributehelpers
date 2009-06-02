@@ -2,7 +2,8 @@
 package MooseX::AttributeHelpers::Trait::Collection::List;
 use Moose::Role;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::List;
@@ -51,7 +52,7 @@ MooseX::AttributeHelpers::Collection::List
       default   => sub { [] },
       provides  => {
           map  => 'map_options',
-          grep => 'fitler_options',
+          grep => 'filter_options',
       }
   );
 
@@ -95,4 +96,3 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-

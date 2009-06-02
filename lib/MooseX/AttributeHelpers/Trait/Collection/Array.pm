@@ -2,7 +2,8 @@
 package MooseX::AttributeHelpers::Trait::Collection::Array;
 use Moose::Role;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::Array;
@@ -95,4 +96,3 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-

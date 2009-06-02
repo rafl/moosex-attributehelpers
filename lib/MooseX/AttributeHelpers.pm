@@ -10,6 +10,7 @@ use Moose 0.56 ();
 use MooseX::AttributeHelpers::Meta::Method::Provided;
 use MooseX::AttributeHelpers::Meta::Method::Curried;
 
+use MooseX::AttributeHelpers::Trait::Bool;
 use MooseX::AttributeHelpers::Trait::Counter;
 use MooseX::AttributeHelpers::Trait::Number;
 use MooseX::AttributeHelpers::Trait::String;

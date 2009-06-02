@@ -3,7 +3,8 @@ package MooseX::AttributeHelpers::Trait::Collection::Bag;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 use MooseX::AttributeHelpers::MethodProvider::Bag;
@@ -113,4 +114,3 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-

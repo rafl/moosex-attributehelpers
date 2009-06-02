@@ -1,7 +1,8 @@
 package MooseX::AttributeHelpers::Trait::Number;
 use Moose::Role;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.17';
+$VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::AttributeHelpers::Trait::Base';
@@ -167,4 +168,3 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-
