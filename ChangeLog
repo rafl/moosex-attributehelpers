@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.19 Sun June 14, 2009
+    - No functional changes from 0.18_01
+
 0.18_01 Mon June 1, 2009
 	- Turn our metaclasses into traits, though metaclasses still exist for
 	  backwards compatibility (Sartak and doy)
