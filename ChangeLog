@@ -1,5 +1,8 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+    - New provided method for hashs: elements (Returns the key, value
+      pairs in the hash as a flattened list)
+
 0.19 Sun June 14, 2009
     - No functional changes from 0.18_01
 
