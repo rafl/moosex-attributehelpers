@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 48;
+use Test::More tests => 50;
 use Test::Exception;
 
 BEGIN {
@@ -30,6 +30,8 @@ BEGIN {
             'exists'   => 'has_option',
             'defined'  => 'is_defined',
             'accessor' => 'option_accessor',
+            'kv'       => 'key_value',
+            'elements' => 'options_elements',
         },
         curries   => {
             'accessor' => {
@@ -161,6 +163,27 @@ is_deeply($options->provides, {
     'defined'  => 'is_defined',
     'exists'   => 'has_option',
     'accessor' => 'option_accessor',
+    'kv'       => 'key_value',
+    'elements' => 'options_elements',
 }, '... got the right provides mapping');
 
 is($options->type_constraint->type_parameter, 'Str', '... got the right container type');
+
+$stuff->set_option( oink => "blah", xxy => "flop" );
+my @key_value = $stuff->key_value;
+is_deeply(
+    \@key_value,
+    [ [ 'xxy', 'flop' ], [ 'quantity', 4 ], [ 'oink', 'blah' ] ],
+    '... got the right key value pairs'
+);
+
+my %options_elements = $stuff->options_elements;
+is_deeply(
+    \%options_elements,
+    {
+        'oink'     => 'blah',
+        'quantity' => 4,
+        'xxy'      => 'flop'
+    },
+    '... got the right hash elements'
+);

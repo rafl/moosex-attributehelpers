@@ -47,6 +47,16 @@ sub kv : method {
     };
 }
 
+sub elements : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my $h = $reader->($_[0]);
+        map {
+            $_, $h->{$_}
+        } CORE::keys %{$h}
+    };
+}
+
 sub count : method {
     my ($attr, $reader, $writer) = @_;
     return sub { scalar CORE::keys %{$reader->($_[0])} };
@@ -114,7 +124,11 @@ Returns the list of values in the hash.
 
 =item B<kv>
 
-Returns the  key, value pairs in the hash
+Returns the key, value pairs in the hash as array references
+
+=item B<elements>
+
+Returns the key, value pairs in the hash as a flattened list
 
 =back
 
