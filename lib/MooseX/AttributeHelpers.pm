@@ -131,6 +131,10 @@ passed to the final method.
 
 Common numerical operations.
 
+=item L<String|MooseX::AttributeHelpers::String>
+
+Common methods for string operations.
+
 =item L<Counter|MooseX::AttributeHelpers::Counter>
 
 Methods for incrementing and decrementing a counter attribute.
@@ -142,6 +146,10 @@ Common methods for boolean values.
 =item L<Collection::Hash|MooseX::AttributeHelpers::Collection::Hash>
 
 Common methods for hash references.
+
+=item L<Collection::ImmutableHash|MooseX::AttributeHelpers::Collection::ImmutableHash>
+
+Common methods for inspecting hash references.
 
 =item L<Collection::Array|MooseX::AttributeHelpers::Collection::Array>
 
