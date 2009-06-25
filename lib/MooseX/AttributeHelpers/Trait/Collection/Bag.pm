@@ -3,7 +3,7 @@ package MooseX::AttributeHelpers::Trait::Collection::Bag;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
 
-our $VERSION   = '0.19';
+our $VERSION   = '0.20';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
