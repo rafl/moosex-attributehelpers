@@ -16,7 +16,7 @@ BEGIN {
     use Moose;
 
     has 'options' => (
-        traits    => [qw/Collection::Array/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Collection::Array/],
         is        => 'ro',
         isa       => 'ArrayRef[Int]',
         default   => sub { [] },

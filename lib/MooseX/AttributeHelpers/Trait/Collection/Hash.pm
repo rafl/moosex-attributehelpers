@@ -21,14 +21,6 @@ sub helper_type { 'HashRef' }
 
 no Moose::Role;
 
-# register the alias ...
-package # hide me from search.cpan.org
-    Moose::Meta::Attribute::Custom::Trait::Collection::Hash;
-sub register_implementation {
-    'MooseX::AttributeHelpers::Trait::Collection::Hash'
-}
-
-
 1;
 
 __END__

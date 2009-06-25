@@ -15,7 +15,7 @@ BEGIN {
     use Moose;
 
     has 'string' => (
-        traits    => [qw/String/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::String/],
         is        => 'rw',
         isa       => 'Str',
         default   => sub { '' },

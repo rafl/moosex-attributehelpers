@@ -36,13 +36,6 @@ before 'process_options_for_provides' => sub {
 no Moose::Role;
 no Moose::Util::TypeConstraints;
 
-# register the alias ...
-package # hide me from search.cpan.org
-    Moose::Meta::Attribute::Custom::Trait::Collection::Bag;
-sub register_implementation {
-    'MooseX::AttributeHelpers::Trait::Collection::Bag'
-}
-
 1;
 
 __END__

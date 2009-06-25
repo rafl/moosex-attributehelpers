@@ -34,11 +34,6 @@ before 'process_options_for_provides' => sub {
 
 no Moose::Role;
 
-# register the alias ...
-package # hide me from search.cpan.org
-    Moose::Meta::Attribute::Custom::Trait::Bool;
-sub register_implementation { 'MooseX::AttributeHelpers::Trait::Bool' }
-
 1;
 
 =pod

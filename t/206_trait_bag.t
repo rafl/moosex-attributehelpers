@@ -17,7 +17,7 @@ BEGIN {
     use MooseX::AttributeHelpers;
 
     has 'word_histogram' => (
-        traits    => [qw/Collection::Bag/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Collection::Bag/],
         is        => 'ro',
         provides  => {
             'add'    => 'add_word',

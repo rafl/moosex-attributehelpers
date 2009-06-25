@@ -21,14 +21,6 @@ sub helper_type { 'ArrayRef' }
 
 no Moose::Role;
 
-# register the alias ...
-package # hide me from search.cpan.org
-    Moose::Meta::Attribute::Custom::Trait::Collection::Array;
-sub register_implementation {
-    'MooseX::AttributeHelpers::Trait::Collection::Array'
-}
-
-
 1;
 
 __END__

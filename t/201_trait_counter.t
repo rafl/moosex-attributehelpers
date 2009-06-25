@@ -15,7 +15,7 @@ BEGIN {
     use Moose;
 
     has 'counter' => (
-        traits    => [qw/Counter/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Counter/],
         is        => 'ro',
         isa       => 'Int',
         default   => sub { 0 },

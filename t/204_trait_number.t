@@ -15,7 +15,7 @@ BEGIN {
     use Moose;
 
     has 'integer' => (
-        traits    => [qw/Number/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Number/],
         is        => 'ro',
         isa       => 'Int',
         default   => sub { 5 },

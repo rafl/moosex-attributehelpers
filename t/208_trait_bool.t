@@ -10,7 +10,7 @@ use MooseX::AttributeHelpers;
     package Room;
     use Moose;
     has 'is_lit' => (
-        traits    => ['Bool'],
+        traits    => ['MooseX::AttributeHelpers::Trait::Bool'],
         is        => 'rw',
         isa       => 'Bool',
         default   => sub { 0 },

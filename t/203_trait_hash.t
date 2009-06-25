@@ -17,7 +17,7 @@ BEGIN {
     use MooseX::AttributeHelpers;
 
     has 'options' => (
-        traits    => [qw/Collection::Hash/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Collection::Hash/],
         is        => 'ro',
         isa       => 'HashRef[Str]',
         default   => sub { {} },

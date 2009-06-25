@@ -16,7 +16,7 @@ BEGIN {
     use Moose;
 
     has '_options' => (
-        traits    => [qw/Collection::List/],
+        traits    => [qw/MooseX::AttributeHelpers::Trait::Collection::List/],
         is        => 'ro',
         isa       => 'ArrayRef[Int]',
         init_arg  => 'options',

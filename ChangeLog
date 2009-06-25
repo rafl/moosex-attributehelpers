@@ -1,7 +1,14 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+0.20 Thu June 25, 2009
+	- MXAH is moving into core. This module will be deprecated when
+	  that finally happens.
+	- Remove register_implementation methods from the traits because
+	  we don't want to conflict with cored AttributeHelpers. You'll need to
+	  specify the full package name for traits --
+	  MooseX::AttributeHelpers::Trait::Counter instead of Counter
     - New provided method for hashs: elements (Returns the key, value
-      pairs in the hash as a flattened list)
+      pairs in the hash as a flattened list) (plu)
 
 0.19 Sun June 14, 2009
     - No functional changes from 0.18_01
