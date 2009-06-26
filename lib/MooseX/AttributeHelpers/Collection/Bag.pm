@@ -35,7 +35,7 @@ MooseX::AttributeHelpers::Collection::Bag
   has 'word_histogram' => (
       metaclass => 'Collection::Bag',
       is        => 'ro',
-      isa       => 'Bag', # optional ... as is defalt
+      isa       => 'Bag', # optional ... as is default
       provides  => {
           'add'    => 'add_word',
           'get'    => 'get_count_for',            
