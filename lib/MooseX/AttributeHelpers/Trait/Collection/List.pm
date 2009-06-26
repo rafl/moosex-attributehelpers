@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Trait::Collection::List;
 use Moose::Role;
 
-our $VERSION   = '0.20';
+our $VERSION   = '0.21';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 

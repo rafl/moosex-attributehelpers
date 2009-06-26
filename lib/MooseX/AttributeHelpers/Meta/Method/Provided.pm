@@ -2,7 +2,7 @@
 package MooseX::AttributeHelpers::Meta::Method::Provided;
 use Moose;
 
-our $VERSION   = '0.20';
+our $VERSION   = '0.21';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
