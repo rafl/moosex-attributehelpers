@@ -160,7 +160,7 @@ after 'install_accessors' => sub {
                 $method_code = $attr->_curry_sub($body, $curried_arg);
             }
             else {
-                confess "curries parameter must be ref type HASH or CODE";
+                confess "curries parameter must be ref type ARRAY or CODE";
             }
 
             my $method = MooseX::AttributeHelpers::Meta::Method::Curried->wrap(
@@ -168,7 +168,7 @@ after 'install_accessors' => sub {
                 package_name => $class_name,
                 name => $curried_name,
             );
-                
+
             $attr->associate_method($method);
             $class->add_method($curried_name => $method);
         }
