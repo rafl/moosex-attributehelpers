@@ -7,12 +7,12 @@ Revision history for Perl extension MooseX-AttributeHelpers
     - Doc typo fix in Collection::Bag (Sartak).
 
 0.20 Thu June 25, 2009
-	- MXAH is moving into core. This module will be deprecated when
-	  that finally happens.
-	- Remove register_implementation methods from the traits because
-	  we don't want to conflict with cored AttributeHelpers. You'll need to
-	  specify the full package name for traits --
-	  MooseX::AttributeHelpers::Trait::Counter instead of Counter
+    - MXAH is moving into core. This module will be deprecated when
+      that finally happens.
+    - Remove register_implementation methods from the traits because
+      we don't want to conflict with cored AttributeHelpers. You'll need to
+      specify the full package name for traits --
+      MooseX::AttributeHelpers::Trait::Counter instead of Counter
     - New provided method for hashs: elements (Returns the key, value
       pairs in the hash as a flattened list) (plu)
 
@@ -20,11 +20,11 @@ Revision history for Perl extension MooseX-AttributeHelpers
     - No functional changes from 0.18_01
 
 0.18_01 Mon June 1, 2009
-	- Turn our metaclasses into traits, though metaclasses still exist for
-	  backwards compatibility (Sartak and doy)
+    - Turn our metaclasses into traits, though metaclasses still exist for
+      backwards compatibility (Sartak and doy)
     - Add accessor to Hash and Array (Sartak)
-	- Let the user know which constraint they have violated in the confessed
-	message (nperez)
+    - Let the user know which constraint they have violated in the confessed
+      message (nperez)
 
 0.17 Fri April 19, 2009
     - Add defined to Hash (Evan Carroll).
