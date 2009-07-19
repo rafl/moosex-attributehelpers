@@ -6,7 +6,7 @@ our $VERSION   = '0.21';
 $VERSION = eval $VERSION;
 our $AUTHORITY = 'cpan:STEVAN';
 
-sub append : method { 
+sub append : method {
     my ($attr, $reader, $writer) = @_;
 
     return sub { $writer->( $_[0],  $reader->($_[0]) . $_[1] ) };
@@ -72,6 +72,14 @@ sub clear : method {
     return sub { $writer->( $_[0], '' ) }
 }
 
+sub length : method {
+    my ($attr, $reader, $writer) = @_;
+    return sub {
+        my $v = $reader->($_[0]);
+        return CORE::length($v);
+    };
+}
+
 sub substr : method {
     my ($attr, $reader, $writer) = @_;
     return sub {
@@ -104,10 +112,10 @@ __END__
 =head1 NAME
 
 MooseX::AttributeHelpers::MethodProvider::String
-  
+
 =head1 DESCRIPTION
 
-This is a role which provides the method generators for 
+This is a role which provides the method generators for
 L<MooseX::AttributeHelpers::String>.
 
 =head1 METHODS
@@ -138,13 +146,15 @@ L<MooseX::AttributeHelpers::String>.
 
 =item B<clear>
 
+=item B<length>
+
 =item B<substr>
 
 =back
 
 =head1 BUGS
 
-All complex software has bugs lurking in it, and this module is no 
+All complex software has bugs lurking in it, and this module is no
 exception. If you find a bug please either email me, or add the bug
 to cpan-RT.
 

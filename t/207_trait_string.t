@@ -3,11 +3,11 @@
 use strict;
 use warnings;
 
-use Test::More tests => 27;
+use Test::More tests => 30;
 use Test::Moose 'does_ok';
 
 BEGIN {
-    use_ok('MooseX::AttributeHelpers');   
+    use_ok('MooseX::AttributeHelpers');
 }
 
 {
@@ -29,6 +29,7 @@ BEGIN {
             chomp   => 'chomp_string',
             clear   => 'clear_string',
             substr  => 'sub_string',
+            length  => 'length_string',
         },
         curries  => {
             append  => {exclaim         => [ '!' ]},
@@ -43,13 +44,15 @@ my $page = MyHomePage->new();
 isa_ok($page, 'MyHomePage');
 
 is($page->string, '', '... got the default value');
+is($page->length_string, 0, '... length is zero');
 
 $page->string('a');
+is($page->length_string, 1, '... new string has length of one');
 
-$page->inc_string; 
+$page->inc_string;
 is($page->string, 'b', '... got the incremented value');
 
-$page->inc_string; 
+$page->inc_string;
 is($page->string, 'c', '... got the incremented value (again)');
 
 $page->append_string("foo$/");
@@ -66,6 +69,7 @@ is($page->string, "cfo", 'chopped string');
 
 $page->prepend_string("bar");
 is($page->string, 'barcfo', 'prepended to string');
+is($page->length_string, 6, 'right length');
 
 is_deeply( [ $page->match_string(qr/([ao])/) ], [ "a" ], "match" );
 
@@ -105,7 +109,7 @@ is($string->helper_type, 'Str', '... got the expected helper type');
 
 is($string->type_constraint->name, 'Str', '... got the expected type constraint');
 
-is_deeply($string->provides, { 
+is_deeply($string->provides, {
     inc     => 'inc_string',
     append  => 'append_string',
     prepend => 'prepend_string',
@@ -115,5 +119,6 @@ is_deeply($string->provides, {
     chomp   => 'chomp_string',
     clear   => 'clear_string',
     substr  => 'sub_string',
+    length  => 'length_string',
 }, '... got the right provides methods');
 
