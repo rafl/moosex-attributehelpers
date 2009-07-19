@@ -1,5 +1,11 @@
 Revision history for Perl extension MooseX-AttributeHelpers
 
+    - Add length to String (Florian Ragwitz).
+    - Specify build dependency on Test::Moose (Closes RT#47258) (Florian Ragwitz).
+    - Fix the error message you get on unknown 'curries' parameters to tell you
+      what it really expected (Florian Ragwitz).
+    - Doc typo fix in Collection::Bag (Sartak).
+
 0.20 Thu June 25, 2009
 	- MXAH is moving into core. This module will be deprecated when
 	  that finally happens.
